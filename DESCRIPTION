@@ -1,7 +1,7 @@
 Package: phonics
 Type: Package
 Title: Phonetic spelling algorithms for R
-Version: 0.1
+Version: 0.2
 Date: 2015-09-20
 Author: James P. Howard, II <jh@jameshoward.us>
 Maintainer: James P. Howard, II <jh@jameshoward.us>
