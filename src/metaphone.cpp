@@ -51,8 +51,6 @@ string substr(string, int, int);
 //'
 //' @param word        character vector of strings to encode
 //' @param maxCodeLen  maximum length of the resulting encodings, in characters
-//' @param traditional use traditional Metaphone or not
-//'
 //'
 //' @details The function \code{metaphone} phonentically encodes the '
 //' given string using the metaphone algorithm.  There is some discrepency
@@ -64,6 +62,9 @@ string substr(string, int, int);
 //'
 //' This implementation is based on a Javascript implementation which is
 //' itself based on the PHP internal implementation.
+//'
+//' The variable \code{maxCodeLen} is the limit on how long the returned
+//' metaphone should be.
 //'
 //' @return metaphone encoded character vector
 //'
@@ -77,11 +78,11 @@ string substr(string, int, int);
 //' @importFrom Rcpp evalCpp
 //' @export
 //[[Rcpp::export]]
-CharacterVector metaphone(CharacterVector word, int maxCodeLen = 10, bool traditional = true) {
+CharacterVector metaphone(CharacterVector word, int maxCodeLen = 10) {
 	CharacterVector res;
 
 	for(CharacterVector::iterator i = word.begin(); i != word.end(); i++)
-		res.push_back(metaphone((string)*i, maxCodeLen, traditional));
+		res.push_back(metaphone((string)*i, maxCodeLen, true));
 
 	return(res);
 }
