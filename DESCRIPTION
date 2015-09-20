@@ -1,0 +1,16 @@
+Package: phonics
+Type: Package
+Title: Phonetic spelling algorithms for R
+Version: 0.1
+Date: 2015-09-20
+Author: James P. Howard, II <jh@jameshoward.us>
+Maintainer: James P. Howard, II <jh@jameshoward.us>
+Description: This package provides the Metaphone and Double Metaphone phonetic algorithms.
+License: BSD_2_clause + file LICENSE
+LazyData: TRUE
+Imports:
+    Rcpp (>= 0.12.1),
+    testthat
+LinkingTo:
+    Rcpp,
+    BH
