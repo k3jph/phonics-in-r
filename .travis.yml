@@ -1,2 +1,8 @@
 language: r
 sudo: required
+
+# System dependencies for building
+r_binary_packages:
+ - BH
+ - Rcpp
+ - testthat
