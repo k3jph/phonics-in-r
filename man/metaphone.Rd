@@ -4,14 +4,12 @@
 \alias{metaphone}
 \title{metaphone}
 \usage{
-metaphone(word, maxCodeLen = 10L, traditional = TRUE)
+metaphone(word, maxCodeLen = 10L)
 }
 \arguments{
 \item{word}{character vector of strings to encode}
 
 \item{maxCodeLen}{maximum length of the resulting encodings, in characters}
-
-\item{traditional}{use traditional Metaphone or not}
 }
 \value{
 metaphone encoded character vector
@@ -30,6 +28,9 @@ is probably more well known, this code should match it in output.
 
 This implementation is based on a Javascript implementation which is
 itself based on the PHP internal implementation.
+
+The variable \code{maxCodeLen} is the limit on how long the returned
+metaphone should be.
 }
 \examples{
 metaphone("wheel")
