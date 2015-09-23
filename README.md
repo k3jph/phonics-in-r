@@ -9,7 +9,8 @@ phonetic spelling and test phonetic similarity.
 
 ## Algorithms included
 
-* metaphone
+* Metaphone
+* New York State Identification and Intelligence System
 
 ## Dependencies
 
