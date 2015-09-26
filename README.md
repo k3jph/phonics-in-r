@@ -16,6 +16,8 @@ phonetic spelling and test phonetic similarity.
 * New York State Identification and Intelligence System
   * NYSIIS
   * Modified NYSIIS
+* Statistics Canada
+  * Census Modified
 
 ## Dependencies
 
