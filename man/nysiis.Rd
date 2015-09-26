@@ -43,6 +43,7 @@ Robert L. Taft, \emph{Name search techniques}, Bureau of Systems
 Development, Albany, New York, 1970.
 }
 \seealso{
-Other phonics: \code{\link{metaphone}}
+Other phonics: \code{\link{caverphone}};
+  \code{\link{metaphone}}
 }
 

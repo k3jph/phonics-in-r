@@ -9,6 +9,7 @@ phonetic spelling and test phonetic similarity.
 
 ## Algorithms included
 
+* Caverphone
 * Metaphone
 * New York State Identification and Intelligence System
 

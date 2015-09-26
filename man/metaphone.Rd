@@ -37,6 +37,7 @@ metaphone("wheel")
 metaphone(c("school", "benji"))
 }
 \seealso{
-Other phonics: \code{\link{nysiis}}
+Other phonics: \code{\link{caverphone}};
+  \code{\link{nysiis}}
 }
 
