@@ -41,6 +41,6 @@ University of Otago, New Zealand, 2004.
 }
 \seealso{
 Other phonics: \code{\link{metaphone}};
-  \code{\link{nysiis}}
+  \code{\link{nysiis}}; \code{\link{statcan}}
 }
 

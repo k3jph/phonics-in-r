@@ -3,5 +3,6 @@
 export(caverphone)
 export(metaphone)
 export(nysiis)
+export(statcan)
 importFrom(Rcpp,evalCpp)
 useDynLib(phonics)

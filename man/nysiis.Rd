@@ -44,6 +44,6 @@ Development, Albany, New York, 1970.
 }
 \seealso{
 Other phonics: \code{\link{caverphone}};
-  \code{\link{metaphone}}
+  \code{\link{metaphone}}; \code{\link{statcan}}
 }
 

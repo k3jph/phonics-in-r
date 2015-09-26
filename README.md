@@ -10,8 +10,12 @@ phonetic spelling and test phonetic similarity.
 ## Algorithms included
 
 * Caverphone
+  * Original Caverphone
+  * Caverphone 2
 * Metaphone
 * New York State Identification and Intelligence System
+  * NYSIIS
+  * Modified NYSIIS
 
 ## Dependencies
 

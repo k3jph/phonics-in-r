@@ -38,6 +38,6 @@ metaphone(c("school", "benji"))
 }
 \seealso{
 Other phonics: \code{\link{caverphone}};
-  \code{\link{nysiis}}
+  \code{\link{nysiis}}; \code{\link{statcan}}
 }
 
