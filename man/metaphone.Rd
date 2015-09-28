@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{metaphone}
 \alias{metaphone}
-\title{metaphone}
+\title{Metaphone}
 \usage{
 metaphone(word, maxCodeLen = 10L)
 }
@@ -15,13 +15,13 @@ metaphone(word, maxCodeLen = 10L)
 metaphone encoded character vector
 }
 \description{
-Encode a string with the Metaphone phonentic algorithm
+The Metaphone phonentic algorithm
 }
 \details{
-The function \code{metaphone} phonentically encodes the '
+The function \code{metaphone} phonentically encodes the
 given string using the metaphone algorithm.  There is some discrepency
-with respect to how the metaphone algorithm actually works.  For '
-instance, there is a version in the Java Apache Commons library.  '
+with respect to how the metaphone algorithm actually works.  For
+instance, there is a version in the Java Apache Commons library.
 There is a version provided within PHP.  These do not provide the same
 results.  On the questionable theory that the implementation in PHP
 is probably more well known, this code should match it in output.
@@ -35,5 +35,9 @@ metaphone should be.
 \examples{
 metaphone("wheel")
 metaphone(c("school", "benji"))
+}
+\seealso{
+Other phonics: \code{\link{caverphone}};
+  \code{\link{nysiis}}; \code{\link{statcan}}
 }
 

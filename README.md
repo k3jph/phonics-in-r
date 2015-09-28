@@ -9,7 +9,15 @@ phonetic spelling and test phonetic similarity.
 
 ## Algorithms included
 
-* metaphone
+* Caverphone
+  * Original Caverphone
+  * Caverphone 2
+* Metaphone
+* New York State Identification and Intelligence System
+  * NYSIIS
+  * Modified NYSIIS
+* Statistics Canada
+  * Census Modified
 
 ## Dependencies
 

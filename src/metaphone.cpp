@@ -45,17 +45,18 @@ string substr(string, int, int);
 
 //' @rdname metaphone
 //' @name metaphone
-//' @title metaphone
+//' @title Metaphone
 //'
-//' @description Encode a string with the Metaphone phonentic algorithm
+//' @description
+//' The Metaphone phonentic algorithm
 //'
 //' @param word        character vector of strings to encode
 //' @param maxCodeLen  maximum length of the resulting encodings, in characters
 //'
-//' @details The function \code{metaphone} phonentically encodes the '
+//' @details The function \code{metaphone} phonentically encodes the
 //' given string using the metaphone algorithm.  There is some discrepency
-//' with respect to how the metaphone algorithm actually works.  For '
-//' instance, there is a version in the Java Apache Commons library.  '
+//' with respect to how the metaphone algorithm actually works.  For
+//' instance, there is a version in the Java Apache Commons library.
 //' There is a version provided within PHP.  These do not provide the same
 //' results.  On the questionable theory that the implementation in PHP
 //' is probably more well known, this code should match it in output.
