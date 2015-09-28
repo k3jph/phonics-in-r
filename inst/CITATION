@@ -1,0 +1,9 @@
+year <- sub("-.*", "", meta$Date)
+note <- sprintf("R package version %s", meta$Version)
+
+bibentry(bibtype = "Manual",
+         title = "{phonics}: Phonetic Spelling Algorithms in R",
+         author = person("James P.", "{Howard, II}", email = "jh@jameshoward.us"),
+         year = year,
+         note = note,
+         url = "https://jameshoward.us/software/phonics")
