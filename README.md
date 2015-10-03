@@ -28,7 +28,7 @@ phonetic spelling and test phonetic similarity.
 
 ## Contribution guidelines
 
-* Use [Git Flow](http://nvie.com/posts/a-successful-git-branching-model/)
+* Use [GitFlow](http://nvie.com/posts/a-successful-git-branching-model/)
 * Write unit tests using [testthat](https://github.com/hadley/testthat)
 * Document functions using [roxygen2](https://github.com/yihui/roxygen2)
 
