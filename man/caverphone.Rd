@@ -40,7 +40,7 @@ David Hood, "Caverphone Revisited," Technical Paper CTP150804
 University of Otago, New Zealand, 2004.
 }
 \seealso{
-Other phonics: \code{\link{metaphone}};
+Other phonics: \code{\link{lein}}; \code{\link{metaphone}};
   \code{\link{nysiis}}; \code{\link{statcan}}
 }
 
