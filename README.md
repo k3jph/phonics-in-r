@@ -17,6 +17,9 @@ phonetic spelling and test phonetic similarity.
 * New York State Identification and Intelligence System
   * NYSIIS
   * Modified NYSIIS
+* Soundex
+  * Original Soundex
+  * Apache Refined Soundex
 * Statistics Canada
   * Census Modified
 

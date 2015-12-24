@@ -1,0 +1,41 @@
+##  This is a collection of sample values for the Apache
+##  refined soundex algorithm.  The list can be found on the
+##  web at http://ntz-develop.blogspot.com/2011/03/phonetic-algorithms.html
+word,value
+Braz,B1905
+Broz,B1905
+Caren,C30908
+Caron,C30908
+Carren,C30908
+Charon,C30908
+Corain,C30908
+Coram,C30908
+Corran,C30908
+Corrin,C30908
+Corwin,C30908
+Curran,C30908
+Curreen,C30908
+Currin,C30908
+Currom,C30908
+Currum,C30908
+Curwen,C30908
+Hairs,H093
+Hark,H093
+Hars,H093
+Hayers,H093
+Heers,H093
+Hiers,H093
+Lambard,L7081096
+Lambart,L7081096
+Lambert,L7081096
+Lambird,L7081096
+Lampaert,L7081096
+Lampard,L7081096
+Lampart,L7081096
+Lamperd,L7081096
+Lampert,L7081096
+Lamport,L7081096
+Limbert,L7081096
+Lombard,L7081096
+Nolton,N807608
+Noulton,N807608

@@ -65,7 +65,7 @@ nysiis <- function(word, maxCodeLen = 6, modified = FALSE) {
     ## Both NYSIIS and the modified NYSIIS are based on the
     ## implementation described at
     ## http://www.dropby.com/NYSIISTextStrings.html
-    
+
     if(modified == TRUE)
         return(nysiis_modified(word, maxCodeLen))
     else
@@ -73,11 +73,11 @@ nysiis <- function(word, maxCodeLen = 6, modified = FALSE) {
 }
 
 nysiis_original <- function(word, maxCodeLen = 6) {
-    
+
     ## First, remove any nonalphabetical characters and capitalize it
     word <- gsub("[^[:alpha:]]*", "", word)
     word <- toupper(word)
-    
+
     ## Translate first characters of name: MAC to MCC, KN to N, K to C, PH,
     ## PF to FF, SCH to SSS
     word <- gsub("^MAC", "MCC", word)
