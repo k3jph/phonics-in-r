@@ -1,0 +1,15 @@
+##  Test values from the PHP documentation for the Soundex function.
+##  More examples would be better.
+word,value
+Euler,E460
+Ellery,E460
+Gauss,G200
+Ghosh,G200
+Hilbert,H416
+Hilbert,H416
+Knuth,K530
+Kant,K530
+Lloyd,L300
+Ladd,L300
+Lukasiewicz,L222
+Lissajous,L222

@@ -17,3 +17,27 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// soundex
+CharacterVector soundex(CharacterVector word, int maxCodeLen);
+RcppExport SEXP phonics_soundex(SEXP wordSEXP, SEXP maxCodeLenSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< CharacterVector >::type word(wordSEXP);
+    Rcpp::traits::input_parameter< int >::type maxCodeLen(maxCodeLenSEXP);
+    __result = Rcpp::wrap(soundex(word, maxCodeLen));
+    return __result;
+END_RCPP
+}
+// refinedSoundex
+CharacterVector refinedSoundex(CharacterVector word, int maxCodeLen);
+RcppExport SEXP phonics_refinedSoundex(SEXP wordSEXP, SEXP maxCodeLenSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< CharacterVector >::type word(wordSEXP);
+    Rcpp::traits::input_parameter< int >::type maxCodeLen(maxCodeLenSEXP);
+    __result = Rcpp::wrap(refinedSoundex(word, maxCodeLen));
+    return __result;
+END_RCPP
+}

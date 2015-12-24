@@ -12,10 +12,14 @@ phonetic spelling and test phonetic similarity.
 * Caverphone
   * Original Caverphone
   * Caverphone 2
+* Lein
 * Metaphone
 * New York State Identification and Intelligence System
   * NYSIIS
   * Modified NYSIIS
+* Soundex
+  * Original Soundex
+  * Apache Refined Soundex
 * Statistics Canada
   * Census Modified
 
@@ -28,7 +32,7 @@ phonetic spelling and test phonetic similarity.
 
 ## Contribution guidelines
 
-* Use [Git Flow](http://nvie.com/posts/a-successful-git-branching-model/)
+* Use [GitFlow](http://nvie.com/posts/a-successful-git-branching-model/)
 * Write unit tests using [testthat](https://github.com/hadley/testthat)
 * Document functions using [roxygen2](https://github.com/yihui/roxygen2)
 
