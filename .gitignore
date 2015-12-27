@@ -1,7 +1,8 @@
-.Rbuildignore
 .Rproj.user
 .Rhistory
 .RData
 src/*.o
 src/*.so
 src/*.dll
+src/RcppExports.cpp
+man/*
