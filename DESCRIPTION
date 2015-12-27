@@ -10,7 +10,8 @@ Description: Provides a collection of phonetic algorithms including
 License: BSD_2_clause + file LICENSE
 LazyData: TRUE
 Imports:
-    Rcpp (>= 0.12.1),
+    Rcpp (>= 0.12.1)
+Suggests:
     testthat
 LinkingTo: Rcpp,
     BH
