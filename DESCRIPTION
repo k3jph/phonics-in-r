@@ -1,7 +1,7 @@
 Package: phonics
 Type: Package
 Title: Phonetic Spelling Algorithms
-Version: 0.5.3
+Version: 0.5.4
 Date: 2015-12-27
 Author: "James P. Howard, II" <jh@jameshoward.us>
 Maintainer: "James P. Howard, II" <jh@jameshoward.us>
