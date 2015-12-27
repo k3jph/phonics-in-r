@@ -1,11 +1,12 @@
 Package: phonics
 Type: Package
-Title: Phonetic spelling algorithms for R
+Title: Phonetic spelling algorithms
 Version: 0.5.1
 Date: 2015-12-24
-Author: James P. Howard, II <jh@jameshoward.us>
-Maintainer: James P. Howard, II <jh@jameshoward.us>
-Description: This package provides a collection of phonetic algorithms.
+Author: "James P. Howard, II" <jh@jameshoward.us>
+Maintainer: "James P. Howard, II" <jh@jameshoward.us>
+Description: Provides a collection of phonetic algorithms including
+    Soundex, Metaphone, NYSIIS, Caverphone, and others.
 License: BSD_2_clause + file LICENSE
 LazyData: TRUE
 Imports:
