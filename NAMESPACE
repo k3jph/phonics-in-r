@@ -3,6 +3,8 @@
 export(caverphone)
 export(lein)
 export(metaphone)
+export(mra_compare)
+export(mra_encode)
 export(nysiis)
 export(refinedSoundex)
 export(soundex)

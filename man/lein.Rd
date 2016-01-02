@@ -36,7 +36,8 @@ Division, Washington, 1977.
 }
 \seealso{
 Other phonics: \code{\link{caverphone}},
-  \code{\link{metaphone}}, \code{\link{nysiis}},
-  \code{\link{soundex}}, \code{\link{statcan}}
+  \code{\link{metaphone}}, \code{\link{mra_encode}},
+  \code{\link{nysiis}}, \code{\link{soundex}},
+  \code{\link{statcan}}
 }
 

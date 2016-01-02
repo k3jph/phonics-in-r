@@ -42,7 +42,7 @@ University of Otago, New Zealand, 2004.
 }
 \seealso{
 Other phonics: \code{\link{lein}}, \code{\link{metaphone}},
-  \code{\link{nysiis}}, \code{\link{soundex}},
-  \code{\link{statcan}}
+  \code{\link{mra_encode}}, \code{\link{nysiis}},
+  \code{\link{soundex}}, \code{\link{statcan}}
 }
 
