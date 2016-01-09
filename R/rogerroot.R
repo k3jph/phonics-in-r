@@ -57,6 +57,8 @@
 #' rogerroot(c("Peter", "Peady"))
 #' rogerroot("Stevenson")
 #'
+#' @importFrom utils read.csv
+#'
 #' @export
 rogerroot <- function(word, maxCodeLen = 5) {
 
