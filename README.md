@@ -13,10 +13,14 @@ phonetic spelling and test phonetic similarity.
   * Original Caverphone
   * Caverphone 2
 * Lein
+* Match Rating Approach
+  * Encoder
+  * Comparison
 * Metaphone
 * New York State Identification and Intelligence System
   * NYSIIS
   * Modified NYSIIS
+* Roger Root
 * Soundex
   * Original Soundex
   * Apache Refined Soundex

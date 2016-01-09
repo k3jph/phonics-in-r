@@ -1,8 +1,8 @@
 Package: phonics
 Type: Package
 Title: Phonetic Spelling Algorithms
-Version: 0.5.4
-Date: 2015-12-27
+Version: 0.6.0
+Date: 2016-01-08
 Author: "James P. Howard, II" <jh@jameshoward.us>
 Maintainer: "James P. Howard, II" <jh@jameshoward.us>
 Description: Provides a collection of phonetic algorithms including

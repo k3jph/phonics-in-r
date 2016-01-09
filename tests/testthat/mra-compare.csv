@@ -1,0 +1,8 @@
+##  Test values from https://en.wikipedia.org/wiki/Match_rating_approach
+word1,word2,value
+Byrnn,Boern,TRUE
+Smith,Smyth,TRUE
+Catherine,Kathryn,TRUE
+##  I need a handful of gauranteed fails
+James,Howard,FALSE
+Strangelove,Maryland,FALSE
