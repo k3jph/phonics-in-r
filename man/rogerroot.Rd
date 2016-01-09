@@ -18,7 +18,7 @@ vector which is \code{TRUE} if \code{x} and \code{y} pass the MRA
 comparison test.
 }
 \description{
-
+Provides the Roger Root name coding system
 }
 \details{
 The variable \code{word} is the name to be encoded.  The variable
