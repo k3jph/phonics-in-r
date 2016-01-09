@@ -29,7 +29,7 @@
 #' @description
 #' The Lein name coding procedure.
 #'
-#' @param word         character or character vector or wordings to encode
+#' @param word string or vector of strings to encode
 #' @param maxCodeLen   maximum length of the resulting encodings, in characters
 #'
 #' @details

@@ -50,7 +50,7 @@ string substr(string, int, int);
 //' @description
 //' The Metaphone phonentic algorithm
 //'
-//' @param word        character vector of strings to encode
+//' @param word string or vector of strings to encode
 //' @param maxCodeLen  maximum length of the resulting encodings, in characters
 //'
 //' @details The function \code{metaphone} phonentically encodes the

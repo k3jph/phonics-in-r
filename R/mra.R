@@ -30,7 +30,7 @@
 #' @description
 #' The Western Airlines matching rating approach name encoder
 #'
-#' @param word character or character vector or wordings to encode
+#' @param word string or vector of strings to encode
 #' @param x MRA-encoded character vector
 #' @param y MRA-encoded character vector
 #'
