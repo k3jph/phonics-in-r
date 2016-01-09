@@ -40,7 +40,7 @@ metaphone(c("school", "benji"))
 \seealso{
 Other phonics: \code{\link{caverphone}},
   \code{\link{lein}}, \code{\link{mra_encode}},
-  \code{\link{nysiis}}, \code{\link{soundex}},
-  \code{\link{statcan}}
+  \code{\link{nysiis}}, \code{\link{rogerroot}},
+  \code{\link{soundex}}, \code{\link{statcan}}
 }
 

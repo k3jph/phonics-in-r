@@ -38,6 +38,6 @@ Division, Washington, 1977.
 Other phonics: \code{\link{caverphone}},
   \code{\link{lein}}, \code{\link{metaphone}},
   \code{\link{mra_encode}}, \code{\link{nysiis}},
-  \code{\link{soundex}}
+  \code{\link{rogerroot}}, \code{\link{soundex}}
 }
 

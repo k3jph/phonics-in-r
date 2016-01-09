@@ -1,0 +1,21 @@
+## Test values from Robert L. Taft, Name search techniques, Bureau of
+## Systems Development, Albany, New York, 1970.
+word,value 
+Johnson,32020
+Williams,45300
+Smith,00310
+Jones,32000
+Brown,09420
+Davis,01800
+Jackson,37020
+Wilson,45020
+Lee,05000
+Thomas,01300
+Anderson,12140
+Overstreet,18401
+Heckel,27500
+Wyszynski,40207
+Witted,41100
+## I am not sure "Ongoog" is correct, but it yields the correct result
+Ongoog,12770
+Ching,06270
