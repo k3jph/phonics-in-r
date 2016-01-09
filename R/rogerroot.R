@@ -27,7 +27,7 @@
 #' @title Roger Root Name Coding Procedure
 #'
 #' @description
-#'
+#' Provides the Roger Root name coding system
 #'
 #' @param word character or character vector or wordings to encode
 #' @param maxCodeLen   maximum length of the resulting encodings, in characters
@@ -49,7 +49,7 @@
 #'
 #' Robert L. Taft, \emph{Name search techniques}, Bureau of Systems
 #' Development, Albany, New York, 1970.
-#' 
+#'
 #' @family phonics
 #'
 #' @examples
@@ -69,7 +69,7 @@ rogerroot <- function(word, maxCodeLen = 5) {
     letters <- read.csv(colClasses=c("character", "character"), text = letterTable)
     for(i in 1:nrow(letters))
         word <- gsub(letters$letter[i], letters$code[i], word)
-    
+
     ## Basic letter table
     letterTable<-"letter,code\nB,9\nCE,0\nCH,6\nCI,0\nCY,0\nC,7\nDG,7\nD,1\nF,8\nG,7\nJ,6\nK,7\nL,5\nM,3\nN,2\nPH,8\nP,8\nQ,7\nR,4\nSCH,6\nSH,6\nS,0\nTSCH,6\nTSH,6\nTS,0\nT,1\nV,8\nX,7\nZ,0"
     letters <- read.csv(colClasses=c("character", "character"), text = letterTable)
@@ -79,14 +79,14 @@ rogerroot <- function(word, maxCodeLen = 5) {
     ## Remove duplicate consecutive characters
     word <- gsub("([1-9])\\1+", "\\1", word)
     word <- gsub(".([0])\\1+", "\\1", word)
-    
+
     ## Remove non-numeric characters
     word <- gsub("[^0-9]", "", word)
-    
+
     ## Truncate to requested length
     zeros <- paste(rep(0, maxCodeLen), sep = "", collapse = "")
     word <- gsub("$", zeros, word)
     word <- substr(word, 1, maxCodeLen)
-    
+
     return(word)
 }
