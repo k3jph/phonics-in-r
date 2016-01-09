@@ -29,7 +29,7 @@
 #' @description
 #' The NYSIIS phonetic algorithm
 #'
-#' @param word         character or character vector or strings to encode
+#' @param word string or vector of strings to encode
 #' @param maxCodeLen   maximum length of the resulting encodings, in characters
 #' @param modified     if \code{TRUE}, use the modified NYSIIS algorithm
 #'

@@ -29,21 +29,19 @@
 #' @description
 #' Provides the Roger Root name coding system
 #'
-#' @param word character or character vector or wordings to encode
-#' @param maxCodeLen   maximum length of the resulting encodings, in characters
+#' @param word string or vector of strings to encode
+#' @param maxCodeLen  maximum length of the resulting encodings, in characters
 #'
 #' @details
 #'
-#' The variable \code{word} is the name to be encoded.  The variable
-#' \code{maxCodeLen} is \emph{not} supported in this algorithm encoder
-#' because the algorithm itself is dependent upon its six-character
-#' length.  The variables \code{x} and \code{y} are MRA-encoded and are
-#' compared to each other using the MRA comparison specification.
+#' The \code{rogerroot} function phentically encodes the given string
+#' using the Roger Root algorithm.  The variable \code{word} is a string
+#' or vector of strings to encode.
 #'
-#' @return The \code{mra_encode} function returns match rating approach
-#' encoded character vector.  The \code{mra_compare} returns a boolean
-#' vector which is \code{TRUE} if \code{x} and \code{y} pass the MRA
-#' comparison test.
+#' The variable \code{maxCodeLen} is the limit on how long the returned
+#' code should be.  The default is 5.
+#'
+#' @return the Roger Root encoded character vector
 #'
 #' @references
 #'
@@ -56,6 +54,8 @@
 #' rogerroot("William")
 #' rogerroot(c("Peter", "Peady"))
 #' rogerroot("Stevenson")
+#'
+#' @importFrom utils read.csv
 #'
 #' @export
 rogerroot <- function(word, maxCodeLen = 5) {

@@ -46,7 +46,7 @@ string refinedSoundex(string, int);
 //' @description
 //' The Soundex phonetic algorithms
 //'
-//' @param word        character vector of strings to encode
+//' @param word string or vector of strings to encode
 //' @param maxCodeLen  maximum length of the resulting encodings, in characters
 //'
 //' @details The function \code{soundex} phonentically encodes the given

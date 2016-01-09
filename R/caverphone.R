@@ -29,7 +29,7 @@
 #' @description
 #' The Caverphone family of phonetic algorithms
 #'
-#' @param word         character or character vector or wordings to encode
+#' @param word string or vector of strings to encode
 #' @param maxCodeLen   maximum length of the resulting encodings, in characters
 #' @param modified     if \code{TRUE}, use the Caverphone 2 algorithm
 #'
