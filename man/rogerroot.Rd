@@ -7,25 +7,23 @@
 rogerroot(word, maxCodeLen = 5)
 }
 \arguments{
-\item{word}{character or character vector or wordings to encode}
+\item{word}{string or vector of strings to encode}
 
 \item{maxCodeLen}{maximum length of the resulting encodings, in characters}
 }
 \value{
-The \code{mra_encode} function returns match rating approach
-encoded character vector.  The \code{mra_compare} returns a boolean
-vector which is \code{TRUE} if \code{x} and \code{y} pass the MRA
-comparison test.
+the Roger Root encoded character vector
 }
 \description{
 Provides the Roger Root name coding system
 }
 \details{
-The variable \code{word} is the name to be encoded.  The variable
-\code{maxCodeLen} is \emph{not} supported in this algorithm encoder
-because the algorithm itself is dependent upon its six-character
-length.  The variables \code{x} and \code{y} are MRA-encoded and are
-compared to each other using the MRA comparison specification.
+The \code{rogerroot} function phentically encodes the given string
+using the Roger Root algorithm.  The variable \code{word} is a string
+or vector of strings to encode.
+
+The variable \code{maxCodeLen} is the limit on how long the returned
+code should be.  The default is 5.
 }
 \examples{
 rogerroot("William")
@@ -41,6 +39,7 @@ Development, Albany, New York, 1970.
 Other phonics: \code{\link{caverphone}},
   \code{\link{lein}}, \code{\link{metaphone}},
   \code{\link{mra_encode}}, \code{\link{nysiis}},
-  \code{\link{soundex}}, \code{\link{statcan}}
+  \code{\link{phonics}}, \code{\link{soundex}},
+  \code{\link{statcan}}
 }
 

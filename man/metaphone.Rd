@@ -7,7 +7,7 @@
 metaphone(word, maxCodeLen = 10L)
 }
 \arguments{
-\item{word}{character vector of strings to encode}
+\item{word}{string or vector of strings to encode}
 
 \item{maxCodeLen}{maximum length of the resulting encodings, in characters}
 }
@@ -40,7 +40,8 @@ metaphone(c("school", "benji"))
 \seealso{
 Other phonics: \code{\link{caverphone}},
   \code{\link{lein}}, \code{\link{mra_encode}},
-  \code{\link{nysiis}}, \code{\link{rogerroot}},
-  \code{\link{soundex}}, \code{\link{statcan}}
+  \code{\link{nysiis}}, \code{\link{phonics}},
+  \code{\link{rogerroot}}, \code{\link{soundex}},
+  \code{\link{statcan}}
 }
 

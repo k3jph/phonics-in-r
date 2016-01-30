@@ -7,7 +7,7 @@
 nysiis(word, maxCodeLen = 6, modified = FALSE)
 }
 \arguments{
-\item{word}{character or character vector or strings to encode}
+\item{word}{string or vector of strings to encode}
 
 \item{maxCodeLen}{maximum length of the resulting encodings, in characters}
 
@@ -46,7 +46,8 @@ Development, Albany, New York, 1970.
 \seealso{
 Other phonics: \code{\link{caverphone}},
   \code{\link{lein}}, \code{\link{metaphone}},
-  \code{\link{mra_encode}}, \code{\link{rogerroot}},
-  \code{\link{soundex}}, \code{\link{statcan}}
+  \code{\link{mra_encode}}, \code{\link{phonics}},
+  \code{\link{rogerroot}}, \code{\link{soundex}},
+  \code{\link{statcan}}
 }
 

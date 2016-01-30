@@ -7,7 +7,7 @@
 statcan(word, maxCodeLen = 4)
 }
 \arguments{
-\item{word}{character or character vector or wordings to encode}
+\item{word}{string or vector of strings to encode}
 
 \item{maxCodeLen}{maximum length of the resulting encodings, in characters}
 }
@@ -38,6 +38,7 @@ Division, Washington, 1977.
 Other phonics: \code{\link{caverphone}},
   \code{\link{lein}}, \code{\link{metaphone}},
   \code{\link{mra_encode}}, \code{\link{nysiis}},
-  \code{\link{rogerroot}}, \code{\link{soundex}}
+  \code{\link{phonics}}, \code{\link{rogerroot}},
+  \code{\link{soundex}}
 }
 

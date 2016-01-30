@@ -10,7 +10,7 @@ mra_encode(word)
 mra_compare(x, y)
 }
 \arguments{
-\item{word}{character or character vector or wordings to encode}
+\item{word}{string or vector of strings to encode}
 
 \item{x}{MRA-encoded character vector}
 
@@ -46,7 +46,8 @@ Technology, SP-500-2 (1977), p. 17.
 \seealso{
 Other phonics: \code{\link{caverphone}},
   \code{\link{lein}}, \code{\link{metaphone}},
-  \code{\link{nysiis}}, \code{\link{rogerroot}},
-  \code{\link{soundex}}, \code{\link{statcan}}
+  \code{\link{nysiis}}, \code{\link{phonics}},
+  \code{\link{rogerroot}}, \code{\link{soundex}},
+  \code{\link{statcan}}
 }
 
