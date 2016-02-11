@@ -105,12 +105,11 @@ string metaphone(string x, int maxCodeLen, bool traditional) {
      * null string is, itself, the null string.  The Metaphone of a
      * single character is itself, capitalized, as appropriate.
      */
-    if(word.length() == 0)
-        return("");
+    for(i = word.begin(); i != word.end() && !isalpha(*i); i++);
+    if(i == word.end())
+        return "";
     if(word.length() == 1)
         return(word);
-
-    for(i = word.begin(); !isalpha(*i); i++);
 
     switch (cc) {
     case 'A':

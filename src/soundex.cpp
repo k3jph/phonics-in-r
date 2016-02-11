@@ -110,23 +110,21 @@ string soundex(string x, int maxCodeLen) {
     trim(x);
     to_upper(x);
 
-    string word = x.substr();
-
-    if(x.length() == 0)
-        return("");
-    if(x.length() == 1)
-        return(x);
-
     for(i = x.begin(); i != x.end() && !isalpha(*i); i++);
     if(i == x.end())
         return "";
+    if(x.length() == 1)
+        return(x);
 
     code = *i;
     lastCode = SOUNDEX.at(*i - 'A');
 
     for(i++; i != x.end(); ++i) {
-        char nextCode = SOUNDEX.at(*i - 'A');
+		char currCode = *i - 'A';
+		if(currCode < 0 || currCode > 25)
+			break;
 
+        char nextCode = SOUNDEX.at(currCode);
         if(nextCode != '0' && nextCode != lastCode)
             code += (lastCode = nextCode);
         if(nextCode ==  '0' && *i != 'H' && *i != 'W')
@@ -149,22 +147,21 @@ string refinedSoundex(string x, int maxCodeLen) {
     trim(x);
     to_upper(x);
 
-    string word = x.substr();
-
-    if(x.length() == 0)
-        return("");
-    if(x.length() == 1)
-        return(x);
-
     for(i = x.begin(); i != x.end() && !isalpha(*i); i++);
     if(i == x.end())
         return "";
+    if(x.length() == 1)
+        return(x);
 
     code = *i;
     code += (lastCode = SOUNDEX.at(*i - 'A'));
 
     for(i++; i != x.end(); ++i) {
-        char nextCode = SOUNDEX.at(*i - 'A');
+		char currCode = *i - 'A';
+		if(currCode < 0 || currCode > 25)
+			break;
+
+        char nextCode = SOUNDEX.at(currCode);
         if(nextCode != lastCode)
             code += (lastCode = nextCode);
     }

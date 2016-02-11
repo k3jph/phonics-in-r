@@ -10,7 +10,7 @@ mra_encode(word)
 mra_compare(x, y)
 }
 \arguments{
-\item{word}{character or character vector or wordings to encode}
+\item{word}{string or vector of strings to encode}
 
 \item{x}{MRA-encoded character vector}
 

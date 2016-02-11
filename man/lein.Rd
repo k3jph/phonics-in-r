@@ -7,7 +7,7 @@
 lein(word, maxCodeLen = 4)
 }
 \arguments{
-\item{word}{character or character vector or wordings to encode}
+\item{word}{string or vector of strings to encode}
 
 \item{maxCodeLen}{maximum length of the resulting encodings, in characters}
 }

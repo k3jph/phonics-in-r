@@ -10,7 +10,7 @@ soundex(word, maxCodeLen = 4L)
 refinedSoundex(word, maxCodeLen = 10L)
 }
 \arguments{
-\item{word}{character vector of strings to encode}
+\item{word}{string or vector of strings to encode}
 
 \item{maxCodeLen}{maximum length of the resulting encodings, in characters}
 }
