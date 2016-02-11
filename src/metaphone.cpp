@@ -108,9 +108,6 @@ string metaphone(string x, int maxCodeLen, bool traditional) {
     for(i = word.begin(); i != word.end() && !isalpha(*i); i++);
     if(i == word.end())
         return "";
-
-    if(word.length() == 0)
-        return("");
     if(word.length() == 1)
         return(word);
 

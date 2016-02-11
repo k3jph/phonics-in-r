@@ -113,9 +113,6 @@ string soundex(string x, int maxCodeLen) {
     for(i = x.begin(); i != x.end() && !isalpha(*i); i++);
     if(i == x.end())
         return "";
-
-	if(x.length() == 0)
-        return("");
     if(x.length() == 1)
         return(x);
 
@@ -153,9 +150,6 @@ string refinedSoundex(string x, int maxCodeLen) {
     for(i = x.begin(); i != x.end() && !isalpha(*i); i++);
     if(i == x.end())
         return "";
-
-	if(x.length() == 0)
-        return("");
     if(x.length() == 1)
         return(x);
 
