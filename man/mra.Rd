@@ -46,8 +46,7 @@ Technology, SP-500-2 (1977), p. 17.
 \seealso{
 Other phonics: \code{\link{caverphone}},
   \code{\link{lein}}, \code{\link{metaphone}},
-  \code{\link{nysiis}}, \code{\link{phonics}},
-  \code{\link{rogerroot}}, \code{\link{soundex}},
-  \code{\link{statcan}}
+  \code{\link{nysiis}}, \code{\link{rogerroot}},
+  \code{\link{soundex}}, \code{\link{statcan}}
 }
 
