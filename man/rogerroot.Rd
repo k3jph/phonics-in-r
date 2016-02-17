@@ -37,8 +37,9 @@ Development, Albany, New York, 1970.
 }
 \seealso{
 Other phonics: \code{\link{caverphone}},
-  \code{\link{lein}}, \code{\link{metaphone}},
-  \code{\link{mra_encode}}, \code{\link{nysiis}},
-  \code{\link{soundex}}, \code{\link{statcan}}
+  \code{\link{cologne}}, \code{\link{lein}},
+  \code{\link{metaphone}}, \code{\link{mra_encode}},
+  \code{\link{nysiis}}, \code{\link{soundex}},
+  \code{\link{statcan}}
 }
 

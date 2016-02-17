@@ -14,6 +14,7 @@ phonetic spelling and test phonetic similarity.
 * Caverphone
   * Original Caverphone
   * Caverphone 2
+* Cologne (Kölner)
 * Lein
 * Match Rating Approach
   * Encoder
