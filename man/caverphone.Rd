@@ -41,9 +41,9 @@ David Hood, "Caverphone Revisited," Technical Paper CTP150804
 University of Otago, New Zealand, 2004.
 }
 \seealso{
-Other phonics: \code{\link{lein}}, \code{\link{metaphone}},
-  \code{\link{mra_encode}}, \code{\link{nysiis}},
-  \code{\link{rogerroot}}, \code{\link{soundex}},
-  \code{\link{statcan}}
+Other phonics: \code{\link{cologne}}, \code{\link{lein}},
+  \code{\link{metaphone}}, \code{\link{mra_encode}},
+  \code{\link{nysiis}}, \code{\link{rogerroot}},
+  \code{\link{soundex}}, \code{\link{statcan}}
 }
 
