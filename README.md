@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/howardjp/phonics.svg?branch=master,osx)](https://travis-ci.org/howardjp/phonics)
 [![Coverage Status](https://coveralls.io/repos/howardjp/phonics/badge.svg?branch=master&service=github)](https://coveralls.io/github/howardjp/phonics?branch=master)
-[![Downloads from the RStudio CRAN mirror](http://cranlogs.r-pkg.org/badges/phonics)](http://cran.rstudio.com/package=phonics)
+[![Downloads from the RStudio CRAN mirror](http://cranlogs.r-pkg.org/badges/phonics)](https://cran.rstudio.com/web/packages/phonics/index.html)
  
 This is the R package to support phonetic spelling algorithms in R.
 Several packages provide the Soundex algorithm.  However, other
