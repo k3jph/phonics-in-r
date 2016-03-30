@@ -3,6 +3,7 @@ Type: Package
 Title: Phonetic Spelling Algorithms
 Version: 0.7.2
 Date: 2016-03-29
+Encoding: UTF-8
 Authors@R: person(given = "James P.", family = "Howard, II",
 		          email = "jh@jameshoward.us", role = c("aut", "cre"))
 URL: https://jameshoward.us/software/phonics/,
