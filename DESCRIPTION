@@ -19,4 +19,4 @@ Suggests:
     testthat
 LinkingTo: Rcpp,
     BH
-RoxygenNote: 5.0.1.9000
+RoxygenNote: 5.0.1
