@@ -2,7 +2,7 @@ context("metaphone")
 
 ##  Test the metaphone algorithm.  Data comes from the Javascript
 ##  implementation.
-test <- read.csv("metaphone.csv", comment.char="#", stringsAsFactors = FALSE)
+test <- read.csv("metaphone.csv", comment.char = "#", stringsAsFactors = FALSE, colClasses = c("character", "character"), encoding = "UTF-8")
 for(i in 1:nrow(test))
     expect_true(metaphone(test$word[i]) == test$value[i])
 test$test <- metaphone(test$word)
