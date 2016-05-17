@@ -1,4 +1,4 @@
-## Copyright (c) 2015, James P. Howard, II <jh@jameshoward.us>
+## Copyright (c) 2016, James P. Howard, II <jh@jameshoward.us>
 ##
 ## Redistribution and use in source and binary forms, with or without
 ## modification, are permitted provided that the following conditions are
@@ -24,13 +24,13 @@
 ## (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 ## OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#' @title Lein Name Coding
+#' @title Phonex Name Coding
 #'
 #' @description
-#' The Lein name coding procedure.
+#' The Phonex name coding procedure.
 #'
 #' @param word string or vector of strings to encode
-#' @param maxCodeLen   maximum length of the resulting encodings, in characters
+#' @param maxCodeLen maximum length of the resulting encodings, in characters
 #'
 #' @details
 #'
@@ -38,14 +38,13 @@
 #' \code{maxCodeLen} is the limit on how long the returned name code
 #' should be.  The default is 4.
 #'
-#' @return the Lein encoded character vector
+#' @return the Phonex encoded character vector
 #'
 #' @references
 #'
-#' Billy T. Lynch and William L. Arends. "Selection of surname coding
-#' procedure for the SRS record linkage system." United States
-#' Department of Agriculture, Sample Survey Research Branch, Research
-#' Division, Washington, 1977.
+#' A.J. Lait and Brian Randell. "An assessment of name matching
+#' algorithms." Technical Report Series-University of Newcastle Upon
+#' Tyne Computing Science (1996).
 #'
 #' @family phonics
 #'
