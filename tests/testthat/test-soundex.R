@@ -1,17 +1,25 @@
 context("soundex")
 
-##  Test the soundex algorithm
-test <- read.csv("soundex.csv", comment.char="#", stringsAsFactors=FALSE)
-for(i in 1:nrow(test))
-    expect_true(soundex(test$word[i]) == test$value[i])
-test$test <- soundex(test$word)
-for(i in 1:nrow(test))
-    expect_true(test$test[i] == test$value[i])
+test_that("The soundex algorithm implementation accurately maps strings to soundexes", {
+  test_data <- read.csv("soundex.csv", comment.char = "#", stringsAsFactors = FALSE)
+  expect_true(all(soundex(test_data$word) == test_data$value))
+  test_data$test_soundexes <- soundex(test_data$word)
+  expect_true(all(test_data$test_soundexes == test_data$value))
+})
 
-##  Test the refined soundex algorithm
-test <- read.csv("soundex-refined.csv", comment.char="#", stringsAsFactors=FALSE)
-for(i in 1:nrow(test))
-    expect_true(refinedSoundex(test$word[i]) == test$value[i])
-test$test <- refinedSoundex(test$word)
-for(i in 1:nrow(test))
-    expect_true(test$test[i] == test$value[i])
+test_that("The soundex algorithm implementation can handle NAs", {
+  test_data <- soundex(NA_character_)
+  expect_true(is.na(test_data))
+})
+
+test_that("The refined soundex algorithm implementation accurately maps strings to soundexes", {
+  test_data <- read.csv("soundex-refined.csv", comment.char = "#", stringsAsFactors = FALSE)
+  expect_true(all(refinedSoundex(test_data$word) == test_data$value))
+  test_data$test_soundexes <- refinedSoundex(test_data$word)
+  expect_true(all(test_data$test_soundexes == test_data$value))
+})
+
+test_that("The refined soundex algorithm implementation can handle NAs", {
+  test_data <- refinedSoundex(NA_character_)
+  expect_true(is.na(test_data))
+})
