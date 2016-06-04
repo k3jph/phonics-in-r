@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{metaphone}
 \alias{metaphone}
-\title{Metaphone}
+\title{Generate phonetic versions of strings with Metaphone}
 \usage{
 metaphone(word, maxCodeLen = 10L)
 }
@@ -12,17 +12,18 @@ metaphone(word, maxCodeLen = 10L)
 \item{maxCodeLen}{maximum length of the resulting encodings, in characters}
 }
 \value{
-metaphone encoded character vector
+a character vector containing the metaphones of \code{word},
+or an NA if the \code{word} value is NA
 }
 \description{
-The Metaphone phonentic algorithm
+The function \code{metaphone} phonentically encodes the
+given string using the metaphone algorithm.
 }
 \details{
-The function \code{metaphone} phonentically encodes the
-given string using the metaphone algorithm.  There is some discrepency
-with respect to how the metaphone algorithm actually works.  For
+There is some discrepency
+with respect to how the metaphone algorithm actually works. For
 instance, there is a version in the Java Apache Commons library.
-There is a version provided within PHP.  These do not provide the same
+There is a version provided within PHP. These do not provide the same
 results.  On the questionable theory that the implementation in PHP
 is probably more well known, this code should match it in output.
 

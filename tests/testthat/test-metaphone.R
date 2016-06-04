@@ -1,10 +1,13 @@
 context("metaphone")
 
-##  Test the metaphone algorithm.  Data comes from the Javascript
-##  implementation.
-test <- read.csv("metaphone.csv", comment.char="#", stringsAsFactors = FALSE)
-for(i in 1:nrow(test))
-    expect_true(metaphone(test$word[i]) == test$value[i])
-test$test <- metaphone(test$word)
-for(i in 1:nrow(test))
-    expect_true(test$test[i] == test$value[i])
+test_that("The metaphone algorithm implementation accurately maps strings to metaphones", {
+  test_data <- read.csv("metaphone.csv", comment.char = "#", stringsAsFactors = FALSE)
+  expect_true(all(metaphone(test_data$word) == test_data$value))
+  test_data$test_metaphones <- metaphone(test_data$word)
+  expect_true(all(test_data$test_metaphones == test_data$value))
+})
+
+test_that("The metaphone algorithm implementation can handle NAs", {
+  test_data <- metaphone(NA_character_)
+  expect_true(is.na(test_data))
+})
