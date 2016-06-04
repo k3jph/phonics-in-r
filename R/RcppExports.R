@@ -3,19 +3,19 @@
 
 #' @rdname metaphone
 #' @name metaphone
-#' @title Metaphone
+#' @title Generate phonetic versions of strings with Metaphone
 #'
 #' @description
-#' The Metaphone phonentic algorithm
+#' The function \code{metaphone} phonentically encodes the
+#' given string using the metaphone algorithm.
 #'
 #' @param word string or vector of strings to encode
 #' @param maxCodeLen  maximum length of the resulting encodings, in characters
 #'
-#' @details The function \code{metaphone} phonentically encodes the
-#' given string using the metaphone algorithm.  There is some discrepency
-#' with respect to how the metaphone algorithm actually works.  For
+#' @details There is some discrepency
+#' with respect to how the metaphone algorithm actually works. For
 #' instance, there is a version in the Java Apache Commons library.
-#' There is a version provided within PHP.  These do not provide the same
+#' There is a version provided within PHP. These do not provide the same
 #' results.  On the questionable theory that the implementation in PHP
 #' is probably more well known, this code should match it in output.
 #'
@@ -25,7 +25,8 @@
 #' The variable \code{maxCodeLen} is the limit on how long the returned
 #' metaphone should be.
 #'
-#' @return metaphone encoded character vector
+#' @return a character vector containing the metaphones of \code{word},
+#' or an NA if the \code{word} value is NA
 #'
 #' @family phonics
 #'

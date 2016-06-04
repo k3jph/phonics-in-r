@@ -36,8 +36,78 @@ using namespace std;
 #define NULLCHAR    (char)NULL
 #define pc          lastChar
 
-string soundex(string, int);
-string refinedSoundex(string, int);
+
+string soundex_single(string x, int maxCodeLen) {
+  const string SOUNDEX = "01230120022455012623010202";
+  string::iterator i;
+  string code = "";
+  char lastCode = NULLCHAR;
+
+  trim(x);
+  to_upper(x);
+
+  for(i = x.begin(); i != x.end() && !isalpha(*i); i++);
+  if(i == x.end())
+    return "";
+  if(x.length() == 1)
+    return(x);
+
+  code = *i;
+  lastCode = SOUNDEX.at(*i - 'A');
+
+  for(i++; i != x.end(); ++i) {
+    char currCode = *i - 'A';
+    if(currCode < 0 || currCode > 25)
+      break;
+
+    char nextCode = SOUNDEX.at(currCode);
+    if(nextCode != '0' && nextCode != lastCode)
+      code += (lastCode = nextCode);
+    if(nextCode ==  '0' && *i != 'H' && *i != 'W')
+      lastCode = '?';
+  }
+
+  //  "0"-pad string then truncate
+  code += "0000";
+  code = code.substr(0, maxCodeLen);
+
+  return code;
+}
+
+string refinedSoundex_single(string x, int maxCodeLen) {
+  const string SOUNDEX = "01360240043788015936020505";
+  string::iterator i;
+  string code = "";
+  char lastCode = NULLCHAR;
+
+  trim(x);
+  to_upper(x);
+
+  for(i = x.begin(); i != x.end() && !isalpha(*i); i++);
+  if(i == x.end())
+    return "";
+  if(x.length() == 1)
+    return(x);
+
+  code = *i;
+  code += (lastCode = SOUNDEX.at(*i - 'A'));
+
+  for(i++; i != x.end(); ++i) {
+    char currCode = *i - 'A';
+    if(currCode < 0 || currCode > 25)
+      break;
+
+    char nextCode = SOUNDEX.at(currCode);
+    if(nextCode != lastCode)
+      code += (lastCode = nextCode);
+  }
+
+  // Do not "0"-pad for refined
+  code = code.substr(0, maxCodeLen);
+
+  return code;
+}
+
 
 //' @rdname soundex
 //' @name soundex
@@ -79,12 +149,23 @@ string refinedSoundex(string, int);
 //' @export
 //[[Rcpp::export]]
 CharacterVector soundex(CharacterVector word, int maxCodeLen = 4) {
-    CharacterVector res;
 
-    for(CharacterVector::iterator i = word.begin(); i != word.end(); i++)
-        res.push_back(soundex((string)*i, maxCodeLen));
+  unsigned int input_size = word.size();
+  CharacterVector res(input_size);
 
-    return(res);
+  for(unsigned int i = 0; i < input_size; i++){
+    if((i % 10000) == 0){
+      Rcpp::checkUserInterrupt();
+    }
+    if(word[i] == NA_STRING){
+      res[i] = NA_STRING;
+    } else {
+      res[i] = soundex_single(Rcpp::as<std::string>(word[i]), maxCodeLen);
+    }
+
+  }
+
+  return res;
 }
 
 //' @rdname soundex
@@ -93,81 +174,21 @@ CharacterVector soundex(CharacterVector word, int maxCodeLen = 4) {
 //' @export
 //[[Rcpp::export]]
 CharacterVector refinedSoundex(CharacterVector word, int maxCodeLen = 10) {
-    CharacterVector res;
 
-    for(CharacterVector::iterator i = word.begin(); i != word.end(); i++)
-        res.push_back(refinedSoundex((string)*i, maxCodeLen));
+  unsigned int input_size = word.size();
+  CharacterVector res(input_size);
 
-    return(res);
-}
-
-string soundex(string x, int maxCodeLen) {
-    const string SOUNDEX = "01230120022455012623010202";
-    string::iterator i;
-    string code = "";
-    char lastCode = NULLCHAR;
-
-    trim(x);
-    to_upper(x);
-
-    for(i = x.begin(); i != x.end() && !isalpha(*i); i++);
-    if(i == x.end())
-        return "";
-    if(x.length() == 1)
-        return(x);
-
-    code = *i;
-    lastCode = SOUNDEX.at(*i - 'A');
-
-    for(i++; i != x.end(); ++i) {
-		char currCode = *i - 'A';
-		if(currCode < 0 || currCode > 25)
-			break;
-
-        char nextCode = SOUNDEX.at(currCode);
-        if(nextCode != '0' && nextCode != lastCode)
-            code += (lastCode = nextCode);
-        if(nextCode ==  '0' && *i != 'H' && *i != 'W')
-            lastCode = '?';
+  for(unsigned int i = 0; i < input_size; i++){
+    if((i % 10000) == 0){
+      Rcpp::checkUserInterrupt();
+    }
+    if(word[i] == NA_STRING){
+      res[i] = NA_STRING;
+    } else {
+      res[i] = refinedSoundex_single(Rcpp::as<std::string>(word[i]), maxCodeLen);
     }
 
-    //  "0"-pad string then truncate
-    code += "0000";
-    code = code.substr(0, maxCodeLen);
+  }
 
-    return code;
-}
-
-string refinedSoundex(string x, int maxCodeLen) {
-    const string SOUNDEX = "01360240043788015936020505";
-    string::iterator i;
-    string code = "";
-    char lastCode = NULLCHAR;
-
-    trim(x);
-    to_upper(x);
-
-    for(i = x.begin(); i != x.end() && !isalpha(*i); i++);
-    if(i == x.end())
-        return "";
-    if(x.length() == 1)
-        return(x);
-
-    code = *i;
-    code += (lastCode = SOUNDEX.at(*i - 'A'));
-
-    for(i++; i != x.end(); ++i) {
-		char currCode = *i - 'A';
-		if(currCode < 0 || currCode > 25)
-			break;
-
-        char nextCode = SOUNDEX.at(currCode);
-        if(nextCode != lastCode)
-            code += (lastCode = nextCode);
-    }
-
-    // Do not "0"-pad for refined
-    code = code.substr(0, maxCodeLen);
-
-    return code;
+  return res;
 }
