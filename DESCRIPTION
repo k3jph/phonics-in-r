@@ -17,7 +17,10 @@ LazyData: TRUE
 Imports:
     Rcpp (>= 0.12.1)
 Suggests:
-    testthat
+    testthat,
+    knitr,
+    rmarkdown
 LinkingTo: Rcpp,
     BH
 RoxygenNote: 5.0.1
+VignetteBuilder: knitr
