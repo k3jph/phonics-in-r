@@ -23,6 +23,7 @@ phonetic spelling and test phonetic similarity.
 * New York State Identification and Intelligence System
   * NYSIIS
   * Modified NYSIIS
+* Oxford Name Compression Algorithm
 * Phonex
 * Roger Root
 * Soundex
