@@ -1,48 +1,84 @@
 ---
 author:
-  - name: FirstName LastName
-    affiliation: University/Company
-    address: >
-      First line
-      Second line
-    email: name@company.com
-    url: http://rstudio.com
-  - name: Second Author
-    affiliation: Affiliation
+  - name: James P. Howard, II
+#    affiliation: University/Company
+#    address: >
+#      First line
+#      Second line
+    email: jh@jameshoward.us
+    url: https://jameshoward.us
 title:
-  formatted: "A Capitalized Title: Something about a Package \\pkg{foo}"
+  formatted: "Phonetic Spelling Algorithms in \\proglang{R}"
   # If you use tex in the formatted title, also supply version without
-  plain:     "A Capitalized Title: Something about a Package foo"
+  plain:     "Phonetic Spelling Algorithms in R"
   # For running headers, if needed
-  short:     "\\pkg{foo}: A Capitalized Title"
+  short:     "Phonetic Spelling Algorithms in R"
 abstract: >
   The abstract of the article.
 keywords:
   # at least one keyword must be supplied
-  formatted: [keywords, not capitalized, "\\proglang{Java}"]
-  plain:     [keywords, not capitalized, Java]
+  formatted: [text processing, phonetics, linguistics, record linkage, "\\proglang{R}"]
+  plain:     [text processing, phonetics, linguistics, record linkage, R]
+classoption: nojss
 preamble: >
   \usepackage{amsmath}
+  \usepackage[smaller]{acronym}
 output: rticles::jss_article
 ---
 
+\acrodef{NYSIIS}{New York State Identification and Intelligence System}
+
 # Introduction
 
-This template demonstrates some of the basic latex you'll need to know to create a JSS article.
+# Phonetic Algorithms
 
-## Code formatting
+## Caverphone
+ * Original Caverphone
+ * Caverphone 2
 
-Don't use markdown, instead use the more precise latex commands:
+## Cologne (Kölner)
 
-* \proglang{Java}
-* \pkg{plyr}
-* \code{print("abc")}
+## Lein
 
-# R code
+## Match Rating Approach
+ * Encoder
+ * Comparison
 
-Can be inserted in regular R markdown blocks.
+## Metaphone
 
-```{r}
-x <- 1:10
-x
-```
+## New York State Identification and Intelligence System
+ * NYSIIS
+ * Modified NYSIIS
+
+## Phonex
+
+## Roger Root
+
+## Soundex
+ * Original Soundex
+ * Apache Refined Soundex
+
+## Statistics Canada
+ * Census Modified
+
+# Implementation
+
+## Rcpp-Based Implementations
+
+## Regular Expression Implementations
+
+## Unit Testing
+
+# Usage
+
+## Standard Usage
+
+## Match Rating Approach
+
+# Examples
+
+## Standard Usage
+
+## Match Rating Approach
+
+# Summary
