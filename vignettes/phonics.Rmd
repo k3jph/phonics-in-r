@@ -50,6 +50,8 @@ output: rticles::jss_article
  * NYSIIS
  * Modified NYSIIS
 
+## Oxford Name Compression Algorithm
+
 ## Phonex
 
 ## Roger Root
