@@ -38,7 +38,7 @@
 #' @importFrom Rcpp evalCpp
 #' @export
 metaphone <- function(word, maxCodeLen = 10L) {
-    .Call('phonics_metaphone', PACKAGE = 'phonics', word, maxCodeLen)
+    .Call('_phonics_metaphone', PACKAGE = 'phonics', word, maxCodeLen)
 }
 
 #' @rdname soundex
@@ -80,7 +80,7 @@ metaphone <- function(word, maxCodeLen = 10L) {
 #' @importFrom Rcpp evalCpp
 #' @export
 soundex <- function(word, maxCodeLen = 4L) {
-    .Call('phonics_soundex', PACKAGE = 'phonics', word, maxCodeLen)
+    .Call('_phonics_soundex', PACKAGE = 'phonics', word, maxCodeLen)
 }
 
 #' @rdname soundex
@@ -88,6 +88,6 @@ soundex <- function(word, maxCodeLen = 4L) {
 #' @importFrom Rcpp evalCpp
 #' @export
 refinedSoundex <- function(word, maxCodeLen = 10L) {
-    .Call('phonics_refinedSoundex', PACKAGE = 'phonics', word, maxCodeLen)
+    .Call('_phonics_refinedSoundex', PACKAGE = 'phonics', word, maxCodeLen)
 }
 

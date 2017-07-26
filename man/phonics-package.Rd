@@ -15,7 +15,15 @@ symbolic representation approximating the sound.  It can be used to
 match names, words, and as a proxy for assorted string distance
 algorithms.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://jameshoward.us/software/phonics/}
+  \item \url{https://github.com/howardjp/phonics}
+  \item Report bugs at \url{https://github.com/howardjp/phonics/issues}
+}
+
+}
 \author{
 James P. Howard, II <jh@jameshoward.us>
 }
-

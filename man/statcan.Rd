@@ -42,4 +42,3 @@ Other phonics: \code{\link{caverphone}},
   \code{\link{phonex}}, \code{\link{rogerroot}},
   \code{\link{soundex}}
 }
-

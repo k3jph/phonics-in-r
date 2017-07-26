@@ -43,4 +43,3 @@ Other phonics: \code{\link{caverphone}},
   \code{\link{phonex}}, \code{\link{soundex}},
   \code{\link{statcan}}
 }
-

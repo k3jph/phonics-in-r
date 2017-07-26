@@ -1,20 +1,29 @@
 ---
 author:
   - name: James P. Howard, II
-#    affiliation: University/Company
-#    address: >
-#      First line
-#      Second line
-    email: jh@jameshoward.us
-    url: https://jameshoward.us
+    affiliation: Johns Hopkins University Applied Physics Laboratory
+    address: >
+        11100 Johns Hopkins Road
+        Laurel, Maryland 20723
+        United States
+    email: james.howard@jhuapl.edu jh@jameshoward.us
+    url: http://www.jhuapl.edu https://jameshoward.us
 title:
   formatted: "Phonetic Spelling Algorithms in \\proglang{R}"
   # If you use tex in the formatted title, also supply version without
   plain:     "Phonetic Spelling Algorithms in R"
   # For running headers, if needed
-  short:     "Phonetic Spelling Algorithms in R"
-abstract: >
-  The abstract of the article.
+  short:     "Phonetic Spelling Algorithms in \\proglang{R}"
+abstract: > 
+  The \phonics package provides several functions for indexing words by
+  their English language pronunciation.  Over nearly one hundred years,
+  many different algorithms have been developed to support word and name
+  indexing.  From Soundex, developed in the early 20th century and
+  predating the digital computer, through to modern digital phonetic
+  algorithms like Phonex, the \phonics package provides support for more
+  than a dozen methods.  Together, these provide phonetic algorithms
+  appropriate for use in name indexing and name matching across a
+  variety of English language use cases.
 keywords:
   # at least one keyword must be supplied
   formatted: [text processing, phonetics, linguistics, record linkage, "\\proglang{R}"]
@@ -23,64 +32,632 @@ classoption: nojss
 preamble: >
   \usepackage{amsmath}
   \usepackage[smaller]{acronym}
-output: rticles::jss_article
+  \usepackage{xspace}
+  
+  \newcommand\phonics{\pkg{phonics}\xspace}
+  \newcommand\Rcpp{\pkg{Rcpp}\xspace}
+  \newcommand\Cpp{\proglang{C++}\xspace}
+  \newcommand\R{\proglang{R}\xspace}
+  
+  \acrodef{CRAN}{the Comprehensive \R Archive Network}
+  \acrodef{CSV}{comma-separated values}
+  \acrodef{MRA}{match rating approach}
+  \acrodef{NARA}{United States National Archives and Records Administration}
+  \acrodef{NYSIIS}{New York State Identification and Intelligence System}
+  \acrodef{ONCA}{Oxford Name Compression Algorithm}
+  \acrodef{SSA}{United States Social Security Administration}
+  \acrodef{USDA}{United States Department of Agriculture}
+output: 
+  rticles::jss_article:
+    fig_caption: yes
+bibliography: phonics.bib
 ---
-
-\acrodef{NYSIIS}{New York State Identification and Intelligence System}
+```{r set-options, include = FALSE}
+knitr::opts_chunk$set(comment = "##", strip.white = TRUE)
+```
 
 # Introduction
 
-# Phonetic Algorithms
+The \phonics package for \proglang{R} is designed to provide a
+variety of phonetic indexing algorithms in common and not-so-common use
+today.  The algorithms generally reduce a string to a symbolic
+representation approximating the sound made by pronouncing the string.
+They can be used to match names, words, and as a proxy for assorted
+string distance algorithms.
 
-## Caverphone
- * Original Caverphone
- * Caverphone 2
+Some of the algorithms, especially Soundex, are relatively common and
+implemented in other packages for R [for instance, see @borg:2016, the
+\pkg{RecordLinkage} package].  Others, such as RogerRoot, are not
+commonly available or are only rarely implemented.  The overriding goal
+within this package has been to provide a single interface allowing for
+each algorithm to be used as a drop-in replacement for the others.
+Except for the Match Rating Approach, detailed later, this goal is met.
 
-## Cologne (Kölner)
+This paper will explain the \phonics package and some of the
+implementation details.  First, we will explain how to install the
+package, give a brief overview of the history of the algorithm, along
+with sources.  Each algorithm discussion closes with examples and output
+samples.  Next, we will discuss high-level design choices as well as the
+unit testing regime.  We will then provide notes on the relative
+performance of the given algorithms.  Finally, we will conclude this
+paper.
 
-## Lein
+# Description, Usage, and Examples
 
-## Match Rating Approach
- * Encoder
- * Comparison
+Like most \R packages, the \phonics library can be downloaded from
+\ac{CRAN} using the usual install method:
+
+```{r install-cran, eval = FALSE}
+install.packages("phonics")
+```
+
+In addition, the package is maintained via Git Flow development model
+[@pidoux:2014, 66-71] with the source publicly available via GitHub.
+The development branch can be directly installed via ``install_github``
+from the \pkg{devtools} package [@wickham:2016].
+
+```{r install-github, eval = FALSE}
+devtools::install_github("howardjp/phonics")
+```
+
+The \phonics package has several dependencies, but the most notable is
+\Rcpp.  Therefore, a \Cpp compiler is necessary to install the
+package from source.  After installation, the \phonics package is loaded
+in the usual way with ``library``.  There are no global options that are
+required or optional.  Once loaded, the package's functions are directly
+usable. 
+
+```{r startup}
+library(phonics)
+```
+
+Throughout the usage and examples in this section, we will use a list of
+four examples to demonstrate the functions.  These illustrate both
+similar sounding and different sounding names and how the phonetic
+algorithms succeed or not in matching them.\footnote{Only at the end of
+writing this paper did I realize I was using the Duke and Duchess of 
+Cambridge as my examples.}
+
+```{r example-data}
+x1 <- "Catherine"
+x2 <- "Kathryn"
+x3 <- "Katrina"
+x4 <- "William"
+
+x <- c(x1, x2, x3, x4)
+```
+
+## Soundex
+
+Soundex is probably the oldest and most well-known system for creating
+phonetic indices [@wright:1960; @newcombe:1962].  Soundex was originally
+patented in 1918 and 1922, well before the use of digital computers
+[@knuth:1998, pp. 394-395], and is sometimes known as Russell Soundex.
+The purpose of Soundex was to provide an index that worked from the
+sound of a name.  Soundex is used by the \ac{NARA} to provide indexing
+over United States Census Records.  In addition, Soundex is available in
+many database management systems, such as Oracle, MySQL, and others.
+Due to its precomputer invention, the algorithm itself is quite simple
+and easy to implement, making it even more common.
+
+The final form of a Soundex-encoded index is a letter followed by three
+digits.  Except for the first letter, vowels and vowel sounds are not
+encoded.  If a code were to be longer than four characters, the first
+letter plus three digits, the code is normally truncated.  However, this
+is the normal operation of the algorithm and not required.
+
+In addition, the traditional Soundex method, this package implements the
+Refined Soundex algorithm.  The Refined Soundex algorithm changes the
+letter bins from Soundex, allowing for closer sounding groupings, and
+also removes the truncation step, allowing for full-length encodings.
+The Refined Soundex algorithm seems to have originated with the
+implementation of phonetic algorithms included with the Apache Commons
+library [@fosatti:2008], though the underlying ideas of rebinning and
+lengthening the Soundex encodings goes back to at least @zobel:1995.
+
+The Soundex algorithm is implemented as the ``soundex`` function and the
+Refined Soundex method is given in the ``refinedSoundex`` function, and
+we can observe them in the following examples.
+
+```{r soundex-examples}
+soundex(x1)
+soundex(x2)
+soundex(x)
+
+refinedSoundex(x1)
+refinedSoundex(x2)
+```
+Both functions accept a ``maxCodeLen`` that limits the length of the
+returned code.  Except where noted, all the algorithms support the
+``maxCodeLen`` option to change the maximum or expected code length
+returned, as appropriate.
+
+```{r soundex-examples-maxcodelen}
+refinedSoundex(x, maxCodeLen = 5)
+```
 
 ## Metaphone
 
+Metaphone is a family of loosely related phonetic spelling algorithms
+created by Lawrence Philips [@philips:1990; @philips:2000;
+@philips:2007].  The original algorithm, usually just called Metaphone,
+is implemented in this package.  Metaphone captures 16 core consonant
+sounds in multiple languages and represents them in the final phonetic
+spelling.  In addition to source language flexibility, Metaphone is also
+adept at ordinary words, not just names like the Soundex family.
+
+The second and third algorithms, Double Metaphone and Metaphone 3 are
+not implemented in this package.  Double Metaphone was created by
+Philips to address perceived limitations of Metaphone.  In particular,
+Double Metaphone can provide two results, allowing for more potential
+avenues to index.  Metaphone 3 is patent-encumbered and is unlikely to
+provided in short term.
+
+The original Metaphone algorithm can be accessed via the ``metaphone``
+function.
+
+```{r metaphone-examples}
+metaphone(x1)
+metaphone(x2)
+metaphone(x)
+```
+
 ## New York State Identification and Intelligence System
- * NYSIIS
- * Modified NYSIIS
+
+The \ac{NYSIIS} method, named for the New York State agency that
+developed it [@silbert:1970], has become a commonly used name indexing
+algorithm.  This is largely due to its relative simplicity, good
+documentation from multiple sources, and ease of use.  The \ac{NYSIIS},
+in contrast to Soundex, tries to capture fine differentiations in
+pronunciation in different names [@taft:1970].  Therefore, "knight" and
+"night" both observe the n-sound at the start, and \ac{NYSIIS} method
+captures this, it does draw distinctions between roughly similar sounds.
+Therefore, \ac{NYSIIS} does not merge, for instance, the b-sound and
+p-sound into one.  In addition to this algorithm, a modified version was
+documented by @lynch:1977.
+
+The algorithm is available via the ``nysiis`` function and the modified
+version of \ac{NYSIIS} is accessed via the option ``modified``. 
+
+```{r nysiis-examples}
+nysiis(x1)
+nysiis(x2)
+nysiis(x)
+
+nysiis(x1, modified = TRUE)
+nysiis(x2, modified = TRUE)
+nysiis(x, modified = TRUE)
+```
 
 ## Oxford Name Compression Algorithm
 
-## Phonex
+Despite its name, the \ac{ONCA} is not a compression algorithm in the
+traditional sense [@sayood:2012] that the original text can be restored
+from the output of the algorithm.  Instead, \ac{ONCA} is a phonetic
+spelling algorithm.  \ac{ONCA} was developed for use in linking medical
+records across the British National Health Service [@gill:1997].
+
+The \ac{ONCA} method is unique among those phonetic spelling algorithms
+presented here in that it is a two-step method where each step is
+another method.  First, a string is phonetically reduced using the
+\ac{NYSIIS} algorithm.  Second, the result of the \ac{NYSIIS} process is
+then run through Soundex.  The result of the second step Soundex is the
+final result of the \ac{ONCA} method. 
+
+@gill:1997 notably claims the first step of \ac{NYSIIS} reduces
+occurrences of some edge cases better than Soundex alone, while still
+retaining the characteristic four-character index that Soundex produces.
+He also notes that the algorithm has been successfully used to index and
+link ten million records in the Oxford Record Linkage Study.
+
+The \ac{ONCA} algorithm is provided in the ``onca`` function.
+
+```{r onca-examples}
+onca(x1)
+onca(x2)
+onca(x)
+```
+
+It is important to note that the output of the \ac{ONCA} function
+is, at first glance, indistinguishable from the output of a Russell
+Soundex over a similar input string.  As a result, visual inspection
+cannot be used to discern what algorithm was used on such an output. 
+
+## Caverphone
+
+Caverphone is a family of two phonetic algorithms first documented by
+@hood:2002.  Caverphone was created as part of the Caversham project at
+the University of Otago, documenting social mobility in late 19th and
+early 20th century New Zealand.  Accordingly, Caverphone was developed
+to provide efficient matching of names on electoral rolls.  In practice,
+the Caversham project applied Caverphone after exact matches were
+identified.  This reduced the likelihood of false positives by removing
+potential targets from the index pool.
+
+Caverphone was not meant for general use.  While openly documented, the
+algorithm was developed specifically for the data at hand in the
+Caversham project.  The Caverphone 2 algorithm was updated by @hood:2004
+to provide a more generalized approach to a phonetic algorithm based on
+the experiences of Caversham and the original Caverphone.  While
+generalized, both are based on local pronunciation in and around
+Dunedin, Otago, New Zealand.
+
+The original Caverphone function returns a six-character code for the
+name.  This is the first six characters of the encoded name.  If a name
+is under six characters, it is padded with ``1``s to reach six
+characters.  Caverphone two works similarly, but with a 10-character
+code, padded with ``1``s.
+
+The Caverphone algorithm is provided by the ``caverphone`` functions.
+The Caverphone 2 algorithm is provided by setting the ``modified``
+option to ``TRUE``.
+
+```{r caverphone-examples}
+caverphone(x1)
+caverphone(x2)
+caverphone(x)
+caverphone(x1, modified = TRUE)
+caverphone(x2, modified = TRUE)
+caverphone(x, modified = TRUE)
+```
+
+## Cologne (Kölner)
+
+The Cologne phonetic algorithm was developed by @postel:1969 at
+I.B.M. to provide Soundex-like functionality for German language names.
+German names often include additional diacritics (as demonstrated by the
+German name for Cologne, "K\"olner") and more variant spellings for
+common names, due to later orthographic standardization.  Accordingly,
+Soundex was not suitable for German names and Cologne was meant to fill
+that void. 
+
+
+Cologne, unlike many of the other algorithms in this package, does not
+produce a fixed-length or maximum-length output, under normal
+operations.  The algorithm will continue encoding a string until there
+is no string left to encode.  The code itself will include digits from 1
+to 9.
+
+```{r cologne-examples}
+cologne(x1)
+cologne(x2)
+cologne(x)
+```
+
+## Lein
+
+The origins of the Lein name coding algorithm are unclear, though it
+seems probable Lein is an acronym standing for "Law Enforcement
+Information Network," a name used by several states for centralized law
+enforcement databases.  We do know that Lein was documented by
+@lynch:1977 as early as 1977 as part of a \ac{USDA} project to analyze
+the use of several name coding algorithms.
+
+The algorithm itself is retains the first character, eliminates vowels
+and duplicate sounds, then codes letters as numbers.  These are limited
+to four characters, a letter followed by three digits.
+
+The Lein algorithm is provided in the ``lein`` function.
+
+```{r lein-examples}
+lein(x1)
+lein(x2)
+lein(x)
+```
+
+## Census-Modified Statistics Canada
+
+Like Lein, the Census-Modified Statistics Canada method is documented by
+@lynch:1977. Given the name, the provenence is almost certainly a
+modification of an approach developed by Statistics Canada.  However,
+@fair:2004 has more recent information on methods for record-linkage
+used by Statistics Canada.
+
+The algorithm is also simple like Lein.  Vowel sounds are eliminated and
+duplicate sounds are reduced.  Individual letters are not recoded making
+this an extremely fast algorithm.
+
+The Census-modified Statistics Canada algorithm is provided in the
+``statcan`` function.
+
+```{r statcan-examples}
+statcan(x1)
+statcan(x2)
+statcan(x)
+```
 
 ## Roger Root
 
-## Soundex
- * Original Soundex
- * Apache Refined Soundex
+Like Lein, the Roger Root method is documented by @lynch:1977.  There
+seems to be no previous documentation, or subsequent documentation, that
+provides any details about the origin or purpose of the algorithm,
+beyond the obvious application to phonetic spelling and indexing.  The
+algorithm is also simple like Lein.  Vowel sounds are eliminated and
+duplicate sounds are reduced, leading to a five-digit numerical code.
+Because of the narrow field of options (the digits 0-9), the Roger Root
+method is more likely to lead to a larger number of collisions for
+different names.
 
-## Statistics Canada
- * Census Modified
+The Roger Root algorithm is provided in the ``rogerroot`` function.
+
+```{r rogerroot-examples}
+rogerroot(x1)
+rogerroot(x2)
+rogerroot(x)
+```
+
+## Phonex
+
+Phonex was created by @lait:1996 after a detailed analysis of several
+other algorithms with three specific goals in mind: improved accuracy,
+faster runtime, and overall simplicity.  In particular, overall
+simplicity can lead to a faster implementation as less work is necessary
+to complete the algorithm.  The creators note that by starting with
+Soundex as a baseline and making improvements from there, Phonex was
+likely to be well-suited to English language names and not well suited
+to other languages or general-purpose word matching.
+
+The Phonex algorithm is provided via the ``phonex`` algorithm.  Like
+Soundex, Phonex encodings are a single letter followed by three digits
+encoding the first four sounds of the name.
+
+```{r phonex-examples}
+phonex(x1)
+phonex(x2)
+phonex(x)
+```
+
+## Match Rating Approach
+
+The \ac{MRA} was developed by Western Airlines to match names within
+their reservation system [@moore:1977].  Unlike other algorithms
+described here, \ac{MRA} is a two-stage algorithm with separate encoding
+and comparison routines.  For instance, the results of Soundex on two
+different strings can be directly compared to test for equality: 
+
+```{r soundex-test-example}
+soundex(x1) == soundex(x2)
+soundex(x2) == soundex(x3)
+```
+
+However, the \ac{MRA} encoding algorithm may return different encodings
+for similar strings that should match.  So the second stage, for
+comparison, is used to compare to \ac{MRA}-encoded strings.  There, an
+algorithm that measures the amount of similarity between two encoded
+strings, similar to a string distance algorithm [@vanderloo:2014].  The
+encoding algorithm is provided by `mra_encode` and the comparison
+algorithm is provided by `mra_compare`.
+
+```{r mra-example}
+(mra1 = mra_encode("Katherine"))
+(mra2 = mra_encode("Catherine"))
+(mra3 = mra_encode("Katarina"))
+
+mra_compare(mra1, mra2)
+mra_compare(mra1, mra3)
+mra_compare(mra2, mra3)
+```
+
+The threshold necessary to establish similarity _gets smaller_ as the
+encoded strings get larger.  This leads to some interesting results.
+For instance, Catherine and William match as names.
+
+```{r mra-kw-example}
+mra_compare(mra_encode("Catherine"), mra_encode("William"))
+```
+
+On the other hand, Kate and Will do not match, though Will and Bill do
+successfully match.
+
+```{r mra-willbill-example}
+mra_compare(mra_encode("Kate"), mra_encode("Will"))
+mra_compare(mra_encode("Bill"), mra_encode("Will"))
+```
+
+Fully understanding the implications of the \ac{MRA} comparison
+algorithm is advised before adopting \ac{MRA} for production use.
 
 # Implementation
 
+The implementations of the functions in the \phonics package follow one
+of two outlines, depending on the nature of the function.  The majority
+of these functions are implemented as sequential processes of search and
+replace run over the subject string.  Others are implemented by
+processing the string character by character into a _final_ form; these
+are implemented in \Rcpp to provide greater speed.  The implementation
+chosen for each function flows naturally from the string processing
+rules given by the algorithm.
+
+All implementations begin with essentially the same opening stanzas.  A
+regular expression is used to eliminate nonalphabetical characters.
+This is customized in each case to allow for vowels with diacritics in
+the Cologne algorithm, and where otherwise important.  Then, all input
+strings are converted to upper case, allowing for more even and
+stardized processing.
+
 ## Rcpp-Based Implementations
+
+Three of the algorithm contained in the \phonics package are implemented
+in \Cpp and bridged into R using \Rcpp.  These are Soundex
+(``soundex``), Refined Soundex (``refinedSoundex``), and Metaphone
+(``metaphone``).  These were implemented in \Cpp at an earlier stage of
+development of the package.  In addition, these algorithms benefit from
+implementation in \Cpp through the use of its more advanced string
+processing primitives.  This is not to suggest that other languages
+cannot implement these algorithms, but \Cpp provides a particularly
+elegant solution.
 
 ## Regular Expression Implementations
 
+All other algorithms included in this package are implemented in pure
+\R, usually through the extensive use of regular expressions for string
+replacement [@teetor:2011, 161-176; @thompson:1968].  As many phonetic
+algorithms rely on common themes, such as replacing leading "KN" (as in
+"knight") with an "N" to reflect pronunciation, regular expression
+provide a convenient way to implement these translations. 
+
+The simplest case is most likely the Census-Modified Statistics Canada
+algorithm (``statcan``).  It consists of the following steps, other than
+boilerplate nonalphabetical character removal and truncation for length: 
+
+1.  Capture the first letter and remove it.
+2.  Remove all vowels and the letter "Y."
+3.  Add the first letter back to the start of the encoded string.
+4.  Remove all duplicated letters.
+
+Steps 1 and 3 are accomplished using R's internal string splitting and
+reassembly routines.  Steps 2 and 4 are easily implemented via regular
+expressions.  Other regular expression based algorithms may include more
+steps, but are not substantively more complex and follow the same basic
+pattern.
+
+## Oxford Name Compression Algorithm
+
+Due to the unique method used by \ac{ONCA}, the implementation is also
+slightly different.  The `onca` function accepts a vector of strings and
+will first process the vector with the `nysiis` function and then
+reprocess the vector with `soundex`.  We do not separately implement
+\ac{ONCA}.
+
 ## Unit Testing
 
-# Usage
+The \phonics package includes a complete test suite for regression using
+the \pkg{testthat} package [@wickham:2011].  For each phonetic
+algorithm, and major variant, there is a \ac{CSV} file containing sample
+strings and correct sample outputs for the algorithm [@rfc4180, pp. 2-4;
+@raymond:2003 pp. 112-122].  The \ac{CSV} file is processed twice for
+each algorithm, once where the vector of strings is tested and once
+where each element of the vector is tested individually.
 
-## Standard Usage
+Each set of samples has been separately generated, therefore, we are
+regressing against an independent data source.  These data sources
+include documentation, examples from independent literature, independent
+implementations of the algorithm, or independently-generated test
+suites.  Accordingly, we have some level of assurance that the results
+generated are correct and not just correct compared to our own
+self-generated outputs.
 
-## Match Rating Approach
+The unit tests are confirmed with each source file commit through an
+automated continuous integration process.
 
-# Examples
+# Performance
 
-## Standard Usage
+```{r performance, echo = FALSE, fig.height = 8, fig.cap = "Relative speed of different phonetic algorithms"}
+library(ggplot2)
+library(readr)
+library(microbenchmark)
 
-## Match Rating Approach
+## Set the number of names in the sample set
+n <- 1000
+
+## set the number of times the sample is processed
+m <- 100
+
+## Read in some sample data
+suppressMessages(nl <- read_csv("namelist.csv",  comment = "#"))
+
+## Make this replicable
+set.seed(0)
+nl.test <- nl[sample(nrow(nl), n, replace = TRUE, prob = nl$freq), ]
+
+mb.tmp <- microbenchmark(soundex(nl.test$name), times = m)
+mb <- data.frame(algorithm = "soundex", time = mb.tmp$time)
+
+mb.tmp <- microbenchmark(refinedSoundex(nl.test$name), times = m)
+mb.tmp <- data.frame(algorithm = "refinedSoundex", time = mb.tmp$time)
+mb <- rbind(mb, mb.tmp)
+
+mb.tmp <- microbenchmark(nysiis(nl.test$name), times = m)
+mb.tmp <- data.frame(algorithm = "nysiis", time = mb.tmp$time)
+mb <- rbind(mb, mb.tmp)
+
+mb.tmp <- microbenchmark(nysiis(nl.test$name, modified = TRUE), times = m)
+mb.tmp <- data.frame(algorithm = "nysiis (m)", time = mb.tmp$time)
+mb <- rbind(mb, mb.tmp)
+
+mb.tmp <- microbenchmark(lein(nl.test$name), times = m)
+mb.tmp <- data.frame(algorithm = "lein", time = mb.tmp$time)
+mb <- rbind(mb, mb.tmp)
+
+mb.tmp <- microbenchmark(caverphone(nl.test$name), times = m)
+mb.tmp <- data.frame(algorithm = "caverphone", time = mb.tmp$time)
+mb <- rbind(mb, mb.tmp)
+
+mb.tmp <- microbenchmark(caverphone(nl.test$name, modified = TRUE), times = m)
+mb.tmp <- data.frame(algorithm = "caverphone (m)", time = mb.tmp$time)
+mb <- rbind(mb, mb.tmp)
+
+mb.tmp <- microbenchmark(cologne(nl.test$name), times = m)
+mb.tmp <- data.frame(algorithm = "cologne", time = mb.tmp$time)
+mb <- rbind(mb, mb.tmp)
+
+mb.tmp <- microbenchmark(metaphone(nl.test$name), times = m)
+mb.tmp <- data.frame(algorithm = "metaphone", time = mb.tmp$time)
+mb <- rbind(mb, mb.tmp)
+
+mb.tmp <- microbenchmark(onca(nl.test$name), times = m)
+mb.tmp <- data.frame(algorithm = "onca", time = mb.tmp$time)
+mb <- rbind(mb, mb.tmp)
+
+mb.tmp <- microbenchmark(phonex(nl.test$name), times = m)
+mb.tmp <- data.frame(algorithm = "phonex", time = mb.tmp$time)
+mb <- rbind(mb, mb.tmp)
+
+mb.tmp <- microbenchmark(rogerroot(nl.test$name), times = m)
+mb.tmp <- data.frame(algorithm = "rogerroot", time = mb.tmp$time)
+mb <- rbind(mb, mb.tmp)
+
+mb.tmp <- microbenchmark(statcan(nl.test$name), times = m)
+mb.tmp <- data.frame(algorithm = "statcan", time = mb.tmp$time)
+mb <- rbind(mb, mb.tmp)
+
+## Convert to microseconds
+mb$time <- mb$time / 1000
+mb$algorithm <- as.factor(mb$algorithm)
+
+ggplot(mb, aes(x = algorithm, y = time)) + geom_boxplot() +
+    xlab("") + ylab("Time (microseconds)") + coord_flip()
+```
+
+Using a MacBook Pro with a 3.1 GHz Intel Core i7 processor, each
+algorithm was benchmarked with the \pkg{microbenchmark} package
+[@mersmann:2015].  For the benchmarking, the top 100 male and female
+names over the last century as provided by the \ac{SSA} [@ssa:2017].
+These were resampled into a random dataset of ``r n`` names with the
+same relative frequency as their appearence in the original data.
+
+The ``microbenchmark`` function is used to run each phonetic spelling
+function over the resampled data ``r m`` times with the time measurement
+from each execution cycle saved.  Due to the two-step process used for
+the matching rating approach, it is excluded from the analysis.  The
+results are shown in figure \ref{fig:performance}.
+
+As we would expect, the three phonetic spelling functions implemented
+using \Rcpp (``soundex``, ``refinedSoundex``, and ``metaphone``)
+outperform those implemented in pure \R.  In addition, the \Rcpp
+implementations provide more consistent results.  We also note that
+``statcan`` provides performance on the same scale as the \Rcpp
+functions, despite being in pure \R.  This is because ``statcan``
+consists of only three regular expression replacements and does not
+require complex bookkeeping to manage out-of-band replacements.
 
 # Summary
+
+This paper has outlined the \phonics package for \R.  Included in this
+package are several English-, German-, and French-language suitable
+algorithms for phonetically reducing names and strings.  These can be
+used for comparison and indexing, as well as later record-linkage.    In
+addition to providing suitable implementations of many different
+phonetic algorithms, this package provides a suite of test values for
+each algorithm allowing us to test the veracity of output for unit
+testing, or by other implementations in other languages.  Finally, this
+document has provided a sketch outline of the history of all included
+algorithms.  This includes, where possible, authoritative sources and
+earliest available sources for all of the algorithms.
+
+# Acknowledgements {-}
+
+The author would like to thank Oliver Keyes for his contributions and
+improvements to the \Cpp implementations within this package.
+
+# References {-}

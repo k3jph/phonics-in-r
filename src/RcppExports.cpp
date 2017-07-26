@@ -7,7 +7,7 @@ using namespace Rcpp;
 
 // metaphone
 CharacterVector metaphone(CharacterVector word, int maxCodeLen);
-RcppExport SEXP phonics_metaphone(SEXP wordSEXP, SEXP maxCodeLenSEXP) {
+RcppExport SEXP _phonics_metaphone(SEXP wordSEXP, SEXP maxCodeLenSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -19,7 +19,7 @@ END_RCPP
 }
 // soundex
 CharacterVector soundex(CharacterVector word, int maxCodeLen);
-RcppExport SEXP phonics_soundex(SEXP wordSEXP, SEXP maxCodeLenSEXP) {
+RcppExport SEXP _phonics_soundex(SEXP wordSEXP, SEXP maxCodeLenSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -31,7 +31,7 @@ END_RCPP
 }
 // refinedSoundex
 CharacterVector refinedSoundex(CharacterVector word, int maxCodeLen);
-RcppExport SEXP phonics_refinedSoundex(SEXP wordSEXP, SEXP maxCodeLenSEXP) {
+RcppExport SEXP _phonics_refinedSoundex(SEXP wordSEXP, SEXP maxCodeLenSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -40,4 +40,16 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(refinedSoundex(word, maxCodeLen));
     return rcpp_result_gen;
 END_RCPP
+}
+
+static const R_CallMethodDef CallEntries[] = {
+    {"_phonics_metaphone", (DL_FUNC) &_phonics_metaphone, 2},
+    {"_phonics_soundex", (DL_FUNC) &_phonics_soundex, 2},
+    {"_phonics_refinedSoundex", (DL_FUNC) &_phonics_refinedSoundex, 2},
+    {NULL, NULL, 0}
+};
+
+RcppExport void R_init_phonics(DllInfo *dll) {
+    R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
+    R_useDynamicSymbols(dll, FALSE);
 }
