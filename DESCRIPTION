@@ -19,7 +19,10 @@ Imports:
 Suggests:
     testthat,
     knitr,
-    rmarkdown
+    rmarkdown,
+    microbenchmark,
+    readr,
+    ggplot2
 LinkingTo: Rcpp,
     BH
 RoxygenNote: 6.0.1
