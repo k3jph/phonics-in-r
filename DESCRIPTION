@@ -1,8 +1,8 @@
 Package: phonics
 Type: Package
 Title: Phonetic Spelling Algorithms
-Version: 0.7.4
-Date: 2016-06-04
+Version: 0.7.5
+Date: 2017-08-25
 Encoding: UTF-8
 Authors@R: c(person(given = "James P.", family = "Howard, II",
 		                email = "jh@jameshoward.us", role = c("aut", "cre")),
