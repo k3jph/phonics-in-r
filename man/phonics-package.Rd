@@ -6,14 +6,24 @@
 \alias{phonics-package}
 \title{Phonetic Spelling Algorithms}
 \description{
-Encode words with English-language Metaphone
+  Encode words with English-language Metaphone
 }
 \details{
-The phonics package provides an implementation of the Metaphone
-phonetic algorithm in R.  The algorithm reduces a string to a
-symbolic representation approximating the sound.  It can be used to
-match names, words, and as a proxy for assorted string distance
-algorithms.
+  The phonics package provides implementations of several phonetic
+  algorithms.  Phonetic algorithms are used to encode a string based on
+  how it is pronounced.  The resultant code should provide functional
+  matching between similarly pronounced names.  For instance, "Robert"
+  and "Rupert" both have the Soundex value of "R163," suggesting they
+  are pronounced almost identically.  Because of pronunciation
+  differences around the world, even across English, many different
+  algorithms exist and serve different needs and populations.
+
+  The algorithms are typically used for name encoding and indexing,
+  record linking between unrelated databases, and spellchecking. In
+  addition, they can be used as a proxy for string distance
+  measurements.  Included in the package are Soundex, Metaphone,
+  Caverphone, the NYSIIS algorithm, and many others developed over the
+  years, including published variants.
 }
 \seealso{
 Useful links:
