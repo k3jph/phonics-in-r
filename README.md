@@ -3,6 +3,7 @@
 [![Build Status](https://travis-ci.org/howardjp/phonics.svg?branch=master,osx)](https://travis-ci.org/howardjp/phonics)
 [![Coverage Status](https://coveralls.io/repos/howardjp/phonics/badge.svg?branch=master&service=github)](https://coveralls.io/github/howardjp/phonics?branch=master)
 [![Downloads from the RStudio CRAN mirror](http://cranlogs.r-pkg.org/badges/phonics)](https://CRAN.R-project.org/package=phonics)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1041982.svg)](https://doi.org/10.5281/zenodo.1041982)
 [![JOSS Status](http://joss.theoj.org/papers/13e41c9bd376fe2fc948f8af10b138b6/status.svg)](http://joss.theoj.org/papers/13e41c9bd376fe2fc948f8af10b138b6)
  
 This is the R package to support phonetic spelling algorithms in R.
