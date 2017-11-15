@@ -1,12 +1,12 @@
 Package: phonics
 Type: Package
 Title: Phonetic Spelling Algorithms
-Version: 0.7.5
-Date: 2017-08-25
+Version: 0.7.6
+Date: 2017-11-15
 Encoding: UTF-8
 Authors@R: c(person(given = "James P.", family = "Howard, II",
-		                email = "jh@jameshoward.us", role = c("aut", "cre")),
-		         person(given = "Oliver", family = "Keyes", role = "ctb"))
+                    email = "jh@jameshoward.us", role = c("aut", "cre")),
+                    person(given = "Oliver", family = "Keyes", role = "ctb"))
 URL: https://jameshoward.us/software/phonics/,
     https://github.com/howardjp/phonics
 BugReports: https://github.com/howardjp/phonics/issues
