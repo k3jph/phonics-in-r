@@ -43,7 +43,7 @@ University of Otago, New Zealand, 2004.
 \seealso{
 Other phonics: \code{\link{cologne}}, \code{\link{lein}},
   \code{\link{metaphone}}, \code{\link{mra_encode}},
-  \code{\link{nysiis}}, \code{\link{rogerroot}},
+  \code{\link{nysiis}}, \code{\link{onca}},
+  \code{\link{phonex}}, \code{\link{rogerroot}},
   \code{\link{soundex}}, \code{\link{statcan}}
 }
-

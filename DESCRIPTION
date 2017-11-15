@@ -1,12 +1,12 @@
 Package: phonics
 Type: Package
 Title: Phonetic Spelling Algorithms
-Version: 0.7.5
-Date: 2017-08-25
+Version: 0.7.6
+Date: 2017-11-15
 Encoding: UTF-8
 Authors@R: c(person(given = "James P.", family = "Howard, II",
-		                email = "jh@jameshoward.us", role = c("aut", "cre")),
-		         person(given = "Oliver", family = "Keyes", role = "ctb"))
+                    email = "jh@jameshoward.us", role = c("aut", "cre")),
+                    person(given = "Oliver", family = "Keyes", role = "ctb"))
 URL: https://jameshoward.us/software/phonics/,
     https://github.com/howardjp/phonics
 BugReports: https://github.com/howardjp/phonics/issues
@@ -17,7 +17,13 @@ LazyData: TRUE
 Imports:
     Rcpp (>= 0.12.1)
 Suggests:
-    testthat
+    testthat,
+    knitr,
+    rmarkdown,
+    microbenchmark,
+    readr,
+    ggplot2
 LinkingTo: Rcpp,
     BH
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1
+VignetteBuilder: knitr

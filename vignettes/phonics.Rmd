@@ -1,0 +1,108 @@
+---
+title: "Overview of the ``phonics`` Package"
+author: "James P. Howard, II"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+The ``phonics`` package for R is designed to provide a variety of
+phonetic indexing algorithms in common and not-so-common use today.  The
+algorithms generally reduce a string to a symbolic representation
+approximating the sound made by pronouncing the string.  They can be
+used to match names, words, and as a proxy for assorted string distance
+algorithms.
+
+# Basic Usage 
+
+All algorithms, except the Match Rating Approach, accept a character
+vector or vector of character vectors as the input.  These are converted
+to their phonetic spelling using the relevant algorithm.  For example,
+we shall consider the Soundex and Refined Soundex algorithms.  The
+Soundex algorithm is implemented as the ``soundex`` function and the
+Refined Soundex method is given in the ``refinedSoundex`` function, and
+we can observe them in the following examples.
+
+```{r basic-examples}
+library("phonics")
+
+x1 <- "Catherine"
+x2 <- "Kathryn"
+x3 <- "Katrina"
+x4 <- "William"
+
+x <- c(x1, x2, x3, x4)
+
+soundex(x1)
+soundex(x2)
+soundex(x)
+
+refinedSoundex(x1)
+refinedSoundex(x2)
+```
+
+Both functions accept a `maxCodeLen` that limits the length of the
+returned code.  Except where noted, all the algorithms support the
+`maxCodeLen` option to change the maximum or expected code length
+returned, as appropriate.
+
+Beyond soundex, additional algorithms are available, as shown in the
+following table.
+
+| Algorithm                                             | Function Name |
+|:------------------------------------------------------|:--------------|
+| Caverphone                                            | caverphone    |
+| Cologne Phonetic                                      | cologne       |
+| Lein Name Coding                                      | lein          |
+| Metaphone                                             | metaphone     |
+| New York State Identification and Intelligence System | nysiis        |
+| Oxford Name Compression Algorithm                     | onca          |
+| Phonex                                                | phonex        |
+| Roger Root Name Coding Procedure                      | rogerroot     |
+| Statistics Canada Name Coding                         | statcan       |
+ 
+# Match Rating Approach
+
+Unlike other algorithms described here, MRA is a two-stage algorithm
+with separate encoding and comparison routines.  For instance, the
+results of Soundex on two different strings can be directly compared to
+test for equality:
+
+```{r soundex-test-example}
+soundex(x1) == soundex(x2)
+soundex(x2) == soundex(x3)
+```
+
+However, the MRA encoding algorithm may return different encodings for
+similar strings that should match.  So the second stage, for comparison,
+is used to compare to MRA-encoded strings. The encoding algorithm is
+provided by `mra_encode` and the comparison algorithm is provided by
+`mra_compare`.
+
+```{r mra-example}
+(mra1 = mra_encode("Katherine"))
+(mra2 = mra_encode("Catherine"))
+(mra3 = mra_encode("Katarina"))
+
+mra_compare(mra1, mra2)
+mra_compare(mra1, mra3)
+mra_compare(mra2, mra3)
+```
+
+The threshold necessary to establish similarity _gets smaller_ as the
+encoded strings get larger.  This leads to some interesting results.
+For instance, Catherine and William match as names.
+
+```{r mra-kw-example}
+mra_compare(mra_encode("Catherine"), mra_encode("William"))
+```
+
+# Summary
+
+This paper has outlined the `phonics` package for R.  Included in this
+package are several English-, German-, and French-language suitable
+algorithms for phonetically reducing names and strings.  These can be
+used for comparison and indexing, as well as later record-linkage. 
