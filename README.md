@@ -52,3 +52,9 @@ phonetic spelling and test phonetic similarity.
 
 * [Phonics in R website](https://jameshoward.us/software/phonics)
 * James P. Howard, II &lt;jh@jameshoward.us&gt;
+
+_This work used the Extreme Science and Engineering Discovery Environment
+(XSEDE), which is supported by National Science Foundation grant number
+ACI-1548562. In particular, it used the Comet system at the San Diego
+Supercomputing Center (SDSC) through allocations TG-DBS170012 and
+TG-ASC150024._
