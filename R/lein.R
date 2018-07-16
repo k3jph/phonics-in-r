@@ -37,7 +37,7 @@
 #' The variable \code{word} is the name to be encoded.  The variable
 #' \code{maxCodeLen} is the limit on how long the returned name code
 #' should be.  The default is 4.
-#' 
+#'
 #' @return the Lein encoded character vector
 #'
 #' @references
@@ -68,14 +68,8 @@ lein <- function(word, maxCodeLen = 4) {
     ## Delete vowels and Y, W, and H
     word <- gsub("A|E|I|O|U|Y|W|H", "", word)
 
-    ## Append word except for first character to first
-    word <- paste(first, word, sep = "")
-    
     ## Remove duplicate consecutive characters
     word <- gsub("([A-Z])\\1+", "\\1", word)
-    
-    ## Grab the last n - 1 characters again, for recoding
-    word <- substr(word, 2, nchar(word))
 
     ## D, T -> 1
     word <- gsub("D|T", "1", word)
@@ -92,9 +86,16 @@ lein <- function(word, maxCodeLen = 4) {
     ## C, J, K, G, Q, S, X, Z -> 5
     word <- gsub("C|J|K|G|Q|S|X|Z", "5", word)
 
+    ## Append word except for first character to first
+    word <- paste(first, word, sep = "")
+
     ## Zero-pad and truncate to requested length
     word <- gsub("$", paste(rep(0, maxCodeLen), collapse = ""), word)
     word <- substr(word, 1, maxCodeLen)
 
+    ## Manage some edge cases
+    word <- sub("0000", "", word)
+
     return(word)
 }
+

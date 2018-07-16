@@ -1,43 +1,20 @@
-##  Test values from Billy T. Lynch and William L. Arends. "Selection of
-##  surname coding procedure for the SRS record linkage system." United
-##  States Department of Agriculture, Sample Survey Research Branch,
-##  Research Division, Washington, 1977.  We really need more test cases.
+##  Test values cross-refereneced vis-á-vis the Talisman JavaScript
+##  implementation.
 word,value
-Dabbs,4500
-Daves,4500
-Davies,4500
-Davis,4500
-Debaca,4500
-Debose,4500
-Debus,4500
-Defazio,4500
-Defigh,4500
-Deveaux,4500
-Devese,4500
-Devies,4500
-Devos,4500
-Dipiazza,4500
-Divish,4500
-Dobak,4500
-Dobbs,4500
-Dobis,4500
-Dobish,4500
-Dobosh,4500
-Doepke,4500
-Dopps,4500
-Doubek,4500
-Doviak,4500
-Dubbs,4500
-Dubke,4500
-Dubois,4500
-Duboise,4500
-Dubose,4500
-Dubs,4500
-Dubukey,4500
-Dubus,4500
-Dufek,4500
-Duffek,4500
-Dupas,4500
-Dupois,4500
-Dupuis,4500
-
+Euler,E330
+Ellery,E330
+Gauss,G500
+Ghosh,G500
+Hilbert,H343
+Hilbert,H343
+Knuth,K210
+Kant,K210
+Lloyd,L310
+Ladd,L100
+Lukasiewicz,L555
+Lissajous,L555
+J,J000
+A,A000
+"",""
+Euler3.1415,E330
+12345,""
