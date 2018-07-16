@@ -60,7 +60,6 @@ string substr(string x, int i, int n) {
   }
 }
 
-
 string metaphone_single(string x, int maxCodeLen, bool traditional) {
   string alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   string soft = "EIY";

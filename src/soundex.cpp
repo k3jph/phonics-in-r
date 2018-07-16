@@ -32,16 +32,11 @@ using namespace Rcpp;
 using namespace boost;
 using namespace std;
 
-#define cc         *i
-#define NULLCHAR    (char)NULL
-#define pc          lastChar
-
-
 string soundex_single(string x, int maxCodeLen) {
   const string SOUNDEX = "01230120022455012623010202";
   string::iterator i;
   string code = "";
-  char lastCode = NULLCHAR;
+  char lastCode = (char)NULL;
 
   trim(x);
   to_upper(x);
@@ -78,7 +73,7 @@ string refinedSoundex_single(string x, int maxCodeLen) {
   const string SOUNDEX = "01360240043788015936020505";
   string::iterator i;
   string code = "";
-  char lastCode = NULLCHAR;
+  char lastCode = (char)NULL;
 
   trim(x);
   to_upper(x);
@@ -107,7 +102,6 @@ string refinedSoundex_single(string x, int maxCodeLen) {
 
   return code;
 }
-
 
 //' @rdname soundex
 //' @name soundex
@@ -162,7 +156,6 @@ CharacterVector soundex(CharacterVector word, int maxCodeLen = 4) {
     } else {
       res[i] = soundex_single(Rcpp::as<std::string>(word[i]), maxCodeLen);
     }
-
   }
 
   return res;
@@ -187,7 +180,6 @@ CharacterVector refinedSoundex(CharacterVector word, int maxCodeLen = 10) {
     } else {
       res[i] = refinedSoundex_single(Rcpp::as<std::string>(word[i]), maxCodeLen);
     }
-
   }
 
   return res;
