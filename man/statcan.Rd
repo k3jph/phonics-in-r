@@ -22,6 +22,12 @@ The variable \code{word} is the name to be encoded.  The variable
 \code{maxCodeLen} is the limit on how long the returned name code
 should be.  The default is 4.
 }
+\section{Caveats}{
+
+The \code{statcan} algorithm is only
+defined for inputs over the standard French alphabet.
+}
+
 \examples{
 statcan("William")
 statcan(c("Peter", "Peady"))

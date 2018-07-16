@@ -22,6 +22,13 @@ The variable \code{word} is the name to be encoded.  The variable
 \code{maxCodeLen} is the limit on how long the returned name code
 should be.  The default is 4.
 }
+\section{Caveats}{
+
+The \code{lein} algorithm is only
+defined for inputs over the standard English alphabet, \emph{i.e.},
+"A-Z." For inputs outside this range, the output is undefined.
+}
+
 \examples{
 lein("William")
 lein(c("Peter", "Peady"))

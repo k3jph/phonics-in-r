@@ -32,6 +32,13 @@ because the algorithm itself is dependent upon its six-character
 length.  The variables \code{x} and \code{y} are MRA-encoded and are
 compared to each other using the MRA comparison specification.
 }
+\section{Caveats}{
+
+The \code{mra_encode} and \code{mra_compare} algorithms are only
+defined for inputs over the standard English alphabet, \emph{i.e.},
+"A-Z." For inputs outside this range, the output is undefined.
+}
+
 \examples{
 mra_encode("William")
 mra_encode(c("Peter", "Peady"))

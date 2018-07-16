@@ -40,6 +40,11 @@
 #'
 #' @return the Phonex encoded character vector
 #'
+#' @section Caveats:
+#' The \code{phonex} algorithm is only
+#' defined for inputs over the standard English alphabet, \emph{i.e.},
+#' "A-Z." For inputs outside this range, the output is undefined.
+#'
 #' @references
 #'
 #' A.J. Lait and Brian Randell. "An assessment of name matching

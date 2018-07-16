@@ -47,6 +47,11 @@
 #' vector which is \code{TRUE} if \code{x} and \code{y} pass the MRA
 #' comparison test.
 #'
+#' @section Caveats:
+#' The \code{mra_encode} and \code{mra_compare} algorithms are only
+#' defined for inputs over the standard English alphabet, \emph{i.e.},
+#' "A-Z." For inputs outside this range, the output is undefined.
+#'
 #' @references
 #'
 #' G.B. Moore, J.L. Kuhns, J.L. Treffzs, and C.A. Montgomery,

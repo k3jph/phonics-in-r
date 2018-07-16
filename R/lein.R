@@ -40,6 +40,11 @@
 #'
 #' @return the Lein encoded character vector
 #'
+#' @section Caveats:
+#' The \code{lein} algorithm is only
+#' defined for inputs over the standard English alphabet, \emph{i.e.},
+#' "A-Z." For inputs outside this range, the output is undefined.
+#'
 #' @references
 #'
 #' Billy T. Lynch and William L. Arends. "Selection of surname coding

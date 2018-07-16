@@ -123,6 +123,11 @@ string refinedSoundex_single(string x, int maxCodeLen) {
 //'
 //' @return soundex encoded character vector
 //'
+//' @section Caveats:
+//' The \code{soundex} and \code{refinedSoundex} algorithms are only
+//' defined for inputs over the standard English alphabet, \emph{i.e.},
+//' "A-Z." For inputs outside this range, the output is undefined.
+//'
 //' @references
 //' Charles P. Bourne and Donald F. Ford, "A study of methods for
 //' systematically abbreviating English words and names," \emph{Journal
