@@ -32,6 +32,13 @@ NYSIIS code should be.  The default is 6.
 The variable \code{modified} directs \code{nysiis} to use the
 modified method instead of the original.
 }
+\section{Caveats}{
+
+The \code{nysiis} algorithm is only
+defined for inputs over the standard English alphabet, \emph{i.e.},
+"A-Z." For inputs outside this range, the output is undefined.
+}
+
 \examples{
 nysiis("Robert")
 nysiis("rupert")

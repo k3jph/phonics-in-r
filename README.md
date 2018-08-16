@@ -46,7 +46,6 @@ phonetic spelling and test phonetic similarity.
 * Use [GitFlow](http://nvie.com/posts/a-successful-git-branching-model/)
 * Write unit tests using [testthat](https://github.com/hadley/testthat)
 * Document functions using [roxygen2](https://github.com/yihui/roxygen2)
-* Use [ZenHub](https://www.zenhub.com/) for project management on GitHub
 
 ## For more information
 

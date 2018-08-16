@@ -37,12 +37,17 @@
 #' The variable \code{word} is the name to be encoded.  The variable
 #' \code{maxCodeLen} is the limit on how long the returned name code
 #' should be.  The default is 4.
-#' 
+#'
 #' @return the ONCA encoded character vector
+#'
+#' @section Caveats:
+#' The \code{onca} algorithm is only
+#' defined for inputs over the standard English alphabet, \emph{i.e.},
+#' "A-Z." For inputs outside this range, the output is undefined.
 #'
 #' @references
 #'
-#' Gill, Leicester. "OX-LINK: the Oxford medical record linkage system." (1997). 
+#' Gill, Leicester. "OX-LINK: the Oxford medical record linkage system." (1997).
 #'
 #' @family phonics
 #'
@@ -55,7 +60,7 @@
 onca <- function(word, maxCodeLen = 4) {
 
     ## Yes, it really is this simple.
-    
+
     word <- soundex(nysiis(word, maxCodeLen = 10), maxCodeLen)
     return(word)
 }

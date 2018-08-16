@@ -60,7 +60,6 @@ string substr(string x, int i, int n) {
   }
 }
 
-
 string metaphone_single(string x, int maxCodeLen, bool traditional) {
   string alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   string soft = "EIY";
@@ -264,6 +263,11 @@ string metaphone_single(string x, int maxCodeLen, bool traditional) {
 //' @return a character vector containing the metaphones of \code{word},
 //' or an NA if the \code{word} value is NA
 //'
+//' @section Caveats:
+//' The \code{metaphone} algorithm is only
+//' defined for inputs over the standard English alphabet, \emph{i.e.},
+//' "A-Z." For inputs outside this range, the output is undefined.
+//'
 //' @family phonics
 //'
 //' @examples
@@ -288,7 +292,6 @@ CharacterVector metaphone(CharacterVector word, int maxCodeLen = 10) {
     } else {
       res[i] = metaphone_single(Rcpp::as<std::string>(word[i]), maxCodeLen, true);
     }
-
   }
 
   return res;

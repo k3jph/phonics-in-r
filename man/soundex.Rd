@@ -29,6 +29,13 @@ based on the Apache Commons Java editons.
 The variable \code{maxCodeLen} is the limit on how long the returned
 soundex should be.
 }
+\section{Caveats}{
+
+The \code{soundex} and \code{refinedSoundex} algorithms are only
+defined for inputs over the standard English alphabet, \emph{i.e.},
+"A-Z." For inputs outside this range, the output is undefined.
+}
+
 \examples{
 soundex("wheel")
 soundex(c("school", "benji"))

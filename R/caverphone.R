@@ -44,6 +44,11 @@
 #'
 #' @return the Caverphone encoded character vector
 #'
+#' @section Caveats:
+#' The \code{caverphone} algorithm is only
+#' defined for inputs over the standard English alphabet, \emph{i.e.},
+#' "A-Z." For inputs outside this range, the output is undefined.
+#'
 #' @references
 #'
 #' David Hood, "Caverphone: Phonetic matching algorithm," Technical
@@ -71,11 +76,11 @@ caverphone <- function(word, maxCodeLen = NULL, modified = FALSE) {
             maxCodeLen <- 10
         else
             maxCodeLen <- 6
-    
+
     ## First, remove any nonalphabetical characters and lowercase it
     word <- gsub("[^[:alpha:]]*", "", word)
     word <- tolower(word)
-    
+
     if(modified == TRUE)
         word <- caverphone_modified(word)
     else

@@ -28,6 +28,11 @@
 #' @return a character vector containing the metaphones of \code{word},
 #' or an NA if the \code{word} value is NA
 #'
+#' @section Caveats:
+#' The \code{metaphone} algorithm is only
+#' defined for inputs over the standard English alphabet, \emph{i.e.},
+#' "A-Z." For inputs outside this range, the output is undefined.
+#'
 #' @family phonics
 #'
 #' @examples
@@ -60,6 +65,11 @@ metaphone <- function(word, maxCodeLen = 10L) {
 #' soundex should be.
 #'
 #' @return soundex encoded character vector
+#'
+#' @section Caveats:
+#' The \code{soundex} and \code{refinedSoundex} algorithms are only
+#' defined for inputs over the standard English alphabet, \emph{i.e.},
+#' "A-Z." For inputs outside this range, the output is undefined.
 #'
 #' @references
 #' Charles P. Bourne and Donald F. Ford, "A study of methods for

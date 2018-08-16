@@ -40,6 +40,12 @@
 #'
 #' @return the Cologne encoded character vector
 #'
+#' @section Caveats:
+#' The \code{cologne} algorithm is only
+#' defined for inputs over the standard German alphabet, \emph{i.e.},
+#' "A-Z,", "Ä," "Ö," "Ü," and "ß.  For inputs outside this range, the
+#' output is undefined.
+#'
 #' @references
 #'
 #' Hans Joachim Postel. "Die Koelner Phonetik. Ein Verfahren zur

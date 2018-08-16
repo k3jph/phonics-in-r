@@ -27,6 +27,13 @@ is set to \code{TRUE}, then the default is 10.
 The variable \code{modified} directs \code{caverphone} to use the
 Caverphone2 method, instead of the original.
 }
+\section{Caveats}{
+
+The \code{caverphone} algorithm is only
+defined for inputs over the standard English alphabet, \emph{i.e.},
+"A-Z." For inputs outside this range, the output is undefined.
+}
+
 \examples{
 caverphone("William")
 caverphone(c("Peter", "Peady"), modified = TRUE)

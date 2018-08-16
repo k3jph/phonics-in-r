@@ -37,8 +37,12 @@
 #' The variable \code{word} is the name to be encoded.  The variable
 #' \code{maxCodeLen} is the limit on how long the returned name code
 #' should be.  The default is 4.
-#' 
+#'
 #' @return the Statistics Canada encoded character vector
+#'
+#' @section Caveats:
+#' The \code{statcan} algorithm is only
+#' defined for inputs over the standard French alphabet.
 #'
 #' @references
 #'
@@ -61,6 +65,15 @@ statcan <- function(word, maxCodeLen = 4) {
     word <- gsub("[^[:alpha:]]*", "", word)
     word <- toupper(word)
 
+    ## Remove umlauts and eszett
+    word <- gsub("\u00C0|\u00C2", "A", word)
+    word <- gsub("\u00C8|\u00C9|\u00CA|\u00CB", "E", word)
+    word <- gsub("\u00CE|\u00CF", "I", word)
+    word <- gsub("\u00D4", "O", word)
+    word <- gsub("\u00D9|\u00DB|\u00DC", "U", word)
+    word <- gsub("\u0178", "Y", word)
+    word <- gsub("\u00C7", "C", word)
+
     ## First character of key = first character of name
     first <- substr(word, 1, 1)
     word <- substr(word, 2, nchar(word))
@@ -70,7 +83,7 @@ statcan <- function(word, maxCodeLen = 4) {
 
     ## Append word except for first character to first
     word <- paste(first, word, sep = "")
-    
+
     ## Remove duplicate consecutive characters
     word <- gsub("([A-Z])\\1+", "\\1", word)
 
