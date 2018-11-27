@@ -7,3 +7,14 @@ bibentry(bibtype = "Manual",
          year = year,
          note = note,
          url = "https://jameshoward.us/software/phonics")
+
+bibentry(bibtype = "Article",
+         title = "Phonetic Algorithms in R",
+         author = "James P. Howard",
+         year = "2018",
+         journal = "Journal of Open Source Software",
+         volume = "3",
+         number = "22",
+         pages = "480",
+         doi = "10.21105/joss.00480",
+         url = "https://joss.theoj.org/papers/10.21105/joss.00480")
