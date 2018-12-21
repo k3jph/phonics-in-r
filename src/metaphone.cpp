@@ -28,8 +28,6 @@
 #include <Rcpp.h>
 #include <boost/algorithm/string.hpp>
 
-using namespace Rcpp;
-
 #define cc         *i
 #define nc         *(i + 1)
 #define nnc        *(i + 2)
@@ -276,10 +274,10 @@ std::string metaphone_single(std::string x, int maxCodeLen, bool traditional) {
 //' @importFrom Rcpp evalCpp
 //' @export
 //[[Rcpp::export]]
-CharacterVector metaphone(CharacterVector word, int maxCodeLen = 10) {
+Rcpp::CharacterVector metaphone(Rcpp::CharacterVector word, int maxCodeLen = 10) {
 
     unsigned int input_size = word.size();
-    CharacterVector res(input_size);
+    Rcpp::CharacterVector res(input_size);
 
     for(unsigned int i = 0; i < input_size; i++){
         if((i % 10000) == 0){

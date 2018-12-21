@@ -28,8 +28,6 @@
 #include <Rcpp.h>
 #include <boost/algorithm/string.hpp>
 
-using namespace Rcpp;
-
 std::string soundex_single(std::string x, int maxCodeLen) {
     const std::string SOUNDEX = "01230120022455012623010202";
     std::string::iterator i;
@@ -145,10 +143,10 @@ std::string refinedSoundex_single(std::string x, int maxCodeLen) {
 //' @importFrom Rcpp evalCpp
 //' @export
 //[[Rcpp::export]]
-CharacterVector soundex(CharacterVector word, int maxCodeLen = 4) {
+Rcpp::CharacterVector soundex(Rcpp::CharacterVector word, int maxCodeLen = 4) {
 
     unsigned int input_size = word.size();
-    CharacterVector res(input_size);
+    Rcpp::CharacterVector res(input_size);
 
     for(unsigned int i = 0; i < input_size; i++){
         if((i % 10000) == 0){
@@ -169,10 +167,10 @@ CharacterVector soundex(CharacterVector word, int maxCodeLen = 4) {
 //' @importFrom Rcpp evalCpp
 //' @export
 //[[Rcpp::export]]
-CharacterVector refinedSoundex(CharacterVector word, int maxCodeLen = 10) {
+Rcpp::CharacterVector refinedSoundex(Rcpp::CharacterVector word, int maxCodeLen = 10) {
 
     unsigned int input_size = word.size();
-    CharacterVector res(input_size);
+    Rcpp::CharacterVector res(input_size);
 
     for(unsigned int i = 0; i < input_size; i++){
         if((i % 10000) == 0){
