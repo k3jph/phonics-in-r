@@ -30,12 +30,11 @@
 
 using namespace Rcpp;
 using namespace boost;
-using namespace std;
 
-string soundex_single(string x, int maxCodeLen) {
-    const string SOUNDEX = "01230120022455012623010202";
-    string::iterator i;
-    string code = "";
+std::string soundex_single(std::string x, int maxCodeLen) {
+    const std::string SOUNDEX = "01230120022455012623010202";
+    std::string::iterator i;
+    std::string code = "";
     char lastCode = (char)NULL;
 
     trim(x);
@@ -69,10 +68,10 @@ string soundex_single(string x, int maxCodeLen) {
     return code;
 }
 
-string refinedSoundex_single(string x, int maxCodeLen) {
-    const string SOUNDEX = "01360240043788015936020505";
-    string::iterator i;
-    string code = "";
+std::string refinedSoundex_single(std::string x, int maxCodeLen) {
+    const std::string SOUNDEX = "01360240043788015936020505";
+    std::string::iterator i;
+    std::string code = "";
     char lastCode = (char)NULL;
 
     trim(x);
