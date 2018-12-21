@@ -54,3 +54,4 @@ Other phonics: \code{\link{cologne}}, \code{\link{lein}},
   \code{\link{phonex}}, \code{\link{rogerroot}},
   \code{\link{soundex}}, \code{\link{statcan}}
 }
+\concept{phonics}

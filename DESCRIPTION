@@ -25,5 +25,5 @@ Suggests:
     ggplot2
 LinkingTo: Rcpp,
     BH
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.1
 VignetteBuilder: knitr
