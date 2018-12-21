@@ -29,7 +29,6 @@
 #include <boost/algorithm/string.hpp>
 
 using namespace Rcpp;
-using namespace boost;
 
 std::string soundex_single(std::string x, int maxCodeLen) {
     const std::string SOUNDEX = "01230120022455012623010202";
@@ -37,8 +36,8 @@ std::string soundex_single(std::string x, int maxCodeLen) {
     std::string code = "";
     char lastCode = (char)NULL;
 
-    trim(x);
-    to_upper(x);
+    boost::trim(x);
+    boost::to_upper(x);
 
     for(i = x.begin(); i != x.end() && !isalpha(*i); i++);
     if(i == x.end())
@@ -74,8 +73,8 @@ std::string refinedSoundex_single(std::string x, int maxCodeLen) {
     std::string code = "";
     char lastCode = (char)NULL;
 
-    trim(x);
-    to_upper(x);
+    boost::trim(x);
+    boost::to_upper(x);
 
     for(i = x.begin(); i != x.end() && !isalpha(*i); i++);
     if(i == x.end())

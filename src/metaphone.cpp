@@ -29,7 +29,6 @@
 #include <boost/algorithm/string.hpp>
 
 using namespace Rcpp;
-using namespace boost;
 
 #define cc         *i
 #define nc         *(i + 1)
@@ -68,8 +67,8 @@ std::string metaphone_single(std::string x, int maxCodeLen, bool traditional) {
     std::string word = x.substr(), meta = "";
     char lastChar = NULLCHAR;
 
-    trim(word);
-    to_upper(word);
+    boost::trim(word);
+    boost::to_upper(word);
 
     /*
      * First, we will handle a few special cases.  The Metaphone of the
