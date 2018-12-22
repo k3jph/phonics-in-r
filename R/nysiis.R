@@ -119,12 +119,18 @@ nysiis_original <- function(word, maxCodeLen = 6) {
     ## SCH to SSS, PH to FF
     ## Rules are implemented as part of opening block
 
+    ## Put back first letter before applying remaining rules
+    word <- paste(first, word, sep = "")
+    
     ## H to If previous or next is non-vowel, previous.
-    word <- gsub("([^AEIOU])H", "\\1", word)
-    word <- gsub("(.)H[^AEIOU]", "\\1", word)
-
+    word <- gsub("([^AEIOU])H", "\\1\\1", word, perl=T)
+    word <- gsub("(.)H(?=([^AEIOU]|$))", "\\1\\1", word, perl=T)
+    
     ## W to If previous is vowel, A
     word <- gsub("([AEIOU])W", "A", word)
+
+    ## Remove duplicate consecutive characters
+    word <- gsub("([A-Z])\\1+", "\\1", word)
 
     ## If last character is S, remove it
     word <- gsub("S$", "", word)
@@ -132,14 +138,8 @@ nysiis_original <- function(word, maxCodeLen = 6) {
     ## If last characters are AY, replace with Y
     word <- gsub("AY$", "Y", word)
 
-    ## Remove duplicate consecutive characters
-    word <- gsub("([A-Z])\\1+", "\\1", word)
-
     ## If last character is A, remove it
     word <- gsub("A$", "", word)
-
-    ## Append word except for first character to first
-    word <- paste(first, word, sep = "")
 
     ## Truncate to requested length
     word <- substr(word, 1, maxCodeLen)
