@@ -62,30 +62,30 @@
 statcan <- function(word, maxCodeLen = 4) {
 
     ## First, remove any nonalphabetical characters and uppercase it
-    word <- gsub("[^[:alpha:]]*", "", word)
+    word <- gsub("[^[:alpha:]]*", "", word, perl = TRUE)
     word <- toupper(word)
 
     ## Remove umlauts and eszett
-    word <- gsub("\u00C0|\u00C2", "A", word)
-    word <- gsub("\u00C8|\u00C9|\u00CA|\u00CB", "E", word)
-    word <- gsub("\u00CE|\u00CF", "I", word)
-    word <- gsub("\u00D4", "O", word)
-    word <- gsub("\u00D9|\u00DB|\u00DC", "U", word)
-    word <- gsub("\u0178", "Y", word)
-    word <- gsub("\u00C7", "C", word)
+    word <- gsub("\u00C0|\u00C2", "A", word, perl = TRUE)
+    word <- gsub("\u00C8|\u00C9|\u00CA|\u00CB", "E", word, perl = TRUE)
+    word <- gsub("\u00CE|\u00CF", "I", word, perl = TRUE)
+    word <- gsub("\u00D4", "O", word, perl = TRUE)
+    word <- gsub("\u00D9|\u00DB|\u00DC", "U", word, perl = TRUE)
+    word <- gsub("\u0178", "Y", word, perl = TRUE)
+    word <- gsub("\u00C7", "C", word, perl = TRUE)
 
     ## First character of key = first character of name
     first <- substr(word, 1, 1)
     word <- substr(word, 2, nchar(word))
 
     ## Delete vowels and Y
-    word <- gsub("A|E|I|O|U|Y", "", word)
+    word <- gsub("A|E|I|O|U|Y", "", word, perl = TRUE)
 
     ## Append word except for first character to first
     word <- paste(first, word, sep = "")
 
     ## Remove duplicate consecutive characters
-    word <- gsub("([A-Z])\\1+", "\\1", word)
+    word <- gsub("([A-Z])\\1+", "\\1", word, perl = TRUE)
 
     ## Truncate to requested length
     word <- substr(word, 1, maxCodeLen)

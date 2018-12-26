@@ -66,31 +66,31 @@
 rogerroot <- function(word, maxCodeLen = 5) {
 
     ## First, remove any nonalphabetical characters and uppercase it
-    word <- gsub("[^[:alpha:]]*", "", word)
+    word <- gsub("[^[:alpha:]]*", "", word, perl = TRUE)
     word <- toupper(word)
 
     ## First letter table...these are write-once tables...
     letterTable<-"letter,code\n^A,1\n^B,09\n^CE,00\n^CH,06\n^CI,00\n^CY,00\n^C,07\n^DG,07\n^D,01\n^E,1\n^F,08\n^GF,08\n^GM,03\n^GN,02\n^G,07\n^H,2\n^I,1\n^J,3\n^KN,02\n^K,07\n^L,05\n^M,03\n^N,02\n^O,1\n^PF,08\n^PH,08\n^PN,02\n^P,09\n^Q,07\n^R,04\n^SCH,06\n^SH,06\n^S,00\n^TSCH,06\n^TSH,06\n^TS,00\n^T,01\n^U,1\n^V,08\n^WR,04\n^W,4\n^X,07\n^Y,5\n^Z,00\n"
     letters <- read.csv(colClasses=c("character", "character"), text = letterTable)
     for(i in 1:nrow(letters))
-        word <- gsub(letters$letter[i], letters$code[i], word)
+        word <- gsub(letters$letter[i], letters$code[i], word, perl = TRUE)
 
     ## Basic letter table
     letterTable<-"letter,code\nB,9\nCE,0\nCH,6\nCI,0\nCY,0\nC,7\nDG,7\nD,1\nF,8\nG,7\nJ,6\nK,7\nL,5\nM,3\nN,2\nPH,8\nP,8\nQ,7\nR,4\nSCH,6\nSH,6\nS,0\nTSCH,6\nTSH,6\nTS,0\nT,1\nV,8\nX,7\nZ,0"
     letters <- read.csv(colClasses=c("character", "character"), text = letterTable)
     for(i in 1:nrow(letters))
-        word <- gsub(letters$letter[i], letters$code[i], word)
+        word <- gsub(letters$letter[i], letters$code[i], word, perl = TRUE)
 
     ## Remove duplicate consecutive characters
-    word <- gsub("([1-9])\\1+", "\\1", word)
-    word <- gsub(".([0])\\1+", "\\1", word)
+    word <- gsub("([1-9])\\1+", "\\1", word, perl = TRUE)
+    word <- gsub(".([0])\\1+", "\\1", word, perl = TRUE)
 
     ## Remove non-numeric characters
-    word <- gsub("[^0-9]", "", word)
+    word <- gsub("[^0-9]", "", word, perl = TRUE)
 
     ## Truncate to requested length
     zeros <- paste(rep(0, maxCodeLen), sep = "", collapse = "")
-    word <- gsub("$", zeros, word)
+    word <- gsub("$", zeros, word, perl = TRUE)
     word <- substr(word, 1, maxCodeLen)
 
     return(word)

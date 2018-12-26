@@ -64,61 +64,61 @@
 cologne <- function(word, maxCodeLen = NULL) {
 
     ## First, remove any nonalphabetical characters and uppercase it
-    word <- gsub("[^[:alpha:]]*", "", word)
+    word <- gsub("[^[:alpha:]]*", "", word, perl = TRUE)
     word <- toupper(word)
 
     ## Remove umlauts and eszett
-    word <- gsub("\u00C4", "A", word)
-    word <- gsub("\u00DC", "U", word)
-    word <- gsub("\u00D6", "O", word)
-    word <- gsub("\u00DF", "S", word)
+    word <- gsub("\u00C4", "A", word, perl = TRUE)
+    word <- gsub("\u00DC", "U", word, perl = TRUE)
+    word <- gsub("\u00D6", "O", word, perl = TRUE)
+    word <- gsub("\u00DF", "S", word, perl = TRUE)
 
     ## Work through the rules...but backwards, mostly, here's 8s
-    word <- gsub("([CKQ])X", "\\18", word)
-    word <- gsub("[DT]([CSZ])", "8\\1", word)
-    word <- gsub("([SZ])C", "\\18", word)
-    word <- gsub("^C([^AHKLOQRUX])", "8\\1", word)
-    word <- gsub("C([^AHKOQUX])", "8\\1", word)
-    word <- gsub("[SZ]", "8", word)
+	word <- gsub("([CKQ])X", "\\18", word, perl = TRUE)
+    word <- gsub("[DT]([CSZ])", "8\\1", word, perl = TRUE)
+    word <- gsub("([SZ])C", "\\18", word, perl = TRUE)
+    word <- gsub("^C([^AHKLOQRUX])", "8\\1", word, perl = TRUE)
+    word <- gsub("C([^AHKOQUX])", "8\\1", word, perl = TRUE)
+    word <- gsub("[SZ]", "8", word, perl = TRUE)
 
     ## Rule #7
-    word <- gsub("R", "7", word)
+    word <- gsub("R", "7", word, perl = TRUE)
 
     ## Rule #6
-    word <- gsub("[MN]", "6", word)
+    word <- gsub("[MN]", "6", word, perl = TRUE)
 
     ## Rule #5
-    word <- gsub("L", "5", word)
+    word <- gsub("L", "5", word, perl = TRUE)
 
     ## Rule #48
-    word <- gsub("X", "48", word)
+    word <- gsub("X", "48", word, perl = TRUE)
 
     ## Rule #4
-    word <- gsub("[CGKQ]", "4", word)
+    word <- gsub("[CGKQ]", "4", word, perl = TRUE)
 
     ## Rule #3
     ## And we can strip the H since it will not be coded
-    word <- gsub("PH|[FVW]", "3", word)
+    word <- gsub("PH|[FVW]", "3", word, perl = TRUE)
 
     ## Rule #2
-    word <- gsub("[DT]", "2", word)
+    word <- gsub("[DT]", "2", word, perl = TRUE)
 
     ## Rule #1
-    word <- gsub("[BP]", "1", word)
+    word <- gsub("[BP]", "1", word, perl = TRUE)
 
     ## Rule #H
-    word <- gsub("H", "", word)
+    word <- gsub("H", "", word, perl = TRUE)
 
     ## Rule #0
-    word <- gsub("[AEIJOUY]", "0", word)
+    word <- gsub("[AEIJOUY]", "0", word, perl = TRUE)
 
     ## Remove duplicate consecutive characters
-    word <- gsub("([0-9])\\1+", "\\1\\2", word)
+    word <- gsub("([0-9])\\1+", "\\1\\2", word, perl = TRUE)
 
     ## Remove all 0s, except first
     first <- substr(word, 1, 1)
     word <- substr(word, 2, nchar(word))
-    word <- gsub("0", "", word)
+	word <- gsub("0", "", word, perl = TRUE)
     word <- paste(first, word, sep = "")
 
     return(word)
