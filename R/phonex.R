@@ -62,64 +62,64 @@
 phonex <- function(word, maxCodeLen = 4) {
 
     ## First, remove any nonalphabetical characters and uppercase it
-    word <- gsub("[^[:alpha:]]*", "", word)
+    word <- gsub("[^[:alpha:]]*", "", word, perl = TRUE)
     word <- toupper(word)
 
     ## Remove umlauts and eszett
-    word <- gsub("\u00C4", "A", word)
-    word <- gsub("\u00DC", "U", word)
-    word <- gsub("\u00D6", "O", word)
-    word <- gsub("\u00DF", "S", word)
+    word <- gsub("\u00C4", "A", word, perl = TRUE)
+    word <- gsub("\u00DC", "U", word, perl = TRUE)
+    word <- gsub("\u00D6", "O", word, perl = TRUE)
+    word <- gsub("\u00DF", "S", word, perl = TRUE)
 
     ## Preprocess the name
-    word <- gsub("S+$", "", word)
-    word <- gsub("^KN", "N", word)
-    word <- gsub("^WR", "R", word)
-    word <- gsub("^PH", "F", word)
-    word <- gsub("^H", "", word)
-    word <- gsub("^(E|I|O|U|Y)", "A", word)
-    word <- gsub("^P", "B", word)
-    word <- gsub("^V", "F", word)
-    word <- gsub("^(K|Q)", "C", word)
-    word <- gsub("^J", "G", word)
-    word <- gsub("^Z", "S", word)
+    word <- gsub("S+$", "", word, perl = TRUE)
+    word <- gsub("^KN", "N", word, perl = TRUE)
+    word <- gsub("^WR", "R", word, perl = TRUE)
+    word <- gsub("^PH", "F", word, perl = TRUE)
+    word <- gsub("^H", "", word, perl = TRUE)
+    word <- gsub("^(E|I|O|U|Y)", "A", word, perl = TRUE)
+    word <- gsub("^P", "B", word, perl = TRUE)
+    word <- gsub("^V", "F", word, perl = TRUE)
+    word <- gsub("^(K|Q)", "C", word, perl = TRUE)
+    word <- gsub("^J", "G", word, perl = TRUE)
+    word <- gsub("^Z", "S", word, perl = TRUE)
 
     ## First character of key = first character of name
     first <- substr(word, 1, 1)
     word <- substr(word, 2, nchar(word))
 
     ## R -> 6, if not followed by vowel or end of name
-    word <- gsub("R[AEHIOUWY]|R$", "6", word)
-    word <- gsub("R", "", word)
+    word <- gsub("R[AEHIOUWY]|R$", "6", word, perl = TRUE)
+    word <- gsub("R", "", word, perl = TRUE)
 
     ## L -> 4, if not followed by vowel or end of name
-    word <- gsub("L[AEHIOUWY]|L$", "4", word)
-    word <- gsub("L", "", word)
+    word <- gsub("L[AEHIOUWY]|L$", "4", word, perl = TRUE)
+    word <- gsub("L", "", word, perl = TRUE)
 
     ## Delete vowels and Y, W, and H
-    word <- gsub("A|E|H|I|O|U|W|Y", "", word)
+    word <- gsub("A|E|H|I|O|U|W|Y", "", word, perl = TRUE)
 
     ## M, N -> 5, ignore next letter if either D or G.
-    word <- gsub("[MN][DG]*", "5", word)
+    word <- gsub("[MN][DG]*", "5", word, perl = TRUE)
 
     ## B, F, P, V -> 1
-    word <- gsub("B|F|P|V", "1", word)
+    word <- gsub("B|F|P|V", "1", word, perl = TRUE)
 
     ## D, T -> 3, if not followed by C
-    word <- gsub("[DT]C", "C", word)
-    word <- gsub("[DT]", "3", word)
+    word <- gsub("[DT]C", "C", word, perl = TRUE)
+    word <- gsub("[DT]", "3", word, perl = TRUE)
 
     ## C, G, J, K, Q, S, X, Z -> 2
-    word <- gsub("C|G|J|K|Q|S|X|Z", "2", word)
+    word <- gsub("C|G|J|K|Q|S|X|Z", "2", word, perl = TRUE)
 
     ## Remove duplicate consecutive characters
-    word <- gsub("([0-6])\\1+", "\\1", word)
+    word <- gsub("([0-6])\\1+", "\\1", word, perl = TRUE)
 
     ## Append word except for first character to first
     word <- paste(first, word, sep = "")
 
     ## Zero-pad and truncate to requested length
-    word <- gsub("$", paste(rep(0, maxCodeLen), collapse = ""), word)
+    word <- gsub("$", paste(rep(0, maxCodeLen), collapse = ""), word, perl = TRUE)
     word <- substr(word, 1, maxCodeLen)
 
     return(word)

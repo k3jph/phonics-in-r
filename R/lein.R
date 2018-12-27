@@ -63,7 +63,7 @@
 lein <- function(word, maxCodeLen = 4) {
 
     ## First, remove any nonalphabetical characters and uppercase it
-    word <- gsub("[^[:alpha:]]*", "", word)
+    word <- gsub("[^[:alpha:]]*", "", word, perl = TRUE)
     word <- toupper(word)
 
     ## First character of key = first character of name
@@ -71,35 +71,35 @@ lein <- function(word, maxCodeLen = 4) {
     word <- substr(word, 2, nchar(word))
 
     ## Delete vowels and Y, W, and H
-    word <- gsub("A|E|I|O|U|Y|W|H", "", word)
+    word <- gsub("A|E|I|O|U|Y|W|H", "", word, perl = TRUE)
 
     ## Remove duplicate consecutive characters
-    word <- gsub("([A-Z])\\1+", "\\1", word)
+    word <- gsub("([A-Z])\\1+", "\\1", word, perl = TRUE)
 
     ## D, T -> 1
-    word <- gsub("D|T", "1", word)
+    word <- gsub("D|T", "1", word, perl = TRUE)
 
     ## M, N -> 2
-    word <- gsub("M|N", "2", word)
+    word <- gsub("M|N", "2", word, perl = TRUE)
 
     ## L, R -> 3
-    word <- gsub("L|R", "3", word)
+    word <- gsub("L|R", "3", word, perl = TRUE)
 
     ## B, F, P, V -> 4
-    word <- gsub("B|F|P|V", "4", word)
+    word <- gsub("B|F|P|V", "4", word, perl = TRUE)
 
     ## C, J, K, G, Q, S, X, Z -> 5
-    word <- gsub("C|J|K|G|Q|S|X|Z", "5", word)
+    word <- gsub("C|J|K|G|Q|S|X|Z", "5", word, perl = TRUE)
 
     ## Append word except for first character to first
     word <- paste(first, word, sep = "")
 
     ## Zero-pad and truncate to requested length
-    word <- gsub("$", paste(rep(0, maxCodeLen), collapse = ""), word)
+    word <- gsub("$", paste(rep(0, maxCodeLen), collapse = ""), word, perl = TRUE)
     word <- substr(word, 1, maxCodeLen)
 
     ## Manage some edge cases
-    word <- sub("0000", "", word)
+    word <- sub("0000", "", word, perl = TRUE)
 
     return(word)
 }
