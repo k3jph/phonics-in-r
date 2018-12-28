@@ -28,212 +28,208 @@
 #include <Rcpp.h>
 #include <boost/algorithm/string.hpp>
 
-using namespace Rcpp;
-using namespace boost;
-using namespace std;
-
 #define cc         *i
 #define nc         *(i + 1)
 #define nnc        *(i + 2)
 #define pc          lastChar
 #define NULLCHAR    (char)NULL
 
-bool is(string x, char c) {
-  return (c != NULLCHAR && x.find_first_of(c) != std::string::npos);
+bool is(std::string x, char c) {
+    return (c != NULLCHAR && x.find_first_of(c) != std::string::npos);
 }
 
-char at(string x, int i) {
+char at(std::string x, int i) {
 
-  try {
-    return x.at(i);
-  } catch(const out_of_range& e) {
-    return NULLCHAR;
-  }
-}
-
-string substr(string x, int i, int n) {
-
-  try {
-    return x.substr(i, n);
-  } catch(const out_of_range& e) {
-    return "";
-  }
-}
-
-string metaphone_single(string x, int maxCodeLen, bool traditional) {
-  string alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  string soft = "EIY";
-  string vowels = "AEIOU";
-
-  string::iterator i;
-  string word = x.substr(), meta = "";
-  char lastChar = NULLCHAR;
-
-  trim(word);
-  to_upper(word);
-
-  /*
-  * First, we will handle a few special cases.  The Metaphone of the
-  * null string is, itself, the null string.  The Metaphone of a
-  * single character is itself, capitalized, as appropriate.
-  */
-  for(i = word.begin(); i != word.end() && !isalpha(*i); i++);
-  if(i == word.end())
-    return "";
-  if(word.length() == 1)
-    return(word);
-
-  switch (cc) {
-  case 'A':
-    meta += nc == 'E' ? nc : cc;
-    i += 1;
-    break;
-  case 'G':
-  case 'K':
-  case 'P':
-    if (nc == 'N') {
-      meta += nc;
-      i += 2;
+    try {
+        return x.at(i);
+    } catch(const std::out_of_range& e) {
+        return NULLCHAR;
     }
-    break;
-  case 'W':
-    if (nc == 'R') {
-      meta += nc;
-      i += 2;
-    } else if (nc == 'H' || is(vowels, nc)) {
-      meta += 'W';
-      i += 2;
-    }
-    break;
-  case 'X':
-    meta += 'S';
-    i += 1;
-    break;
-  case 'E':
-  case 'I':
-  case 'O':
-  case 'U':
-    meta += cc;
-    i++;
-    break;
-  }
+}
 
-  while(meta.length() < maxCodeLen && i != word.end()) {
-    if(cc != 'C' && pc == cc)
-      i++;
-    else {
-      switch(cc) {
-      case 'B':
-        if (pc != 'M')
-          meta += cc;
+std::string substr(std::string x, int i, int n) {
+
+    try {
+        return x.substr(i, n);
+    } catch(const std::out_of_range& e) {
+        return "";
+    }
+}
+
+std::string metaphone_single(std::string x, int maxCodeLen, bool traditional) {
+    std::string alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    std::string soft = "EIY";
+    std::string vowels = "AEIOU";
+
+    std::string::iterator i;
+    std::string word = x.substr(), meta = "";
+    char lastChar = NULLCHAR;
+
+    boost::trim(word);
+    boost::to_upper(word);
+
+    /*
+     * First, we will handle a few special cases.  The Metaphone of the
+     * null string is, itself, the null string.  The Metaphone of a
+     * single character is itself, capitalized, as appropriate.
+     */
+    for(i = word.begin(); i != word.end() && !isalpha(*i); i++);
+    if(i == word.end())
+        return "";
+    if(word.length() == 1)
+        return(word);
+
+    switch (cc) {
+    case 'A':
+        meta += nc == 'E' ? nc : cc;
+        i += 1;
         break;
-      case 'C':
-        if (is(soft, nc)) {
-          if (nc == 'I' && nnc == 'A') {
-            meta += 'X';
-          } else if (pc != 'S') {
-            meta += 'S';
-          }
-        } else if (nc == 'H') {
-          meta += !traditional && (nnc == 'R' || pc == 'S') ? 'K' : 'X';
-          i++;
-        } else {
-          meta += 'K';
+    case 'G':
+    case 'K':
+    case 'P':
+        if (nc == 'N') {
+            meta += nc;
+            i += 2;
         }
         break;
-      case 'D':
-        if (nc == 'G' && is(soft, nnc)) {
-          meta += 'J';
-          i++;
-        } else {
-          meta += 'T';
+    case 'W':
+        if (nc == 'R') {
+            meta += nc;
+            i += 2;
+        } else if (nc == 'H' || is(vowels, nc)) {
+            meta += 'W';
+            i += 2;
         }
         break;
-      case 'G':
-        if (nc == 'H') {
-          if(!(is("BDH", at(word, distance(word.begin(), i) - 3)) ||
-             at(word, distance(word.begin(), i) - 4) == 'H')) {
-            meta += 'F';
-            i++;
-          }
-        } else if(nc == 'N') {
-          if (is(alpha, nnc) && substr(word, distance(word.begin(), i) + 1, 3) != "NED") {
-            meta += 'K';
-          }
-        } else if(is(soft, nc) && pc != 'G') {
-          meta += 'J';
-        } else {
-          meta += 'K';
-        }
-        break;
-      case 'H':
-        if(is(vowels, nc) && !is("CGPST", pc))
-          meta += cc;
-        break;
-      case 'K':
-        if (pc != 'C') {
-          meta += 'K';
-        }
-        break;
-      case 'P':
-        meta += nc == 'H' ? 'F' : cc;
-        break;
-      case 'Q':
-        meta += 'K';
-        break;
-      case 'S':
-        if(nc == 'I' && is("AO", nnc)) {
-          meta += 'X';
-        } else if(nc == 'H') {
-          meta += 'X';
-          i += 1;
-        } else if(!traditional && substr(word, distance(word.begin(), i) + 1, 3) == "CHW") {
-          meta += 'X';
-          i += 2;
-        } else {
-          meta += 'S';
-        }
-        break;
-      case 'T':
-        if(nc == 'I' && is("AO", nnc)) {
-          meta += 'X';
-        } else if(nc == 'H') {
-          meta += '0';
-          i += 1;
-        } else if(substr(word, distance(word.begin(), i) + 1, 2) != "CH") {
-          meta += 'T';
-        }
-        break;
-      case 'V':
-        meta += 'F';
-        break;
-      case 'W':
-      case 'Y':
-        if(is(vowels, nc))
-          meta += cc;
-        break;
-      case 'X':
-        meta += "KS";
-        break;
-      case 'Z':
+    case 'X':
         meta += 'S';
+        i += 1;
         break;
-      case 'F':
-      case 'J':
-      case 'L':
-      case 'M':
-      case 'N':
-      case 'R':
+    case 'E':
+    case 'I':
+    case 'O':
+    case 'U':
         meta += cc;
+        i++;
         break;
-      default:
-        break;
-      }
-      pc = cc;
-      i++;
     }
-  }
-  return meta;
+
+    while(meta.length() < maxCodeLen && i != word.end()) {
+        if(cc != 'C' && pc == cc)
+            i++;
+        else {
+            switch(cc) {
+            case 'B':
+                if (pc != 'M')
+                    meta += cc;
+                break;
+            case 'C':
+                if (is(soft, nc)) {
+                    if (nc == 'I' && nnc == 'A') {
+                        meta += 'X';
+                    } else if (pc != 'S') {
+                        meta += 'S';
+                    }
+                } else if (nc == 'H') {
+                    meta += !traditional && (nnc == 'R' || pc == 'S') ? 'K' : 'X';
+                    i++;
+                } else {
+                    meta += 'K';
+                }
+                break;
+            case 'D':
+                if (nc == 'G' && is(soft, nnc)) {
+                    meta += 'J';
+                    i++;
+                } else {
+                    meta += 'T';
+                }
+                break;
+            case 'G':
+                if (nc == 'H') {
+                    if(!(is("BDH", at(word, std::distance(word.begin(), i) - 3)) ||
+                         at(word, std::distance(word.begin(), i) - 4) == 'H')) {
+                        meta += 'F';
+                        i++;
+                    }
+                } else if(nc == 'N') {
+                    if (is(alpha, nnc) && substr(word, std::distance(word.begin(), i) + 1, 3) != "NED") {
+                        meta += 'K';
+                    }
+                } else if(is(soft, nc) && pc != 'G') {
+                    meta += 'J';
+                } else {
+                    meta += 'K';
+                }
+                break;
+            case 'H':
+                if(is(vowels, nc) && !is("CGPST", pc))
+                    meta += cc;
+                break;
+            case 'K':
+                if (pc != 'C') {
+                    meta += 'K';
+                }
+                break;
+            case 'P':
+                meta += nc == 'H' ? 'F' : cc;
+                break;
+            case 'Q':
+                meta += 'K';
+                break;
+            case 'S':
+                if(nc == 'I' && is("AO", nnc)) {
+                    meta += 'X';
+                } else if(nc == 'H') {
+                    meta += 'X';
+                    i += 1;
+                } else if(!traditional && substr(word, std::distance(word.begin(), i) + 1, 3) == "CHW") {
+                    meta += 'X';
+                    i += 2;
+                } else {
+                    meta += 'S';
+                }
+                break;
+            case 'T':
+                if(nc == 'I' && is("AO", nnc)) {
+                    meta += 'X';
+                } else if(nc == 'H') {
+                    meta += '0';
+                    i += 1;
+                } else if(substr(word, std::distance(word.begin(), i) + 1, 2) != "CH") {
+                    meta += 'T';
+                }
+                break;
+            case 'V':
+                meta += 'F';
+                break;
+            case 'W':
+            case 'Y':
+                if(is(vowels, nc))
+                    meta += cc;
+                break;
+            case 'X':
+                meta += "KS";
+                break;
+            case 'Z':
+                meta += 'S';
+                break;
+            case 'F':
+            case 'J':
+            case 'L':
+            case 'M':
+            case 'N':
+            case 'R':
+                meta += cc;
+                break;
+            default:
+                break;
+            }
+            pc = cc;
+            i++;
+        }
+    }
+    return meta;
 }
 
 //' @rdname metaphone
@@ -278,21 +274,21 @@ string metaphone_single(string x, int maxCodeLen, bool traditional) {
 //' @importFrom Rcpp evalCpp
 //' @export
 //[[Rcpp::export]]
-CharacterVector metaphone(CharacterVector word, int maxCodeLen = 10) {
+Rcpp::CharacterVector metaphone(Rcpp::CharacterVector word, int maxCodeLen = 10) {
 
-  unsigned int input_size = word.size();
-  CharacterVector res(input_size);
+    unsigned int input_size = word.size();
+    Rcpp::CharacterVector res(input_size);
 
-  for(unsigned int i = 0; i < input_size; i++){
-    if((i % 10000) == 0){
-      Rcpp::checkUserInterrupt();
+    for(unsigned int i = 0; i < input_size; i++){
+        if((i % 10000) == 0){
+            Rcpp::checkUserInterrupt();
+        }
+        if(word[i] == NA_STRING){
+            res[i] = NA_STRING;
+        } else {
+            res[i] = metaphone_single(Rcpp::as<std::string>(word[i]), maxCodeLen, true);
+        }
     }
-    if(word[i] == NA_STRING){
-      res[i] = NA_STRING;
-    } else {
-      res[i] = metaphone_single(Rcpp::as<std::string>(word[i]), maxCodeLen, true);
-    }
-  }
 
-  return res;
+    return res;
 }

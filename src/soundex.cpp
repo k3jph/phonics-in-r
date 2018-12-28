@@ -28,79 +28,75 @@
 #include <Rcpp.h>
 #include <boost/algorithm/string.hpp>
 
-using namespace Rcpp;
-using namespace boost;
-using namespace std;
+std::string soundex_single(std::string x, int maxCodeLen) {
+    const std::string SOUNDEX = "01230120022455012623010202";
+    std::string::iterator i;
+    std::string code = "";
+    char lastCode = (char)NULL;
 
-string soundex_single(string x, int maxCodeLen) {
-  const string SOUNDEX = "01230120022455012623010202";
-  string::iterator i;
-  string code = "";
-  char lastCode = (char)NULL;
+    boost::trim(x);
+    boost::to_upper(x);
 
-  trim(x);
-  to_upper(x);
+    for(i = x.begin(); i != x.end() && !isalpha(*i); i++);
+    if(i == x.end())
+        return "";
+    if(x.length() == 1)
+        return(x);
 
-  for(i = x.begin(); i != x.end() && !isalpha(*i); i++);
-  if(i == x.end())
-    return "";
-  if(x.length() == 1)
-    return(x);
+    code = *i;
+    lastCode = SOUNDEX.at(*i - 'A');
 
-  code = *i;
-  lastCode = SOUNDEX.at(*i - 'A');
+    for(i++; i != x.end(); ++i) {
+        char currCode = *i - 'A';
+        if(currCode < 0 || currCode > 25)
+            break;
 
-  for(i++; i != x.end(); ++i) {
-    char currCode = *i - 'A';
-    if(currCode < 0 || currCode > 25)
-      break;
+        char nextCode = SOUNDEX.at(currCode);
+        if(nextCode != '0' && nextCode != lastCode)
+            code += (lastCode = nextCode);
+        if(nextCode ==  '0' && *i != 'H' && *i != 'W')
+            lastCode = '?';
+    }
 
-    char nextCode = SOUNDEX.at(currCode);
-    if(nextCode != '0' && nextCode != lastCode)
-      code += (lastCode = nextCode);
-    if(nextCode ==  '0' && *i != 'H' && *i != 'W')
-      lastCode = '?';
-  }
+    //  "0"-pad string then truncate
+    code += "0000";
+    code = code.substr(0, maxCodeLen);
 
-  //  "0"-pad string then truncate
-  code += "0000";
-  code = code.substr(0, maxCodeLen);
-
-  return code;
+    return code;
 }
 
-string refinedSoundex_single(string x, int maxCodeLen) {
-  const string SOUNDEX = "01360240043788015936020505";
-  string::iterator i;
-  string code = "";
-  char lastCode = (char)NULL;
+std::string refinedSoundex_single(std::string x, int maxCodeLen) {
+    const std::string SOUNDEX = "01360240043788015936020505";
+    std::string::iterator i;
+    std::string code = "";
+    char lastCode = (char)NULL;
 
-  trim(x);
-  to_upper(x);
+    boost::trim(x);
+    boost::to_upper(x);
 
-  for(i = x.begin(); i != x.end() && !isalpha(*i); i++);
-  if(i == x.end())
-    return "";
-  if(x.length() == 1)
-    return(x);
+    for(i = x.begin(); i != x.end() && !isalpha(*i); i++);
+    if(i == x.end())
+        return "";
+    if(x.length() == 1)
+        return(x);
 
-  code = *i;
-  code += (lastCode = SOUNDEX.at(*i - 'A'));
+    code = *i;
+    code += (lastCode = SOUNDEX.at(*i - 'A'));
 
-  for(i++; i != x.end(); ++i) {
-    char currCode = *i - 'A';
-    if(currCode < 0 || currCode > 25)
-      break;
+    for(i++; i != x.end(); ++i) {
+        char currCode = *i - 'A';
+        if(currCode < 0 || currCode > 25)
+            break;
 
-    char nextCode = SOUNDEX.at(currCode);
-    if(nextCode != lastCode)
-      code += (lastCode = nextCode);
-  }
+        char nextCode = SOUNDEX.at(currCode);
+        if(nextCode != lastCode)
+            code += (lastCode = nextCode);
+    }
 
-  // Do not "0"-pad for refined
-  code = code.substr(0, maxCodeLen);
+    // Do not "0"-pad for refined
+    code = code.substr(0, maxCodeLen);
 
-  return code;
+    return code;
 }
 
 //' @rdname soundex
@@ -147,23 +143,23 @@ string refinedSoundex_single(string x, int maxCodeLen) {
 //' @importFrom Rcpp evalCpp
 //' @export
 //[[Rcpp::export]]
-CharacterVector soundex(CharacterVector word, int maxCodeLen = 4) {
+Rcpp::CharacterVector soundex(Rcpp::CharacterVector word, int maxCodeLen = 4) {
 
-  unsigned int input_size = word.size();
-  CharacterVector res(input_size);
+    unsigned int input_size = word.size();
+    Rcpp::CharacterVector res(input_size);
 
-  for(unsigned int i = 0; i < input_size; i++){
-    if((i % 10000) == 0){
-      Rcpp::checkUserInterrupt();
+    for(unsigned int i = 0; i < input_size; i++){
+        if((i % 10000) == 0){
+            Rcpp::checkUserInterrupt();
+        }
+        if(word[i] == NA_STRING){
+            res[i] = NA_STRING;
+        } else {
+            res[i] = soundex_single(Rcpp::as<std::string>(word[i]), maxCodeLen);
+        }
     }
-    if(word[i] == NA_STRING){
-      res[i] = NA_STRING;
-    } else {
-      res[i] = soundex_single(Rcpp::as<std::string>(word[i]), maxCodeLen);
-    }
-  }
 
-  return res;
+    return res;
 }
 
 //' @rdname soundex
@@ -171,21 +167,21 @@ CharacterVector soundex(CharacterVector word, int maxCodeLen = 4) {
 //' @importFrom Rcpp evalCpp
 //' @export
 //[[Rcpp::export]]
-CharacterVector refinedSoundex(CharacterVector word, int maxCodeLen = 10) {
+Rcpp::CharacterVector refinedSoundex(Rcpp::CharacterVector word, int maxCodeLen = 10) {
 
-  unsigned int input_size = word.size();
-  CharacterVector res(input_size);
+    unsigned int input_size = word.size();
+    Rcpp::CharacterVector res(input_size);
 
-  for(unsigned int i = 0; i < input_size; i++){
-    if((i % 10000) == 0){
-      Rcpp::checkUserInterrupt();
+    for(unsigned int i = 0; i < input_size; i++){
+        if((i % 10000) == 0){
+            Rcpp::checkUserInterrupt();
+        }
+        if(word[i] == NA_STRING){
+            res[i] = NA_STRING;
+        } else {
+            res[i] = refinedSoundex_single(Rcpp::as<std::string>(word[i]), maxCodeLen);
+        }
     }
-    if(word[i] == NA_STRING){
-      res[i] = NA_STRING;
-    } else {
-      res[i] = refinedSoundex_single(Rcpp::as<std::string>(word[i]), maxCodeLen);
-    }
-  }
 
-  return res;
+    return res;
 }
