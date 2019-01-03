@@ -20,9 +20,6 @@ Suggests:
     testthat,
     knitr,
     rmarkdown,
-    microbenchmark,
-    readr,
-    ggplot2
 LinkingTo: Rcpp,
     BH
 RoxygenNote: 6.1.1
