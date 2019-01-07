@@ -18,8 +18,7 @@ Imports:
     Rcpp (>= 0.12.1)
 Suggests:
     testthat,
-    knitr,
-    rmarkdown,
+    knitr
 LinkingTo: Rcpp,
     BH
 RoxygenNote: 6.1.1
