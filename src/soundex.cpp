@@ -40,8 +40,11 @@ std::string soundex_single(std::string x, int maxCodeLen) {
     for(i = x.begin(); i != x.end() && !isalpha(*i); i++);
     if(i == x.end())
         return "";
-    if(x.length() == 1)
+    if(x.length() == 1) {
+        x += "0000";
+        x = x.substr(0, maxCodeLen);
         return(x);
+    }
 
     code = *i;
     lastCode = SOUNDEX.at(*i - 'A');
