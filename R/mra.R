@@ -72,7 +72,7 @@
 mra_encode <- function(word) {
 
     ## First, remove any nonalphabetical characters and uppercase it
-    word <- gsub("[^[:alpha:]]*", "", word)
+    word <- gsub("[^[:alpha:]]*", "", word, perl = TRUE)
     word <- toupper(word)
 
     ## First character of key = first character of name
@@ -80,11 +80,11 @@ mra_encode <- function(word) {
     word <- substr(word, 2, nchar(word))
 
     ## Delete vowels not at the start of the word
-    word <- gsub("[AEIOU]", "", word)
+    word <- gsub("[AEIOU]", "", word, perl = TRUE)
     word <- paste(first, word, sep = "")
 
     ## Remove duplicate consecutive characters
-    word <- gsub("([A-Z])\\1+", "\\1", word)
+    word <- gsub("([A-Z])\\1+", "\\1", word, perl = TRUE)
 
     ## If longer than 6 characters, take first and last 3...and we have
     ## to vectorize it
