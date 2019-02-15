@@ -4,12 +4,14 @@
 \alias{statcan}
 \title{Statistics Canada Name Coding}
 \usage{
-statcan(word, maxCodeLen = 4)
+statcan(word, maxCodeLen = 4, ignoreNonAlpha = FALSE)
 }
 \arguments{
 \item{word}{string or vector of strings to encode}
 
 \item{maxCodeLen}{maximum length of the resulting encodings, in characters}
+
+\item{ignoreNonAlpha}{if \code{TRUE}, ignore non-alphabetic chracters}
 }
 \value{
 the Statistics Canada encoded character vector
@@ -21,13 +23,12 @@ The modified Statistics Canada name coding procedure
 The variable \code{word} is the name to be encoded.  The variable
 \code{maxCodeLen} is the limit on how long the returned name code
 should be.  The default is 4.
-}
-\section{Caveats}{
 
-The \code{statcan} algorithm is only
-defined for inputs over the standard French alphabet.
+The \code{statcan} algorithm is only defined for inputs over the
+standard French alphabet.  For inputs outside this range, the output
+is undefined and \code{NA} is returned.  If \code{ignoreNonAlpha} is
+\code{TRUE}, \code{statcan} attempts to process the strings.
 }
-
 \examples{
 statcan("William")
 statcan(c("Peter", "Peady"))

@@ -4,12 +4,14 @@
 \alias{lein}
 \title{Lein Name Coding}
 \usage{
-lein(word, maxCodeLen = 4)
+lein(word, maxCodeLen = 4, ignoreNonAlpha = FALSE)
 }
 \arguments{
 \item{word}{string or vector of strings to encode}
 
 \item{maxCodeLen}{maximum length of the resulting encodings, in characters}
+
+\item{ignoreNonAlpha}{if \code{TRUE}, ignore non-alphabetic chracters}
 }
 \value{
 the Lein encoded character vector
@@ -21,14 +23,13 @@ The Lein name coding procedure.
 The variable \code{word} is the name to be encoded.  The variable
 \code{maxCodeLen} is the limit on how long the returned name code
 should be.  The default is 4.
-}
-\section{Caveats}{
 
-The \code{lein} algorithm is only
-defined for inputs over the standard English alphabet, \emph{i.e.},
-"A-Z." For inputs outside this range, the output is undefined.
+The \code{lein} algorithm is only defined for inputs over the
+standard English alphabet, \emph{i.e.}, "A-Z." For inputs outside
+this range, the output is undefined and \code{NA} is returned.  If
+\code{ignoreNonAlpha} is \code{TRUE}, \code{lein} attempts to
+process the strings.
 }
-
 \examples{
 lein("William")
 lein(c("Peter", "Peady"))

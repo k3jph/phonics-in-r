@@ -5,12 +5,14 @@
 \alias{mra_compare}
 \title{Match Rating Approach Encoder}
 \usage{
-mra_encode(word)
+mra_encode(word, ignoreNonAlpha = FALSE)
 
 mra_compare(x, y)
 }
 \arguments{
 \item{word}{string or vector of strings to encode}
+
+\item{ignoreNonAlpha}{if \code{TRUE}, ignore non-alphabetic chracters}
 
 \item{x}{MRA-encoded character vector}
 
@@ -31,14 +33,13 @@ The variable \code{word} is the name to be encoded.  The variable
 because the algorithm itself is dependent upon its six-character
 length.  The variables \code{x} and \code{y} are MRA-encoded and are
 compared to each other using the MRA comparison specification.
-}
-\section{Caveats}{
 
-The \code{mra_encode} and \code{mra_compare} algorithms are only
-defined for inputs over the standard English alphabet, \emph{i.e.},
-"A-Z." For inputs outside this range, the output is undefined.
+The \code{mra_encode} algorithm is only defined for inputs over the
+standard English alphabet, \emph{i.e.}, "A-Z." For inputs outside
+this range, the output is undefined and \code{NA} is returned.  If
+\code{ignoreNonAlpha} is \code{TRUE}, \code{mra_encode} attempts to
+process the strings.
 }
-
 \examples{
 mra_encode("William")
 mra_encode(c("Peter", "Peady"))

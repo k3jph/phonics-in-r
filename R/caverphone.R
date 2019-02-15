@@ -32,6 +32,7 @@
 #' @param word string or vector of strings to encode
 #' @param maxCodeLen   maximum length of the resulting encodings, in characters
 #' @param modified     if \code{TRUE}, use the Caverphone 2 algorithm
+#' @param ignoreNonAlpha if \code{TRUE}, ignore non-alphabetic chracters
 #'
 #' @details
 #'
@@ -42,12 +43,13 @@
 #' The variable \code{modified} directs \code{caverphone} to use the
 #' Caverphone2 method, instead of the original.
 #'
-#' @return the Caverphone encoded character vector
+#' The \code{caverphone} algorithm is only defined for inputs over the
+#' standard English alphabet, \emph{i.e.}, "A-Z." For inputs outside
+#' this range, the output is undefined and \code{NA} is returned.  If
+#' \code{ignoreNonAlpha} is \code{TRUE}, \code{caverphone} attempts to
+#' process the strings.
 #'
-#' @section Caveats:
-#' The \code{caverphone} algorithm is only
-#' defined for inputs over the standard English alphabet, \emph{i.e.},
-#' "A-Z." For inputs outside this range, the output is undefined.
+#' @return the Caverphone encoded character vector
 #'
 #' @references
 #'
@@ -65,7 +67,7 @@
 #' caverphone("Stevenson", maxCodeLen = 4)
 #'
 #' @export
-caverphone <- function(word, maxCodeLen = NULL, modified = FALSE) {
+caverphone <- function(word, maxCodeLen = NULL, modified = FALSE, ignoreNonAlpha = FALSE) {
     ## From here on, this is a line-for-line translation of the Apache
     ## Commons Caverphone and Caverphone2 implementations, which both
     ## used regular expressions for substantially all of the work.
@@ -77,9 +79,11 @@ caverphone <- function(word, maxCodeLen = NULL, modified = FALSE) {
         else
             maxCodeLen <- 6
 
-    ## First, remove any nonalphabetical characters and lowercase it
-    word <- gsub("[^[:alpha:]]*", "", word, perl = TRUE)
+    ## First, uppercase it and test for unprocessable characters
     word <- tolower(word)
+    if(any(nonalpha <- grepl("[^a-z]", word, perl = TRUE)))
+        warning("non-alphabetical characters found, results may not be consistent")
+    word <- gsub("[^[:alpha:]]*", "", word, perl = TRUE)
 
     if(modified == TRUE)
         word <- caverphone_modified(word)
@@ -89,6 +93,11 @@ caverphone <- function(word, maxCodeLen = NULL, modified = FALSE) {
     ## Pad the wording with maxCodeLen 1s and truncate
 	word <- gsub("$", paste(rep(1, maxCodeLen), collapse = ""), word, perl = TRUE)
     word <- substr(word, 1, maxCodeLen)
+
+    ## Yeah, we already processed them, but now get rid of them
+    if(!ignoreNonAlpha)
+        word[nonalpha] <- NA
+
     return(word)
 }
 

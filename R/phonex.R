@@ -31,6 +31,7 @@
 #'
 #' @param word string or vector of strings to encode
 #' @param maxCodeLen maximum length of the resulting encodings, in characters
+#' @param ignoreNonAlpha if \code{TRUE}, ignore non-alphabetic chracters
 #'
 #' @details
 #'
@@ -38,12 +39,13 @@
 #' \code{maxCodeLen} is the limit on how long the returned name code
 #' should be.  The default is 4.
 #'
-#' @return the Phonex encoded character vector
+#' The \code{phonex} algorithm is only defined for inputs over the
+#' standard German alphabet, \emph{i.e.}, "A-Z," "Ä," "Ö," "Ü," and "ß."
+#' For inputs outside this range, the output is undefined and \code{NA}
+#' is returned.  If \code{ignoreNonAlpha} is \code{TRUE},
+#' \code{phonex} attempts to process the strings.
 #'
-#' @section Caveats:
-#' The \code{phonex} algorithm is only
-#' defined for inputs over the standard English alphabet, \emph{i.e.},
-#' "A-Z." For inputs outside this range, the output is undefined.
+#' @return the Phonex encoded character vector
 #'
 #' @references
 #'
@@ -59,17 +61,19 @@
 #' phonex("Stevenson", maxCodeLen = 8)
 #'
 #' @export
-phonex <- function(word, maxCodeLen = 4) {
-
-    ## First, remove any nonalphabetical characters and uppercase it
-    word <- gsub("[^[:alpha:]]*", "", word, perl = TRUE)
-    word <- toupper(word)
+phonex <- function(word, maxCodeLen = 4, ignoreNonAlpha = FALSE) {
 
     ## Remove umlauts and eszett
+    word <- toupper(word)
     word <- gsub("\u00C4", "A", word, perl = TRUE)
     word <- gsub("\u00DC", "U", word, perl = TRUE)
     word <- gsub("\u00D6", "O", word, perl = TRUE)
     word <- gsub("\u00DF", "S", word, perl = TRUE)
+
+    ## First, uppercase it and test for unprocessable characters
+    if(any(nonalpha <- grepl("[^A-Z]", word, perl = TRUE)))
+        warning("non-alphabetical characters found, results may not be consistent")
+    word <- gsub("[^[:alpha:]]*", "", word, perl = TRUE)
 
     ## Preprocess the name
     word <- gsub("S+$", "", word, perl = TRUE)
@@ -121,6 +125,10 @@ phonex <- function(word, maxCodeLen = 4) {
     ## Zero-pad and truncate to requested length
     word <- gsub("$", paste(rep(0, maxCodeLen), collapse = ""), word, perl = TRUE)
     word <- substr(word, 1, maxCodeLen)
+
+    ## Yeah, we already processed them, but now get rid of them
+    if(!ignoreNonAlpha)
+        word[nonalpha] <- NA
 
     return(word)
 }

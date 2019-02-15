@@ -31,6 +31,7 @@
 #' The Western Airlines matching rating approach name encoder
 #'
 #' @param word string or vector of strings to encode
+#' @param ignoreNonAlpha if \code{TRUE}, ignore non-alphabetic chracters
 #' @param x MRA-encoded character vector
 #' @param y MRA-encoded character vector
 #'
@@ -42,15 +43,16 @@
 #' length.  The variables \code{x} and \code{y} are MRA-encoded and are
 #' compared to each other using the MRA comparison specification.
 #'
+#' The \code{mra_encode} algorithm is only defined for inputs over the
+#' standard English alphabet, \emph{i.e.}, "A-Z." For inputs outside
+#' this range, the output is undefined and \code{NA} is returned.  If
+#' \code{ignoreNonAlpha} is \code{TRUE}, \code{mra_encode} attempts to
+#' process the strings.
+#'
 #' @return The \code{mra_encode} function returns match rating approach
 #' encoded character vector.  The \code{mra_compare} returns a boolean
 #' vector which is \code{TRUE} if \code{x} and \code{y} pass the MRA
 #' comparison test.
-#'
-#' @section Caveats:
-#' The \code{mra_encode} and \code{mra_compare} algorithms are only
-#' defined for inputs over the standard English alphabet, \emph{i.e.},
-#' "A-Z." For inputs outside this range, the output is undefined.
 #'
 #' @references
 #'
@@ -69,11 +71,13 @@
 #' @rdname mra
 #' @name mra_encode
 #' @export
-mra_encode <- function(word) {
+mra_encode <- function(word, ignoreNonAlpha = FALSE) {
 
-    ## First, remove any nonalphabetical characters and uppercase it
-    word <- gsub("[^[:alpha:]]*", "", word, perl = TRUE)
+    ## First, uppercase it and test for unprocessable characters
     word <- toupper(word)
+    if(any(nonalpha <- grepl("[^A-Z]", word, perl = TRUE)))
+        warning("non-alphabetical characters found, results may not be consistent")
+    word <- gsub("[^[:alpha:]]*", "", word, perl = TRUE)
 
     ## First character of key = first character of name
     first <- substr(word, 1, 1)
@@ -95,6 +99,10 @@ mra_encode <- function(word) {
             word[i] <- paste(first, last, sep = "");
         }
     }
+
+    ## Yeah, we already processed them, but now get rid of them
+    if(!ignoreNonAlpha)
+        word[nonalpha] <- NA
 
     return(word)
 }
