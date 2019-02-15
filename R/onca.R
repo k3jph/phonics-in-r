@@ -32,7 +32,7 @@
 #' @param word string or vector of strings to encode
 #' @param maxCodeLen   maximum length of the resulting encodings, in characters
 #' @param ignoreNonAlpha if \code{TRUE}, ignore non-alphabetic chracters
-
+#'
 #' @details
 #'
 #' The variable \code{word} is the name to be encoded.  The variable
@@ -63,6 +63,6 @@ onca <- function(word, maxCodeLen = 4, ignoreNonAlpha = FALSE) {
 
     ## Yes, it really is this simple, but maxCodeLen * 2 is kind of eyeballing it
     word <- nysiis(word, maxCodeLen = maxCodeLen * 2, ignoreNonAlpha = ignoreNonAlpha)
-    word <- soundex(word, maxCodeLen)
+    word <- soundex(word, maxCodeLen, ignoreNonAlpha = ignoreNonAlpha)
     return(word)
 }

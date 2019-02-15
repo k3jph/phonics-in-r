@@ -46,58 +46,11 @@ metaphone <- function(word, maxCodeLen = 10L) {
     .Call('_phonics_metaphone', PACKAGE = 'phonics', word, maxCodeLen)
 }
 
-#' @rdname soundex
-#' @name soundex
-#' @title Soundex
-#'
-#' @description
-#' The Soundex phonetic algorithms
-#'
-#' @param word string or vector of strings to encode
-#' @param maxCodeLen  maximum length of the resulting encodings, in characters
-#'
-#' @details The function \code{soundex} phonentically encodes the given
-#' string using the soundex algorithm.  The function \code{refinedSoundex}
-#' uses Apache's refined soundex algorithm.  Both implementations are loosely
-#' based on the Apache Commons Java editons.
-#'
-#' The variable \code{maxCodeLen} is the limit on how long the returned
-#' soundex should be.
-#'
-#' @return soundex encoded character vector
-#'
-#' @section Caveats:
-#' The \code{soundex} and \code{refinedSoundex} algorithms are only
-#' defined for inputs over the standard English alphabet, \emph{i.e.},
-#' "A-Z." For inputs outside this range, the output is undefined.
-#'
-#' @references
-#' Charles P. Bourne and Donald F. Ford, "A study of methods for
-#' systematically abbreviating English words and names," \emph{Journal
-#' of the ACM}, vol. 8, no. 4 (1961), p. 538-552.
-#'
-#' Howard B. Newcombe, James M. Kennedy, "Record linkage: making
-#' maximum use of the discriminating power of identifying information,"
-#' \emph{Communications of the ACM}, vol. 5, no. 11 (1962), p. 563-566.
-#'
-#' @family phonics
-#'
-#' @examples
-#' soundex("wheel")
-#' soundex(c("school", "benji"))
-#'
-#' @useDynLib phonics
-#' @importFrom Rcpp evalCpp
-#' @export
-soundex <- function(word, maxCodeLen = 4L) {
-    .Call('_phonics_soundex', PACKAGE = 'phonics', word, maxCodeLen)
+soundex_internal <- function(word, maxCodeLen = 4L) {
+    .Call('_phonics_soundex_internal', PACKAGE = 'phonics', word, maxCodeLen)
 }
 
-#' @rdname soundex
-#' @useDynLib phonics
-#' @importFrom Rcpp evalCpp
-#' @export
-refinedSoundex <- function(word, maxCodeLen = 10L) {
-    .Call('_phonics_refinedSoundex', PACKAGE = 'phonics', word, maxCodeLen)
+refinedSoundex_internal <- function(word, maxCodeLen = 10L) {
+    .Call('_phonics_refinedSoundex_internal', PACKAGE = 'phonics', word, maxCodeLen)
 }
 
