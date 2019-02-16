@@ -93,8 +93,10 @@ caverphone <- function(word, maxCodeLen = NULL, modified = FALSE, ignoreNonAlpha
         word <- caverphone_original(word)
 
     ## Pad the wording with maxCodeLen 1s and truncate
-	word <- gsub("$", paste(rep(1, maxCodeLen), collapse = ""), word, perl = TRUE)
+    ones <- paste(rep(1, maxCodeLen), sep = "", collapse = "")
+	word <- gsub("$", ones, word, perl = TRUE)
     word <- substr(word, 1, maxCodeLen)
+    word <- gsub(ones, "", word, perl = TRUE)
 
     ## Yeah, we already processed them, but now get rid of them
     word[listNulls] <- NA

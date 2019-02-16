@@ -125,8 +125,10 @@ phonex <- function(word, maxCodeLen = 4, ignoreNonAlpha = FALSE) {
     word <- paste(first, word, sep = "")
 
     ## Zero-pad and truncate to requested length
-    word <- gsub("$", paste(rep(0, maxCodeLen), collapse = ""), word, perl = TRUE)
+    zeros <- paste(rep(0, maxCodeLen), sep = "", collapse = "")
+    word <- gsub("$", zeros, word, perl = TRUE)
     word <- substr(word, 1, maxCodeLen)
+    word <- gsub(zeros, "", word, perl = TRUE)
 
     ## Yeah, we already processed them, but now get rid of them
     word[listNAs] <- NA

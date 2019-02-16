@@ -98,7 +98,8 @@ rogerroot <- function(word, maxCodeLen = 5, ignoreNonAlpha = FALSE) {
     zeros <- paste(rep(0, maxCodeLen), sep = "", collapse = "")
     word <- gsub("$", zeros, word, perl = TRUE)
     word <- substr(word, 1, maxCodeLen)
-
+    word <- gsub(zeros, "", word, perl = TRUE)
+    
     ## Yeah, we already processed them, but now get rid of them
     word[listNAs] <- NA
     if(!ignoreNonAlpha)
