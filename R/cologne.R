@@ -66,7 +66,9 @@ cologne <- function(word, maxCodeLen = NULL, ignoreNonAlpha = FALSE) {
 
     ## First, uppercase it and test for unprocessable characters
     word <- toupper(word)
-
+    listNulls <- is.null(word)
+    listNAs <- is.na(word)
+    
     ## Remove umlauts and eszett
     word <- gsub("\u00C4", "A", word, perl = TRUE)
     word <- gsub("\u00DC", "U", word, perl = TRUE)
@@ -126,6 +128,8 @@ cologne <- function(word, maxCodeLen = NULL, ignoreNonAlpha = FALSE) {
     word <- paste(first, word, sep = "")
 
     ## Yeah, we already processed them, but now get rid of them
+    word[listNulls] <- NA
+    word[listNAs] <- NA
     if(!ignoreNonAlpha)
         word[nonalpha] <- NA
 

@@ -27,6 +27,20 @@ test_that("Test that NYSIIS works", {
 
 })
 
+test_that("The NYSIIS algorithm implementation can handle NAs", {
+    skip_on_cran()
+    
+    test_data <- nysiis(NA_character_)
+    expect_true(is.na(test_data))
+})
+
+test_that("The NYSIIS algorithm implementation can handle NULLs", {
+    skip_on_cran()
+    
+    test_data <- nysiis(NULL)
+    expect_true(is.na(test_data))
+})
+
 ##  Test the Modified NYSIIS algorithm
 test_that("Test that modified NYSIIS works", {
     skip_on_cran()
@@ -52,4 +66,18 @@ test_that("Test that modified NYSIIS works", {
             expect_true(nysiis(test$word[i], modified = TRUE, ignoreNonAlpha = TRUE) == test$value[i])
     }
 
+})
+
+test_that("The modified NYSIIS algorithm implementation can handle NAs", {
+    skip_on_cran()
+    
+    test_data <- nysiis(NA_character_, modified = TRUE)
+    expect_true(is.na(test_data))
+})
+
+test_that("The modified NYSIIS algorithm implementation can handle NULLs", {
+    skip_on_cran()
+    
+    test_data <- nysiis(NULL, modified = TRUE)
+    expect_true(is.na(test_data))
 })

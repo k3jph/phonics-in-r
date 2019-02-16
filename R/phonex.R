@@ -71,6 +71,8 @@ phonex <- function(word, maxCodeLen = 4, ignoreNonAlpha = FALSE) {
     word <- gsub("\u00DF", "S", word, perl = TRUE)
 
     ## First, uppercase it and test for unprocessable characters
+    word[is.null(word)] <- NA
+    listNAs <- is.na(word)
     if(any(nonalpha <- grepl("[^A-Z]", word, perl = TRUE)))
         warning("non-alphabetical characters found, results may not be consistent")
     word <- gsub("[^[:alpha:]]*", "", word, perl = TRUE)
@@ -127,6 +129,7 @@ phonex <- function(word, maxCodeLen = 4, ignoreNonAlpha = FALSE) {
     word <- substr(word, 1, maxCodeLen)
 
     ## Yeah, we already processed them, but now get rid of them
+    word[listNAs] <- NA
     if(!ignoreNonAlpha)
         word[nonalpha] <- NA
 

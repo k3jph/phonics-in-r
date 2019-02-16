@@ -33,3 +33,10 @@ test_that("The metaphone algorithm implementation can handle NAs", {
     test_data <- metaphone(NA_character_)
     expect_true(is.na(test_data))
 })
+
+test_that("The metaphone algorithm implementation can handle NULLs", {
+    skip_on_cran()
+    
+    test_data <- metaphone(NULL)
+    expect_true(is.na(test_data))
+})

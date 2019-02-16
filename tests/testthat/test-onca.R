@@ -26,3 +26,17 @@ test_that("Test that ONCA works", {
     }
 
 })
+
+test_that("The ONCA algorithm implementation can handle NAs", {
+    skip_on_cran()
+    
+    test_data <- onca(NA_character_)
+    expect_true(is.na(test_data))
+})
+
+test_that("The ONCA algorithm implementation can handle NULLs", {
+    skip_on_cran()
+    
+    test_data <- onca(NULL)
+    expect_true(is.na(test_data))
+})

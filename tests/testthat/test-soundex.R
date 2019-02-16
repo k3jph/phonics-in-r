@@ -34,6 +34,13 @@ test_that("The soundex algorithm implementation can handle NAs", {
     expect_true(is.na(test_data))
 })
 
+test_that("The soundex algorithm implementation can handle NULLs", {
+    skip_on_cran()
+
+    test_data <- soundex(NULL)
+    expect_true(is.na(test_data))
+})
+
 ##  Test the refined soundex algorithm
 test_that("Test that refined soundex works", {
     skip_on_cran()
@@ -61,10 +68,16 @@ test_that("Test that refined soundex works", {
 
 })
 
-test_that("The soundex algorithm implementation can handle NAs", {
+test_that("The refined soundex algorithm implementation can handle NAs", {
     skip_on_cran()
 
     test_data <- refinedSoundex(NA_character_)
     expect_true(is.na(test_data))
 })
 
+test_that("The refined soundex algorithm implementation can handle NULLs", {
+    skip_on_cran()
+
+    test_data <- refinedSoundex(NULL)
+    expect_true(is.na(test_data))
+})

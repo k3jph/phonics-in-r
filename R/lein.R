@@ -66,6 +66,8 @@ lein <- function(word, maxCodeLen = 4, ignoreNonAlpha = FALSE) {
 
     ## First, uppercase it and test for unprocessable characters
     word <- toupper(word)
+    listNulls <- is.null(word)
+    listNAs <- is.na(word)
     if(any(nonalpha <- grepl("[^A-Z]", word, perl = TRUE)))
         warning("non-alphabetical characters found, results may not be consistent")
     word <- gsub("[^[:alpha:]]*", "", word, perl = TRUE)
@@ -106,6 +108,8 @@ lein <- function(word, maxCodeLen = 4, ignoreNonAlpha = FALSE) {
     word <- sub("0000", "", word, perl = TRUE)
 
     ## Yeah, we already processed them, but now get rid of them
+    word[listNulls] <- NA
+    word[listNAs] <- NA
     if(!ignoreNonAlpha)
         word[nonalpha] <- NA
 

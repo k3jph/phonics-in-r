@@ -75,6 +75,7 @@
 soundex <- function(word, maxCodeLen = 4L, ignoreNonAlpha = FALSE) {
 
     ## First, uppercase it and test for unprocessable characters
+    word[is.null(word)] <- NA
     if(any(nonalpha <- grepl("[^A-Z]", toupper(word), perl = TRUE)))
         warning("non-alphabetical characters found, results may not be consistent")
 
@@ -92,6 +93,7 @@ soundex <- function(word, maxCodeLen = 4L, ignoreNonAlpha = FALSE) {
 refinedSoundex <- function(word, maxCodeLen = 10L, ignoreNonAlpha = FALSE) {
     
     ## First, uppercase it and test for unprocessable characters
+    word[is.null(word)] <- NA
     if(any(nonalpha <- grepl("[^A-Z]", toupper(word), perl = TRUE)))
         warning("non-alphabetical characters found, results may not be consistent")
 

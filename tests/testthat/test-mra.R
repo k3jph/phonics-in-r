@@ -30,6 +30,20 @@ test_that("Test that MRA encoder works", {
 
 })
 
+test_that("The MRA encoder algorithm implementation can handle NAs", {
+    skip_on_cran()
+    
+    test_data <- mra_encode(NA_character_)
+    expect_true(is.na(test_data))
+})
+
+test_that("The MRA encoder algorithm implementation can handle NULLs", {
+    skip_on_cran()
+    
+    test_data <- mra_encode(NULL)
+    expect_true(is.na(test_data))
+})
+
 ##  Test the MRA compare algorithm
 test_that("Test that MRA comparison works", {
     skip_on_cran()

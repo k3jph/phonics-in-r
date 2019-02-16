@@ -26,3 +26,17 @@ test_that("Test that cologne works", {
     }
 
 })
+
+test_that("The Cologne algorithm implementation can handle NAs", {
+    skip_on_cran()
+    
+    test_data <- cologne(NA_character_)
+    expect_true(is.na(test_data))
+})
+
+test_that("The Cologne algorithm implementation can handle NULLs", {
+    skip_on_cran()
+    
+    test_data <- cologne(NULL)
+    expect_true(is.na(test_data))
+})

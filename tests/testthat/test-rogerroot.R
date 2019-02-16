@@ -26,3 +26,17 @@ test_that("Test that RogerRoot works", {
     }
 
 })
+
+test_that("The RogerRoot algorithm implementation can handle NAs", {
+    skip_on_cran()
+    
+    test_data <- rogerroot(NA_character_)
+    expect_true(is.na(test_data))
+})
+
+test_that("The RogerRoot algorithm implementation can handle NULLs", {
+    skip_on_cran()
+    
+    test_data <- rogerroot(NULL)
+    expect_true(is.na(test_data))
+})

@@ -69,6 +69,8 @@ rogerroot <- function(word, maxCodeLen = 5, ignoreNonAlpha = FALSE) {
 
     ## First, uppercase it and test for unprocessable characters
     word <- toupper(word)
+    word[is.null(word)] <- NA
+    listNAs <- is.na(word)
     if(any(nonalpha <- grepl("[^A-Z]", word, perl = TRUE)))
         warning("non-alphabetical characters found, results may not be consistent")
     word <- gsub("[^[:alpha:]]*", "", word, perl = TRUE)
@@ -98,6 +100,7 @@ rogerroot <- function(word, maxCodeLen = 5, ignoreNonAlpha = FALSE) {
     word <- substr(word, 1, maxCodeLen)
 
     ## Yeah, we already processed them, but now get rid of them
+    word[listNAs] <- NA
     if(!ignoreNonAlpha)
         word[nonalpha] <- NA
 

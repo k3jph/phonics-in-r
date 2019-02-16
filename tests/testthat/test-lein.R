@@ -26,3 +26,17 @@ test_that("Test that LEIN works", {
     }
 
 })
+
+test_that("The LEIN algorithm implementation can handle NAs", {
+    skip_on_cran()
+    
+    test_data <- lein(NA_character_)
+    expect_true(is.na(test_data))
+})
+
+test_that("The LEIN algorithm implementation can handle NULLs", {
+    skip_on_cran()
+    
+    test_data <- lein(NULL)
+    expect_true(is.na(test_data))
+})

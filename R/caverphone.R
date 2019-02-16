@@ -81,6 +81,8 @@ caverphone <- function(word, maxCodeLen = NULL, modified = FALSE, ignoreNonAlpha
 
     ## First, uppercase it and test for unprocessable characters
     word <- tolower(word)
+    listNulls <- is.null(word)
+    listNAs <- is.na(word)
     if(any(nonalpha <- grepl("[^a-z]", word, perl = TRUE)))
         warning("non-alphabetical characters found, results may not be consistent")
     word <- gsub("[^[:alpha:]]*", "", word, perl = TRUE)
@@ -95,6 +97,8 @@ caverphone <- function(word, maxCodeLen = NULL, modified = FALSE, ignoreNonAlpha
     word <- substr(word, 1, maxCodeLen)
 
     ## Yeah, we already processed them, but now get rid of them
+    word[listNulls] <- NA
+    word[listNAs] <- NA
     if(!ignoreNonAlpha)
         word[nonalpha] <- NA
 

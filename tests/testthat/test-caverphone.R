@@ -27,6 +27,20 @@ test_that("Test that Caverphone works", {
 
 })
 
+test_that("The Caverphone algorithm implementation can handle NAs", {
+    skip_on_cran()
+    
+    test_data <- caverphone(NA_character_)
+    expect_true(is.na(test_data))
+})
+
+test_that("The Caverphone algorithm implementation can handle NULLs", {
+    skip_on_cran()
+    
+    test_data <- caverphone(NULL)
+    expect_true(is.na(test_data))
+})
+
 ##  Test the Modified Caverphone algorithm
 test_that("Test that Modified Caverphone works", {
     skip_on_cran()
@@ -52,4 +66,18 @@ test_that("Test that Modified Caverphone works", {
             expect_true(caverphone(test$word[i], ignoreNonAlpha = TRUE, modified = TRUE) == test$value[i])
     }
 
+})
+
+test_that("The Modified Caverphone algorithm implementation can handle NAs", {
+    skip_on_cran()
+    
+    test_data <- caverphone(NA_character_, modified = TRUE)
+    expect_true(is.na(test_data))
+})
+
+test_that("The Modified Caverphone algorithm implementation can handle NULLs", {
+    skip_on_cran()
+    
+    test_data <- caverphone(NULL, modified = TRUE)
+    expect_true(is.na(test_data))
 })
