@@ -102,6 +102,8 @@ std::string refinedSoundex_single(std::string x, int maxCodeLen) {
     return code;
 }
 
+//' @useDynLib phonics
+//' @importFrom Rcpp evalCpp
 //[[Rcpp::export]]
 Rcpp::CharacterVector soundex_internal(Rcpp::CharacterVector word, int maxCodeLen = 4) {
     unsigned int input_size = word.size();
@@ -121,6 +123,8 @@ Rcpp::CharacterVector soundex_internal(Rcpp::CharacterVector word, int maxCodeLe
     return res;
 }
 
+//' @useDynLib phonics
+//' @importFrom Rcpp evalCpp
 //[[Rcpp::export]]
 Rcpp::CharacterVector refinedSoundex_internal(Rcpp::CharacterVector word, int maxCodeLen = 10) {
     unsigned int input_size = word.size();
