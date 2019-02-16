@@ -4,12 +4,14 @@
 \alias{cologne}
 \title{Cologne Phonetic Name Coding}
 \usage{
-cologne(word, maxCodeLen = NULL)
+cologne(word, maxCodeLen = NULL, ignoreNonAlpha = FALSE)
 }
 \arguments{
 \item{word}{string or vector of strings to encode}
 
 \item{maxCodeLen}{maximum length of the resulting encodings, in characters}
+
+\item{ignoreNonAlpha}{if \code{TRUE}, ignore non-alphabetic chracters}
 }
 \value{
 the Cologne encoded character vector
@@ -21,15 +23,13 @@ The Cologne phonetic name coding procedure.
 The variable \code{word} is the name to be encoded.  The variable
 \code{maxCodeLen} is the limit on how long the returned name code
 should be.  The default is 4.
-}
-\section{Caveats}{
 
-The \code{cologne} algorithm is only
-defined for inputs over the standard German alphabet, \emph{i.e.},
-"A-Z,", "Ä," "Ö," "Ü," and "ß.  For inputs outside this range, the
-output is undefined.
+The \code{cologne} algorithm is only defined for inputs over the
+standard German alphabet, \emph{i.e.}, "A-Z," "Ä," "Ö," "Ü," and "ß."
+For inputs outside this range, the output is undefined and \code{NA}
+is returned.  If \code{ignoreNonAlpha} is \code{TRUE},
+\code{cologne} attempts to process the strings.
 }
-
 \examples{
 lein("William")
 lein(c("Peter", "Peady"))

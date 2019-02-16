@@ -4,12 +4,14 @@
 \alias{rogerroot}
 \title{Roger Root Name Coding Procedure}
 \usage{
-rogerroot(word, maxCodeLen = 5)
+rogerroot(word, maxCodeLen = 5, ignoreNonAlpha = FALSE)
 }
 \arguments{
 \item{word}{string or vector of strings to encode}
 
 \item{maxCodeLen}{maximum length of the resulting encodings, in characters}
+
+\item{ignoreNonAlpha}{if \code{TRUE}, ignore non-alphabetic chracters}
 }
 \value{
 the Roger Root encoded character vector
@@ -24,14 +26,13 @@ or vector of strings to encode.
 
 The variable \code{maxCodeLen} is the limit on how long the returned
 code should be.  The default is 5.
-}
-\section{Caveats}{
 
-The \code{rogerroot} algorithm is only
-defined for inputs over the standard English alphabet, \emph{i.e.},
-"A-Z." For inputs outside this range, the output is undefined.
+The \code{rogerroot} algorithm is only defined for inputs over the
+standard English alphabet, \emph{i.e.}, "A-Z." For inputs outside
+this range, the output is undefined and \code{NA} is returned.  If
+\code{ignoreNonAlpha} is \code{TRUE}, \code{rogerroot} attempts to
+process the strings.
 }
-
 \examples{
 rogerroot("William")
 rogerroot(c("Peter", "Peady"))

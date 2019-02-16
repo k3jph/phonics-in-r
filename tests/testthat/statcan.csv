@@ -1,7 +1,8 @@
 ##  Test values from Billy T. Lynch and William L. Arends. "Selection of
 ##  surname coding procedure for the SRS record linkage system." United
-##  States Department of Agriculture, Sample Survey Research Branch,
-##  Research Division, Washington, 1977.  We really need more test cases.
+##  States Department of Agriculture, Sample Survey Research Branch
+##  Research Division, Washington
+##  standard characters.  We really need more test cases.
 word,value
 Daves,DVS
 Davies,DVS
@@ -9,3 +10,9 @@ Davis,DVS
 Devese,DVS
 Devies,DVS
 Devos,DVS
+Michael,MCHL
+"",""
+Müller-Lü denscheidt,NA
+Wikipedia,WKPD
+garçon,NA
+Breschnew,BRSC

@@ -1,4 +1,4 @@
-##  Test values from http://www.dropby.com/NYSIISTextStrings.html
+##  Test values from http://www.dropby.com/NYSIISTextStrings.html,
 word,value
 EDWARDS,EDWAD
 EDWARDS,EDWAD
@@ -35,3 +35,8 @@ SEAWRIGHT,SARAGT
 KRATZER,CRATSA
 CANADAY,CANADY
 CREPEAU,CRAP
+"",""
+Müller-Lü denscheidt,NA
+Wikipedia,WACAPA
+garçon,NA
+Breschnew,BRASN

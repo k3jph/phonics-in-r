@@ -31,6 +31,7 @@
 #'
 #' @param word string or vector of strings to encode
 #' @param maxCodeLen   maximum length of the resulting encodings, in characters
+#' @param ignoreNonAlpha if \code{TRUE}, ignore non-alphabetic chracters
 #'
 #' @details
 #'
@@ -38,11 +39,12 @@
 #' \code{maxCodeLen} is the limit on how long the returned name code
 #' should be.  The default is 4.
 #'
-#' @return the Statistics Canada encoded character vector
+#' The \code{statcan} algorithm is only defined for inputs over the
+#' standard French alphabet.  For inputs outside this range, the output
+#' is undefined and \code{NA} is returned.  If \code{ignoreNonAlpha} is
+#' \code{TRUE}, \code{statcan} attempts to process the strings.
 #'
-#' @section Caveats:
-#' The \code{statcan} algorithm is only
-#' defined for inputs over the standard French alphabet.
+#' @return the Statistics Canada encoded character vector
 #'
 #' @references
 #'
@@ -59,11 +61,7 @@
 #' statcan("Stevenson", maxCodeLen = 8)
 #'
 #' @export
-statcan <- function(word, maxCodeLen = 4) {
-
-    ## First, remove any nonalphabetical characters and uppercase it
-    word <- gsub("[^[:alpha:]]*", "", word, perl = TRUE)
-    word <- toupper(word)
+statcan <- function(word, maxCodeLen = 4, ignoreNonAlpha = FALSE) {
 
     ## Remove umlauts and eszett
     word <- gsub("\u00C0|\u00C2", "A", word, perl = TRUE)
@@ -73,6 +71,14 @@ statcan <- function(word, maxCodeLen = 4) {
     word <- gsub("\u00D9|\u00DB|\u00DC", "U", word, perl = TRUE)
     word <- gsub("\u0178", "Y", word, perl = TRUE)
     word <- gsub("\u00C7", "C", word, perl = TRUE)
+
+    ## First, uppercase it and test for unprocessable characters
+    word <- toupper(word)
+    word[is.null(word)] <- NA
+    listNAs <- is.na(word)
+    if(any(nonalpha <- grepl("[^A-Z]", word, perl = TRUE)))
+        warning("non-alphabetical characters found, results may not be consistent")
+    word <- gsub("[^[:alpha:]]*", "", word, perl = TRUE)
 
     ## First character of key = first character of name
     first <- substr(word, 1, 1)
@@ -89,6 +95,11 @@ statcan <- function(word, maxCodeLen = 4) {
 
     ## Truncate to requested length
     word <- substr(word, 1, maxCodeLen)
+
+    ## Yeah, we already processed them, but now get rid of them
+    word[listNAs] <- NA
+    if(!ignoreNonAlpha)
+        word[nonalpha] <- NA
 
     return(word)
 }

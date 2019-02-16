@@ -4,7 +4,8 @@
 \alias{caverphone}
 \title{Caverphone}
 \usage{
-caverphone(word, maxCodeLen = NULL, modified = FALSE)
+caverphone(word, maxCodeLen = NULL, modified = FALSE,
+  ignoreNonAlpha = FALSE)
 }
 \arguments{
 \item{word}{string or vector of strings to encode}
@@ -12,6 +13,8 @@ caverphone(word, maxCodeLen = NULL, modified = FALSE)
 \item{maxCodeLen}{maximum length of the resulting encodings, in characters}
 
 \item{modified}{if \code{TRUE}, use the Caverphone 2 algorithm}
+
+\item{ignoreNonAlpha}{if \code{TRUE}, ignore non-alphabetic chracters}
 }
 \value{
 the Caverphone encoded character vector
@@ -26,14 +29,13 @@ is set to \code{TRUE}, then the default is 10.
 
 The variable \code{modified} directs \code{caverphone} to use the
 Caverphone2 method, instead of the original.
-}
-\section{Caveats}{
 
-The \code{caverphone} algorithm is only
-defined for inputs over the standard English alphabet, \emph{i.e.},
-"A-Z." For inputs outside this range, the output is undefined.
+The \code{caverphone} algorithm is only defined for inputs over the
+standard English alphabet, \emph{i.e.}, "A-Z." For inputs outside
+this range, the output is undefined and \code{NA} is returned.  If
+\code{ignoreNonAlpha} is \code{TRUE}, \code{caverphone} attempts to
+process the strings.
 }
-
 \examples{
 caverphone("William")
 caverphone(c("Peter", "Peady"), modified = TRUE)

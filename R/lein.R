@@ -31,19 +31,21 @@
 #'
 #' @param word string or vector of strings to encode
 #' @param maxCodeLen   maximum length of the resulting encodings, in characters
-#'
+#' @param ignoreNonAlpha if \code{TRUE}, ignore non-alphabetic chracters
+
 #' @details
 #'
 #' The variable \code{word} is the name to be encoded.  The variable
 #' \code{maxCodeLen} is the limit on how long the returned name code
 #' should be.  The default is 4.
 #'
-#' @return the Lein encoded character vector
+#' The \code{lein} algorithm is only defined for inputs over the
+#' standard English alphabet, \emph{i.e.}, "A-Z." For inputs outside
+#' this range, the output is undefined and \code{NA} is returned.  If
+#' \code{ignoreNonAlpha} is \code{TRUE}, \code{lein} attempts to
+#' process the strings.
 #'
-#' @section Caveats:
-#' The \code{lein} algorithm is only
-#' defined for inputs over the standard English alphabet, \emph{i.e.},
-#' "A-Z." For inputs outside this range, the output is undefined.
+#' @return the Lein encoded character vector
 #'
 #' @references
 #'
@@ -60,11 +62,15 @@
 #' lein("Stevenson", maxCodeLen = 8)
 #'
 #' @export
-lein <- function(word, maxCodeLen = 4) {
+lein <- function(word, maxCodeLen = 4, ignoreNonAlpha = FALSE) {
 
-    ## First, remove any nonalphabetical characters and uppercase it
-    word <- gsub("[^[:alpha:]]*", "", word, perl = TRUE)
+    ## First, uppercase it and test for unprocessable characters
     word <- toupper(word)
+    listNulls <- is.null(word)
+    listNAs <- is.na(word)
+    if(any(nonalpha <- grepl("[^A-Z]", word, perl = TRUE)))
+        warning("non-alphabetical characters found, results may not be consistent")
+    word <- gsub("[^[:alpha:]]*", "", word, perl = TRUE)
 
     ## First character of key = first character of name
     first <- substr(word, 1, 1)
@@ -100,6 +106,12 @@ lein <- function(word, maxCodeLen = 4) {
 
     ## Manage some edge cases
     word <- sub("0000", "", word, perl = TRUE)
+
+    ## Yeah, we already processed them, but now get rid of them
+    word[listNulls] <- NA
+    word[listNAs] <- NA
+    if(!ignoreNonAlpha)
+        word[nonalpha] <- NA
 
     return(word)
 }

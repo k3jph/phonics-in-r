@@ -4,7 +4,8 @@
 \alias{nysiis}
 \title{New York State Identification and Intelligence System}
 \usage{
-nysiis(word, maxCodeLen = 6, modified = FALSE)
+nysiis(word, maxCodeLen = 6, modified = FALSE,
+  ignoreNonAlpha = FALSE)
 }
 \arguments{
 \item{word}{string or vector of strings to encode}
@@ -12,6 +13,8 @@ nysiis(word, maxCodeLen = 6, modified = FALSE)
 \item{maxCodeLen}{maximum length of the resulting encodings, in characters}
 
 \item{modified}{if \code{TRUE}, use the modified NYSIIS algorithm}
+
+\item{ignoreNonAlpha}{if \code{TRUE}, ignore non-alphabetic chracters}
 }
 \value{
 the NYSIIS encoded character vector
@@ -31,14 +34,13 @@ NYSIIS code should be.  The default is 6.
 
 The variable \code{modified} directs \code{nysiis} to use the
 modified method instead of the original.
-}
-\section{Caveats}{
 
-The \code{nysiis} algorithm is only
-defined for inputs over the standard English alphabet, \emph{i.e.},
-"A-Z." For inputs outside this range, the output is undefined.
+The \code{nysiis} algorithm is only defined for inputs over the
+standard English alphabet, \emph{i.e.}, "A-Z." For inputs outside
+this range, the output is undefined and \code{NA} is returned.  If
+\code{ignoreNonAlpha} is \code{TRUE}, \code{nysiis} attempts to
+process the strings.
 }
-
 \examples{
 nysiis("Robert")
 nysiis("rupert")

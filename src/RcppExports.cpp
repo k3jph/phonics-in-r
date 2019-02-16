@@ -5,47 +5,47 @@
 
 using namespace Rcpp;
 
-// metaphone
-Rcpp::CharacterVector metaphone(Rcpp::CharacterVector word, int maxCodeLen);
-RcppExport SEXP _phonics_metaphone(SEXP wordSEXP, SEXP maxCodeLenSEXP) {
+// metaphone_internal
+Rcpp::CharacterVector metaphone_internal(Rcpp::CharacterVector word, int maxCodeLen);
+RcppExport SEXP _phonics_metaphone_internal(SEXP wordSEXP, SEXP maxCodeLenSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type word(wordSEXP);
     Rcpp::traits::input_parameter< int >::type maxCodeLen(maxCodeLenSEXP);
-    rcpp_result_gen = Rcpp::wrap(metaphone(word, maxCodeLen));
+    rcpp_result_gen = Rcpp::wrap(metaphone_internal(word, maxCodeLen));
     return rcpp_result_gen;
 END_RCPP
 }
-// soundex
-Rcpp::CharacterVector soundex(Rcpp::CharacterVector word, int maxCodeLen);
-RcppExport SEXP _phonics_soundex(SEXP wordSEXP, SEXP maxCodeLenSEXP) {
+// soundex_internal
+Rcpp::CharacterVector soundex_internal(Rcpp::CharacterVector word, int maxCodeLen);
+RcppExport SEXP _phonics_soundex_internal(SEXP wordSEXP, SEXP maxCodeLenSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type word(wordSEXP);
     Rcpp::traits::input_parameter< int >::type maxCodeLen(maxCodeLenSEXP);
-    rcpp_result_gen = Rcpp::wrap(soundex(word, maxCodeLen));
+    rcpp_result_gen = Rcpp::wrap(soundex_internal(word, maxCodeLen));
     return rcpp_result_gen;
 END_RCPP
 }
-// refinedSoundex
-Rcpp::CharacterVector refinedSoundex(Rcpp::CharacterVector word, int maxCodeLen);
-RcppExport SEXP _phonics_refinedSoundex(SEXP wordSEXP, SEXP maxCodeLenSEXP) {
+// refinedSoundex_internal
+Rcpp::CharacterVector refinedSoundex_internal(Rcpp::CharacterVector word, int maxCodeLen);
+RcppExport SEXP _phonics_refinedSoundex_internal(SEXP wordSEXP, SEXP maxCodeLenSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type word(wordSEXP);
     Rcpp::traits::input_parameter< int >::type maxCodeLen(maxCodeLenSEXP);
-    rcpp_result_gen = Rcpp::wrap(refinedSoundex(word, maxCodeLen));
+    rcpp_result_gen = Rcpp::wrap(refinedSoundex_internal(word, maxCodeLen));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_phonics_metaphone", (DL_FUNC) &_phonics_metaphone, 2},
-    {"_phonics_soundex", (DL_FUNC) &_phonics_soundex, 2},
-    {"_phonics_refinedSoundex", (DL_FUNC) &_phonics_refinedSoundex, 2},
+    {"_phonics_metaphone_internal", (DL_FUNC) &_phonics_metaphone_internal, 2},
+    {"_phonics_soundex_internal", (DL_FUNC) &_phonics_soundex_internal, 2},
+    {"_phonics_refinedSoundex_internal", (DL_FUNC) &_phonics_refinedSoundex_internal, 2},
     {NULL, NULL, 0}
 };
 
