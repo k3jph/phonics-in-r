@@ -1,14 +1,44 @@
+## Copyright (c) 2019, James P. Howard, II <jh@jameshoward.us>
+##
+## Redistribution and use in source and binary forms, with or without
+## modification, are permitted provided that the following conditions are
+## met:
+##
+##     Redistributions of source code must retain the above copyright
+##     notice, this list of conditions and the following disclaimer.
+##
+##     Redistributions in binary form must reproduce the above copyright
+##     notice, this list of conditions and the following disclaimer in
+##     the documentation and/or other materials provided with the
+##     distribution.
+##
+## THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+## "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+## LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+## A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+## HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+## SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+## LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+## DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+## THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+## (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+## OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
 #' @title Phonetic Spelling Algorithms
 #' @docType package
-#' 
+#'
 #' @description
-#' Encode words with English-language Metaphone
+#' Encode words phonetic spelling algorithms.
 #'
 #' @details
-#' The phonics package provides an implementation of the Metaphone
-#' phonetic algorithm in R.  The algorithm reduces a string to a
-#' symbolic representation approximating the sound.  It can be used to
-#' match names, words, and as a proxy for assorted string distance
+#' The \code{phonics} package for \code{R} is designed to provide a
+#' variety of phonetic indexing algorithms in common and not-so-common
+#' use today.  The algorithms generally reduce a string to a symbolic
+#' representation approximating the sound made by pronouncing the
+#' string.  They can be used to match names, words, and as a proxy for
+#' assorted string distance algorithms.  The algorithm reduces a string
+#' to a symbolic representation approximating the sound.  It can be used
+#' to match names, words, and as a proxy for assorted string distance
 #' algorithms.
 #'
 #' @author
