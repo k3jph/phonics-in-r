@@ -33,7 +33,7 @@
 #'
 #' @param word string or vector of strings to encode
 #' @param maxCodeLen  maximum length of the resulting encodings, in characters
-#' @param ignoreNonAlpha if \code{TRUE}, ignore non-alphabetic chracters
+#' @param clean if \code{TRUE}, return \code{NA} for unknown alphabetical characters
 #'
 #' @details The function \code{soundex} phonentically encodes the given
 #' string using the soundex algorithm.  The function \code{refinedSoundex}
@@ -45,9 +45,15 @@
 #'
 #' The \code{soundex} and \code{revisedSoundex} algorithms are only
 #' defined for inputs over the standard English alphabet, \emph{i.e.},
-#' "A-Z." For inputs outside this range, the output is undefined and
-#' \code{NA} is returned.  If \code{ignoreNonAlpha} is \code{TRUE}, the
-#' functions attempt to process the strings.
+#' "A-Z." Non-alphabetical characters are removed from the string in a
+#' locale-dependent fashion.  This strips spaces, hyphens, and numbers.
+#' Other letters, such as "Ü," may be permissible in the current locale
+#' but are unknown to \code{soundex} and \code{revisedSoundex}.  For
+#' inputs outside of its known range, the output is undefined and
+#' \code{NA} is returned and a \code{warning} this thrown.  If
+#' \code{clean} is \code{FALSE}, \code{soundex} and
+#' \code{revisedSoundex} attempts to process the strings.  The default
+#' is \code{TRUE}.
 #'
 #' @return soundex encoded character vector
 #'
@@ -72,17 +78,19 @@
 #' soundex(c("school", "benji"))
 #'
 #' @export
-soundex <- function(word, maxCodeLen = 4L, ignoreNonAlpha = FALSE) {
+soundex <- function(word, maxCodeLen = 4L, clean = TRUE) {
 
     ## First, uppercase it and test for unprocessable characters
+    word <- toupper(word)
     word[is.null(word)] <- NA
-    if(any(nonalpha <- grepl("[^A-Z]", toupper(word), perl = TRUE)))
-        warning("non-alphabetical characters found, results may not be consistent")
-
+    word <- gsub("[^[:alpha:]]*", "", word, perl = TRUE)
+    if(any(nonalpha <- grepl("[^A-Z]", word, perl = TRUE)) && clean)
+        warning("unknown characters found, results may not be consistent")
+    
     word <- soundex_internal(word, maxCodeLen)
 
     ## Yeah, we already processed them, but now get rid of them
-    if(!ignoreNonAlpha)
+    if(clean)
         word[nonalpha] <- NA
 
     return(word)
@@ -90,17 +98,19 @@ soundex <- function(word, maxCodeLen = 4L, ignoreNonAlpha = FALSE) {
 
 #' @rdname soundex
 #' @export
-refinedSoundex <- function(word, maxCodeLen = 10L, ignoreNonAlpha = FALSE) {
+refinedSoundex <- function(word, maxCodeLen = 10L, clean = TRUE) {
     
     ## First, uppercase it and test for unprocessable characters
+    word <- toupper(word)
     word[is.null(word)] <- NA
-    if(any(nonalpha <- grepl("[^A-Z]", toupper(word), perl = TRUE)))
-        warning("non-alphabetical characters found, results may not be consistent")
+    word <- gsub("[^[:alpha:]]*", "", word, perl = TRUE)
+    if(any(nonalpha <- grepl("[^A-Z]", word, perl = TRUE)) && clean)
+        warning("unknown characters found, results may not be consistent")
 
     word <- refinedSoundex_internal(word, maxCodeLen)
 
     ## Yeah, we already processed them, but now get rid of them
-    if(!ignoreNonAlpha)
+    if(clean)
         word[nonalpha] <- NA
 
     return(word)

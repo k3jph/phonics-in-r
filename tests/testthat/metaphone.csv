@@ -1,6 +1,6 @@
 word,value
-    abc,NA
-1234.678!@abc,NA
+    abc,ABK
+1234.678!@abc,ABK
 aero,ER
 air,AR
 egg,EK
@@ -79,9 +79,9 @@ zip,SP
 zoom,SM
 jazz,JS
 zigzag,SKSK
-abc abc,NA
+abc abc,ABKBK
 J,J
 A,A
 "",""
-hypnotic3.1415,NA
-12345,NA
+hypnotic3.1415,PNTK
+12345,""

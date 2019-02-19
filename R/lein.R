@@ -31,8 +31,8 @@
 #'
 #' @param word string or vector of strings to encode
 #' @param maxCodeLen   maximum length of the resulting encodings, in characters
-#' @param ignoreNonAlpha if \code{TRUE}, ignore non-alphabetic chracters
-
+#' @param clean if \code{TRUE}, return \code{NA} for unknown alphabetical characters
+#' 
 #' @details
 #'
 #' The variable \code{word} is the name to be encoded.  The variable
@@ -40,10 +40,14 @@
 #' should be.  The default is 4.
 #'
 #' The \code{lein} algorithm is only defined for inputs over the
-#' standard English alphabet, \emph{i.e.}, "A-Z." For inputs outside
-#' this range, the output is undefined and \code{NA} is returned.  If
-#' \code{ignoreNonAlpha} is \code{TRUE}, \code{lein} attempts to
-#' process the strings.
+#' standard English alphabet, \emph{i.e.}, "A-Z.". Non-alphabetical
+#' characters are removed from the string in a locale-dependent fashion.
+#' This strips spaces, hyphens, and numbers.  Other letters, such as
+#' "Ü," may be permissible in the current locale but are unknown to
+#' \code{lein}.  For inputs outside of its known range, the output is
+#' undefined and \code{NA} is returned and a \code{warning} this thrown.
+#' If \code{clean} is \code{FALSE}, \code{lein} attempts to process the
+#' strings.  The default is \code{TRUE}.
 #'
 #' @return the Lein encoded character vector
 #'
@@ -62,15 +66,15 @@
 #' lein("Stevenson", maxCodeLen = 8)
 #'
 #' @export
-lein <- function(word, maxCodeLen = 4, ignoreNonAlpha = FALSE) {
+lein <- function(word, maxCodeLen = 4, clean = TRUE) {
 
     ## First, uppercase it and test for unprocessable characters
     word <- toupper(word)
     listNulls <- is.null(word)
     listNAs <- is.na(word)
-    if(any(nonalpha <- grepl("[^A-Z]", word, perl = TRUE)))
-        warning("non-alphabetical characters found, results may not be consistent")
     word <- gsub("[^[:alpha:]]*", "", word, perl = TRUE)
+    if(any(nonalpha <- grepl("[^A-Z]", word, perl = TRUE)) && clean)
+        warning("unknown characters found, results may not be consistent")
 
     ## First character of key = first character of name
     first <- substr(word, 1, 1)
@@ -110,7 +114,7 @@ lein <- function(word, maxCodeLen = 4, ignoreNonAlpha = FALSE) {
     ## Yeah, we already processed them, but now get rid of them
     word[listNulls] <- NA
     word[listNAs] <- NA
-    if(!ignoreNonAlpha)
+    if(clean)
         word[nonalpha] <- NA
 
     return(word)

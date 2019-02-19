@@ -32,7 +32,7 @@
 #' @param word string or vector of strings to encode
 #' @param maxCodeLen   maximum length of the resulting encodings, in characters
 #' @param modified     if \code{TRUE}, use the Caverphone 2 algorithm
-#' @param ignoreNonAlpha if \code{TRUE}, ignore non-alphabetic chracters
+#' @param clean if \code{TRUE}, return \code{NA} for unknown alphabetical characters
 #'
 #' @details
 #'
@@ -44,10 +44,14 @@
 #' Caverphone2 method, instead of the original.
 #'
 #' The \code{caverphone} algorithm is only defined for inputs over the
-#' standard English alphabet, \emph{i.e.}, "A-Z." For inputs outside
-#' this range, the output is undefined and \code{NA} is returned.  If
-#' \code{ignoreNonAlpha} is \code{TRUE}, \code{caverphone} attempts to
-#' process the strings.
+#' standard English alphabet, \emph{i.e.}, "A-Z.". Non-alphabetical
+#' characters are removed from the string in a locale-dependent fashion.
+#' This strips spaces, hyphens, and numbers.  Other letters, such as
+#' "Ü," may be permissible in the current locale but are unknown to
+#' \code{caverphone}.  For inputs outside of its known range, the output is
+#' undefined and \code{NA} is returned and a \code{warning} this thrown.
+#' If \code{clean} is \code{FALSE}, \code{caverphone} attempts to process the
+#' strings.  The default is \code{TRUE}.
 #'
 #' @return the Caverphone encoded character vector
 #'
@@ -67,7 +71,7 @@
 #' caverphone("Stevenson", maxCodeLen = 4)
 #'
 #' @export
-caverphone <- function(word, maxCodeLen = NULL, modified = FALSE, ignoreNonAlpha = FALSE) {
+caverphone <- function(word, maxCodeLen = NULL, modified = FALSE, clean = TRUE) {
     ## From here on, this is a line-for-line translation of the Apache
     ## Commons Caverphone and Caverphone2 implementations, which both
     ## used regular expressions for substantially all of the work.
@@ -83,8 +87,8 @@ caverphone <- function(word, maxCodeLen = NULL, modified = FALSE, ignoreNonAlpha
     word <- tolower(word)
     listNulls <- is.null(word)
     listNAs <- is.na(word)
-    if(any(nonalpha <- grepl("[^a-z]", word, perl = TRUE)))
-        warning("non-alphabetical characters found, results may not be consistent")
+    if(any(nonalpha <- grepl("[^a-z]", word, perl = TRUE)) && clean)
+        warning("unknown characters found, results may not be consistent")
     word <- gsub("[^[:alpha:]]*", "", word, perl = TRUE)
 
     if(modified == TRUE)
@@ -94,14 +98,14 @@ caverphone <- function(word, maxCodeLen = NULL, modified = FALSE, ignoreNonAlpha
 
     ## Pad the wording with maxCodeLen 1s and truncate
     ones <- paste(rep(1, maxCodeLen), sep = "", collapse = "")
-	word <- gsub("$", ones, word, perl = TRUE)
+    word <- gsub("$", ones, word, perl = TRUE)
     word <- substr(word, 1, maxCodeLen)
     word <- gsub(ones, "", word, perl = TRUE)
 
     ## Yeah, we already processed them, but now get rid of them
     word[listNulls] <- NA
     word[listNAs] <- NA
-    if(!ignoreNonAlpha)
+    if(clean)
         word[nonalpha] <- NA
 
     return(word)
@@ -228,7 +232,7 @@ caverphone_modified <- function(word) {
     word <- gsub("l", "2", word, perl = TRUE)
     word <- gsub("2", "", word, perl = TRUE)
     word <- gsub("3$", "A", word, perl = TRUE)
-	word <- gsub("3", "", word, perl = TRUE)
+    word <- gsub("3", "", word, perl = TRUE)
 
     return(word)
 }

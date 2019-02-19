@@ -5,14 +5,14 @@
 \alias{mra_compare}
 \title{Match Rating Approach Encoder}
 \usage{
-mra_encode(word, ignoreNonAlpha = FALSE)
+mra_encode(word, clean = TRUE)
 
 mra_compare(x, y)
 }
 \arguments{
 \item{word}{string or vector of strings to encode}
 
-\item{ignoreNonAlpha}{if \code{TRUE}, ignore non-alphabetic chracters}
+\item{clean}{if \code{TRUE}, return \code{NA} for unknown alphabetical characters}
 
 \item{x}{MRA-encoded character vector}
 
@@ -35,10 +35,14 @@ length.  The variables \code{x} and \code{y} are MRA-encoded and are
 compared to each other using the MRA comparison specification.
 
 The \code{mra_encode} algorithm is only defined for inputs over the
-standard English alphabet, \emph{i.e.}, "A-Z." For inputs outside
-this range, the output is undefined and \code{NA} is returned.  If
-\code{ignoreNonAlpha} is \code{TRUE}, \code{mra_encode} attempts to
-process the strings.
+standard English alphabet, \emph{i.e.}, "A-Z.". Non-alphabetical
+characters are removed from the string in a locale-dependent fashion.
+This strips spaces, hyphens, and numbers.  Other letters, such as
+"Ü," may be permissible in the current locale but are unknown to
+\code{mra_encode}.  For inputs outside of its known range, the output is
+undefined and \code{NA} is returned and a \code{warning} this thrown.
+If \code{clean} is \code{FALSE}, \code{mra_encode} attempts to process the
+strings.  The default is \code{TRUE}.
 }
 \examples{
 mra_encode("William")

@@ -5,16 +5,16 @@
 \alias{refinedSoundex}
 \title{Soundex}
 \usage{
-soundex(word, maxCodeLen = 4L, ignoreNonAlpha = FALSE)
+soundex(word, maxCodeLen = 4L, clean = TRUE)
 
-refinedSoundex(word, maxCodeLen = 10L, ignoreNonAlpha = FALSE)
+refinedSoundex(word, maxCodeLen = 10L, clean = TRUE)
 }
 \arguments{
 \item{word}{string or vector of strings to encode}
 
 \item{maxCodeLen}{maximum length of the resulting encodings, in characters}
 
-\item{ignoreNonAlpha}{if \code{TRUE}, ignore non-alphabetic chracters}
+\item{clean}{if \code{TRUE}, return \code{NA} for unknown alphabetical characters}
 }
 \value{
 soundex encoded character vector
@@ -33,9 +33,15 @@ soundex should be.
 
 The \code{soundex} and \code{revisedSoundex} algorithms are only
 defined for inputs over the standard English alphabet, \emph{i.e.},
-"A-Z." For inputs outside this range, the output is undefined and
-\code{NA} is returned.  If \code{ignoreNonAlpha} is \code{TRUE}, the
-functions attempt to process the strings.
+"A-Z." Non-alphabetical characters are removed from the string in a
+locale-dependent fashion.  This strips spaces, hyphens, and numbers.
+Other letters, such as "Ü," may be permissible in the current locale
+but are unknown to \code{soundex} and \code{revisedSoundex}.  For
+inputs outside of its known range, the output is undefined and
+\code{NA} is returned and a \code{warning} this thrown.  If
+\code{clean} is \code{FALSE}, \code{soundex} and
+\code{revisedSoundex} attempts to process the strings.  The default
+is \code{TRUE}.
 }
 \section{Caveats}{
 

@@ -31,7 +31,7 @@
 #'
 #' @param word string or vector of strings to encode
 #' @param maxCodeLen maximum length of the resulting encodings, in characters
-#' @param ignoreNonAlpha if \code{TRUE}, ignore non-alphabetic chracters
+#' @param clean if \code{TRUE}, return \code{NA} for unknown alphabetical characters
 #'
 #' @details
 #'
@@ -40,10 +40,15 @@
 #' should be.  The default is 4.
 #'
 #' The \code{cologne} algorithm is only defined for inputs over the
-#' standard German alphabet, \emph{i.e.}, "A-Z," "Ä," "Ö," "Ü," and "ß."
-#' For inputs outside this range, the output is undefined and \code{NA}
-#' is returned.  If \code{ignoreNonAlpha} is \code{TRUE},
-#' \code{cologne} attempts to process the strings.
+#' standard English alphabet, \emph{i.e.}, "A-Z," "Ä," "Ö," "Ü," and
+#' "ß." Non-alphabetical characters are removed from the string in a
+#' locale-dependent fashion.  This strips spaces, hyphens, and numbers.
+#' Other letters, such as "ç," may be permissible in the current locale
+#' but are unknown to \code{cologne}.  For inputs outside of its known
+#' range, the output is undefined and \code{NA} is returned and a
+#' \code{warning} this thrown.  If \code{clean} is \code{FALSE},
+#' \code{cologne} attempts to process the strings.  The default is
+#' \code{TRUE}.
 #'
 #' @return the Cologne encoded character vector
 #'
@@ -57,12 +62,12 @@
 #' @family phonics
 #'
 #' @examples
-#' lein("William")
-#' lein(c("Peter", "Peady"))
-#' lein("Stevenson", maxCodeLen = 8)
+#' cologne("William")
+#' cologne(c("Peter", "Peady"))
+#' cologne("Stevenson", maxCodeLen = 8)
 #'
 #' @export
-cologne <- function(word, maxCodeLen = NULL, ignoreNonAlpha = FALSE) {
+cologne <- function(word, maxCodeLen = NULL, clean = TRUE) {
 
     ## First, uppercase it and test for unprocessable characters
     word <- toupper(word)
@@ -75,10 +80,10 @@ cologne <- function(word, maxCodeLen = NULL, ignoreNonAlpha = FALSE) {
     word <- gsub("\u00D6", "O", word, perl = TRUE)
     word <- gsub("\u00DF", "S", word, perl = TRUE)
 
-    if(any(nonalpha <- grepl("[^A-Z]", word, perl = TRUE)))
-        warning("non-alphabetical characters found, results may not be consistent")
     word <- gsub("[^[:alpha:]]*", "", word, perl = TRUE)
-
+    if(any(nonalpha <- grepl("[^A-Z]", word, perl = TRUE)) && clean)
+        warning("unknown characters found, results may not be consistent")
+    
     ## Work through the rules...but backwards, mostly, here's 8s
 	word <- gsub("([CKQ])X", "\\18", word, perl = TRUE)
     word <- gsub("[DT]([CSZ])", "8\\1", word, perl = TRUE)
@@ -130,7 +135,7 @@ cologne <- function(word, maxCodeLen = NULL, ignoreNonAlpha = FALSE) {
     ## Yeah, we already processed them, but now get rid of them
     word[listNulls] <- NA
     word[listNAs] <- NA
-    if(!ignoreNonAlpha)
+    if(clean)
         word[nonalpha] <- NA
 
     return(word)

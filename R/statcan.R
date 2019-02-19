@@ -31,7 +31,7 @@
 #'
 #' @param word string or vector of strings to encode
 #' @param maxCodeLen   maximum length of the resulting encodings, in characters
-#' @param ignoreNonAlpha if \code{TRUE}, ignore non-alphabetic chracters
+#' @param clean if \code{TRUE}, return \code{NA} for unknown alphabetical characters
 #'
 #' @details
 #'
@@ -40,9 +40,14 @@
 #' should be.  The default is 4.
 #'
 #' The \code{statcan} algorithm is only defined for inputs over the
-#' standard French alphabet.  For inputs outside this range, the output
-#' is undefined and \code{NA} is returned.  If \code{ignoreNonAlpha} is
-#' \code{TRUE}, \code{statcan} attempts to process the strings.
+#' standard French alphabet. Non-alphabetical characters are removed
+#' from the string in a locale-dependent fashion.  This strips spaces,
+#' hyphens, and numbers.  Other letters, such as "Ü," may be permissible
+#' in the current locale but are unknown to \code{statcan}.  For inputs
+#' outside of its known range, the output is undefined and \code{NA} is
+#' returned and a \code{warning} this thrown.  If \code{clean} is
+#' \code{FALSE}, \code{statcan} attempts to process the strings.  The
+#' default is \code{TRUE}.
 #'
 #' @return the Statistics Canada encoded character vector
 #'
@@ -61,7 +66,7 @@
 #' statcan("Stevenson", maxCodeLen = 8)
 #'
 #' @export
-statcan <- function(word, maxCodeLen = 4, ignoreNonAlpha = FALSE) {
+statcan <- function(word, maxCodeLen = 4, clean = TRUE) {
 
     ## Remove umlauts and eszett
     word <- gsub("\u00C0|\u00C2", "A", word, perl = TRUE)
@@ -76,9 +81,9 @@ statcan <- function(word, maxCodeLen = 4, ignoreNonAlpha = FALSE) {
     word <- toupper(word)
     word[is.null(word)] <- NA
     listNAs <- is.na(word)
-    if(any(nonalpha <- grepl("[^A-Z]", word, perl = TRUE)))
-        warning("non-alphabetical characters found, results may not be consistent")
     word <- gsub("[^[:alpha:]]*", "", word, perl = TRUE)
+    if(any(nonalpha <- grepl("[^A-Z]", word, perl = TRUE)) && clean)
+        warning("unknown characters found, results may not be consistent")
 
     ## First character of key = first character of name
     first <- substr(word, 1, 1)
@@ -98,7 +103,7 @@ statcan <- function(word, maxCodeLen = 4, ignoreNonAlpha = FALSE) {
 
     ## Yeah, we already processed them, but now get rid of them
     word[listNAs] <- NA
-    if(!ignoreNonAlpha)
+    if(clean)
         word[nonalpha] <- NA
 
     return(word)

@@ -4,8 +4,7 @@
 \alias{caverphone}
 \title{Caverphone}
 \usage{
-caverphone(word, maxCodeLen = NULL, modified = FALSE,
-  ignoreNonAlpha = FALSE)
+caverphone(word, maxCodeLen = NULL, modified = FALSE, clean = TRUE)
 }
 \arguments{
 \item{word}{string or vector of strings to encode}
@@ -14,7 +13,7 @@ caverphone(word, maxCodeLen = NULL, modified = FALSE,
 
 \item{modified}{if \code{TRUE}, use the Caverphone 2 algorithm}
 
-\item{ignoreNonAlpha}{if \code{TRUE}, ignore non-alphabetic chracters}
+\item{clean}{if \code{TRUE}, return \code{NA} for unknown alphabetical characters}
 }
 \value{
 the Caverphone encoded character vector
@@ -31,10 +30,14 @@ The variable \code{modified} directs \code{caverphone} to use the
 Caverphone2 method, instead of the original.
 
 The \code{caverphone} algorithm is only defined for inputs over the
-standard English alphabet, \emph{i.e.}, "A-Z." For inputs outside
-this range, the output is undefined and \code{NA} is returned.  If
-\code{ignoreNonAlpha} is \code{TRUE}, \code{caverphone} attempts to
-process the strings.
+standard English alphabet, \emph{i.e.}, "A-Z.". Non-alphabetical
+characters are removed from the string in a locale-dependent fashion.
+This strips spaces, hyphens, and numbers.  Other letters, such as
+"Ü," may be permissible in the current locale but are unknown to
+\code{caverphone}.  For inputs outside of its known range, the output is
+undefined and \code{NA} is returned and a \code{warning} this thrown.
+If \code{clean} is \code{FALSE}, \code{caverphone} attempts to process the
+strings.  The default is \code{TRUE}.
 }
 \examples{
 caverphone("William")

@@ -31,7 +31,7 @@
 #'
 #' @param word string or vector of strings to encode
 #' @param maxCodeLen  maximum length of the resulting encodings, in characters
-#' @param ignoreNonAlpha if \code{TRUE}, ignore non-alphabetic chracters
+#' @param clean if \code{TRUE}, return \code{NA} for unknown alphabetical characters
 #'
 #' @details
 #'
@@ -43,10 +43,14 @@
 #' code should be.  The default is 5.
 #'
 #' The \code{rogerroot} algorithm is only defined for inputs over the
-#' standard English alphabet, \emph{i.e.}, "A-Z." For inputs outside
-#' this range, the output is undefined and \code{NA} is returned.  If
-#' \code{ignoreNonAlpha} is \code{TRUE}, \code{rogerroot} attempts to
-#' process the strings.
+#' standard English alphabet, \emph{i.e.}, "A-Z.". Non-alphabetical
+#' characters are removed from the string in a locale-dependent fashion.
+#' This strips spaces, hyphens, and numbers.  Other letters, such as
+#' "Ü," may be permissible in the current locale but are unknown to
+#' \code{rogerroot}.  For inputs outside of its known range, the output
+#' is undefined and \code{NA} is returned and a \code{warning} this
+#' thrown.  If \code{clean} is \code{FALSE}, \code{rogerroot} attempts
+#' to process the strings.  The default is \code{TRUE}.
 #'
 #' @return the Roger Root encoded character vector
 #'
@@ -65,15 +69,15 @@
 #' @importFrom utils read.csv
 #'
 #' @export
-rogerroot <- function(word, maxCodeLen = 5, ignoreNonAlpha = FALSE) {
+rogerroot <- function(word, maxCodeLen = 5, clean = TRUE) {
 
     ## First, uppercase it and test for unprocessable characters
     word <- toupper(word)
     word[is.null(word)] <- NA
     listNAs <- is.na(word)
-    if(any(nonalpha <- grepl("[^A-Z]", word, perl = TRUE)))
-        warning("non-alphabetical characters found, results may not be consistent")
     word <- gsub("[^[:alpha:]]*", "", word, perl = TRUE)
+    if(any(nonalpha <- grepl("[^A-Z]", word, perl = TRUE)) && clean)
+        warning("unknown characters found, results may not be consistent")
 
     ## First letter table...these are write-once tables...
     letterTable<-"letter,code\n^A,1\n^B,09\n^CE,00\n^CH,06\n^CI,00\n^CY,00\n^C,07\n^DG,07\n^D,01\n^E,1\n^F,08\n^GF,08\n^GM,03\n^GN,02\n^G,07\n^H,2\n^I,1\n^J,3\n^KN,02\n^K,07\n^L,05\n^M,03\n^N,02\n^O,1\n^PF,08\n^PH,08\n^PN,02\n^P,09\n^Q,07\n^R,04\n^SCH,06\n^SH,06\n^S,00\n^TSCH,06\n^TSH,06\n^TS,00\n^T,01\n^U,1\n^V,08\n^WR,04\n^W,4\n^X,07\n^Y,5\n^Z,00\n"
@@ -102,7 +106,7 @@ rogerroot <- function(word, maxCodeLen = 5, ignoreNonAlpha = FALSE) {
     
     ## Yeah, we already processed them, but now get rid of them
     word[listNAs] <- NA
-    if(!ignoreNonAlpha)
+    if(clean)
         word[nonalpha] <- NA
 
     return(word)

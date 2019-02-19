@@ -31,19 +31,23 @@
 #'
 #' @param word string or vector of strings to encode
 #' @param maxCodeLen   maximum length of the resulting encodings, in characters
-#' @param ignoreNonAlpha if \code{TRUE}, ignore non-alphabetic chracters
+#' @param clean if \code{TRUE}, return \code{NA} for unknown alphabetical characters
 #'
 #' @details
 #'
 #' The variable \code{word} is the name to be encoded.  The variable
 #' \code{maxCodeLen} is the limit on how long the returned name code
 #' should be.  The default is 4.
-#'
+#' 
 #' The \code{onca} algorithm is only defined for inputs over the
-#' standard English alphabet, \emph{i.e.}, "A-Z." For inputs outside
-#' this range, the output is undefined and \code{NA} is returned.  If
-#' \code{ignoreNonAlpha} is \code{TRUE}, \code{onca} attempts to
-#' process the strings.
+#' standard English alphabet, \emph{i.e.}, "A-Z.". Non-alphabetical
+#' characters are removed from the string in a locale-dependent fashion.
+#' This strips spaces, hyphens, and numbers.  Other letters, such as
+#' "Ü," may be permissible in the current locale but are unknown to
+#' \code{onca}.  For inputs outside of its known range, the output is
+#' undefined and \code{NA} is returned and a \code{warning} this thrown.
+#' If \code{clean} is \code{FALSE}, \code{onca} attempts to process the
+#' strings.  The default is \code{TRUE}.
 #'
 #' @return the ONCA encoded character vector
 #'
@@ -59,10 +63,10 @@
 #' onca("Stevenson", maxCodeLen = 8)
 #'
 #' @export
-onca <- function(word, maxCodeLen = 4, ignoreNonAlpha = FALSE) {
+onca <- function(word, maxCodeLen = 4, clean = TRUE) {
 
     ## Yes, it really is this simple, but maxCodeLen * 2 is kind of eyeballing it
-    word <- nysiis(word, maxCodeLen = maxCodeLen * 2, ignoreNonAlpha = ignoreNonAlpha)
-    word <- soundex(word, maxCodeLen, ignoreNonAlpha = ignoreNonAlpha)
+    word <- nysiis(word, maxCodeLen = maxCodeLen * 2, clean = clean)
+    word <- soundex(word, maxCodeLen, clean = clean)
     return(word)
 }

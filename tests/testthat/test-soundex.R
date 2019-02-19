@@ -6,7 +6,7 @@ test_that("Test that soundex works", {
 
     test <- read.csv("soundex.csv", comment.char = "#", stringsAsFactors = FALSE, colClasses = rep("character", 2), encoding = "UTF-8")
 
-    ## Test for cases where ignoreNonAlpha is FALSE
+    ## Test for cases where clean = TRUE
     for(i in 1:nrow(test)) {
         if(is.na(test$value[i])) {
             expect_warning(testValue <- soundex(test$word[i]))
@@ -15,14 +15,14 @@ test_that("Test that soundex works", {
             expect_true(soundex(test$word[i]) == test$value[i])
     }
 
-    ## Test for cases where ignoreNonAlpha is TRUE, which should not
+    ## Test for cases where clean = FALSE, which should not
     ## return NA, so we are going to assume that's an error
     for(i in 1:nrow(test)) {
         if(is.na(test$value[i])) {
-            expect_warning(testValue <- soundex(test$word[i], ignoreNonAlpha = TRUE))
+            expect_warning(testValue <- soundex(test$word[i], clean = FALSE))
             expect_false(is.na(testValue))
         } else
-            expect_true(soundex(test$word[i], ignoreNonAlpha = TRUE) == test$value[i])
+            expect_true(soundex(test$word[i], clean = FALSE) == test$value[i])
     }
 
 })
@@ -47,7 +47,7 @@ test_that("Test that refined soundex works", {
 
     test <- read.csv("soundex-refined.csv", comment.char = "#", stringsAsFactors = FALSE, colClasses = rep("character", 2), encoding = "UTF-8")
 
-    ## Test for cases where ignoreNonAlpha is FALSE
+    ## Test for cases where clean = TRUE
     for(i in 1:nrow(test)) {
         if(is.na(test$value[i])) {
             expect_warning(testValue <- refinedSoundex(test$word[i]))
@@ -56,14 +56,14 @@ test_that("Test that refined soundex works", {
             expect_true(refinedSoundex(test$word[i]) == test$value[i])
     }
 
-    ## Test for cases where ignoreNonAlpha is TRUE, which should not
+    ## Test for cases where clean = FALSE, which should not
     ## return NA, so we are going to assume that's an error
     for(i in 1:nrow(test)) {
         if(is.na(test$value[i])) {
-            expect_warning(testValue <- refinedSoundex(test$word[i], ignoreNonAlpha = TRUE))
+            expect_warning(testValue <- refinedSoundex(test$word[i], clean = FALSE))
             expect_false(is.na(testValue))
         } else
-            expect_true(refinedSoundex(test$word[i], ignoreNonAlpha = TRUE) == test$value[i])
+            expect_true(refinedSoundex(test$word[i], clean = FALSE) == test$value[i])
     }
 
 })

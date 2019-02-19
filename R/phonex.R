@@ -31,7 +31,7 @@
 #'
 #' @param word string or vector of strings to encode
 #' @param maxCodeLen maximum length of the resulting encodings, in characters
-#' @param ignoreNonAlpha if \code{TRUE}, ignore non-alphabetic chracters
+#' @param clean if \code{TRUE}, return \code{NA} for unknown alphabetical characters
 #'
 #' @details
 #'
@@ -40,11 +40,16 @@
 #' should be.  The default is 4.
 #'
 #' The \code{phonex} algorithm is only defined for inputs over the
-#' standard German alphabet, \emph{i.e.}, "A-Z," "Ä," "Ö," "Ü," and "ß."
-#' For inputs outside this range, the output is undefined and \code{NA}
-#' is returned.  If \code{ignoreNonAlpha} is \code{TRUE},
-#' \code{phonex} attempts to process the strings.
-#'
+#' standard English alphabet, \emph{i.e.}, "A-Z," "Ä," "Ö," "Ü," and
+#' "ß." Non-alphabetical characters are removed from the string in a
+#' locale-dependent fashion.  This strips spaces, hyphens, and numbers.
+#' Other letters, such as "ç," may be permissible in the current locale
+#' but are unknown to \code{phonex}.  For inputs outside of its known
+#' range, the output is undefined and \code{NA} is returned and a
+#' \code{warning} this thrown.  If \code{clean} is \code{FALSE},
+#' \code{phonex} attempts to process the strings.  The default is
+#' \code{TRUE}.
+#' 
 #' @return the Phonex encoded character vector
 #'
 #' @references
@@ -61,7 +66,7 @@
 #' phonex("Stevenson", maxCodeLen = 8)
 #'
 #' @export
-phonex <- function(word, maxCodeLen = 4, ignoreNonAlpha = FALSE) {
+phonex <- function(word, maxCodeLen = 4, clean = TRUE) {
 
     ## Remove umlauts and eszett
     word <- toupper(word)
@@ -73,9 +78,9 @@ phonex <- function(word, maxCodeLen = 4, ignoreNonAlpha = FALSE) {
     ## First, uppercase it and test for unprocessable characters
     word[is.null(word)] <- NA
     listNAs <- is.na(word)
-    if(any(nonalpha <- grepl("[^A-Z]", word, perl = TRUE)))
-        warning("non-alphabetical characters found, results may not be consistent")
     word <- gsub("[^[:alpha:]]*", "", word, perl = TRUE)
+    if(any(nonalpha <- grepl("[^A-Z]", word, perl = TRUE)) && clean)
+        warning("unknown characters found, results may not be consistent")
 
     ## Preprocess the name
     word <- gsub("S+$", "", word, perl = TRUE)
@@ -132,7 +137,7 @@ phonex <- function(word, maxCodeLen = 4, ignoreNonAlpha = FALSE) {
 
     ## Yeah, we already processed them, but now get rid of them
     word[listNAs] <- NA
-    if(!ignoreNonAlpha)
+    if(clean)
         word[nonalpha] <- NA
 
     return(word)

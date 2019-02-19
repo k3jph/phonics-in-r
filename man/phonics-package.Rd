@@ -6,13 +6,17 @@
 \alias{phonics-package}
 \title{Phonetic Spelling Algorithms}
 \description{
-Encode words with English-language Metaphone
+Encode words phonetic spelling algorithms.
 }
 \details{
-The phonics package provides an implementation of the Metaphone
-phonetic algorithm in R.  The algorithm reduces a string to a
-symbolic representation approximating the sound.  It can be used to
-match names, words, and as a proxy for assorted string distance
+The \code{phonics} package for \code{R} is designed to provide a
+variety of phonetic indexing algorithms in common and not-so-common
+use today.  The algorithms generally reduce a string to a symbolic
+representation approximating the sound made by pronouncing the
+string.  They can be used to match names, words, and as a proxy for
+assorted string distance algorithms.  The algorithm reduces a string
+to a symbolic representation approximating the sound.  It can be used
+to match names, words, and as a proxy for assorted string distance
 algorithms.
 }
 \seealso{

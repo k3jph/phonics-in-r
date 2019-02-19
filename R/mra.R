@@ -31,7 +31,7 @@
 #' The Western Airlines matching rating approach name encoder
 #'
 #' @param word string or vector of strings to encode
-#' @param ignoreNonAlpha if \code{TRUE}, ignore non-alphabetic chracters
+#' @param clean if \code{TRUE}, return \code{NA} for unknown alphabetical characters
 #' @param x MRA-encoded character vector
 #' @param y MRA-encoded character vector
 #'
@@ -42,12 +42,16 @@
 #' because the algorithm itself is dependent upon its six-character
 #' length.  The variables \code{x} and \code{y} are MRA-encoded and are
 #' compared to each other using the MRA comparison specification.
-#'
+#' 
 #' The \code{mra_encode} algorithm is only defined for inputs over the
-#' standard English alphabet, \emph{i.e.}, "A-Z." For inputs outside
-#' this range, the output is undefined and \code{NA} is returned.  If
-#' \code{ignoreNonAlpha} is \code{TRUE}, \code{mra_encode} attempts to
-#' process the strings.
+#' standard English alphabet, \emph{i.e.}, "A-Z.". Non-alphabetical
+#' characters are removed from the string in a locale-dependent fashion.
+#' This strips spaces, hyphens, and numbers.  Other letters, such as
+#' "Ü," may be permissible in the current locale but are unknown to
+#' \code{mra_encode}.  For inputs outside of its known range, the output is
+#' undefined and \code{NA} is returned and a \code{warning} this thrown.
+#' If \code{clean} is \code{FALSE}, \code{mra_encode} attempts to process the
+#' strings.  The default is \code{TRUE}.
 #'
 #' @return The \code{mra_encode} function returns match rating approach
 #' encoded character vector.  The \code{mra_compare} returns a boolean
@@ -71,15 +75,15 @@
 #' @rdname mra
 #' @name mra_encode
 #' @export
-mra_encode <- function(word, ignoreNonAlpha = FALSE) {
+mra_encode <- function(word, clean = TRUE) {
 
     ## First, uppercase it and test for unprocessable characters
     word <- toupper(word)
     word[is.null(word)] <- NA
     listNAs <- is.na(word)
-    if(any(nonalpha <- grepl("[^A-Z]", word, perl = TRUE)))
-        warning("non-alphabetical characters found, results may not be consistent")
     word <- gsub("[^[:alpha:]]*", "", word, perl = TRUE)
+    if(any(nonalpha <- grepl("[^A-Z]", word, perl = TRUE)) && clean)
+        warning("unknown characters found, results may not be consistent")
 
     ## First character of key = first character of name
     first <- substr(word, 1, 1)
@@ -104,7 +108,7 @@ mra_encode <- function(word, ignoreNonAlpha = FALSE) {
 
     ## Yeah, we already processed them, but now get rid of them
     word[listNAs] <- NA
-    if(!ignoreNonAlpha)
+    if(clean)
         word[nonalpha] <- NA
 
     return(word)
