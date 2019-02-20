@@ -75,10 +75,10 @@ metaphone <- function(word, maxCodeLen = 10L, clean = TRUE) {
     ## First, uppercase it and test for unprocessable characters
     word <- toupper(word)
     word[is.null(word)] <- NA
-    word <- gsub("[^[:alpha:]]*", "", word, perl = TRUE)
     if(any(nonalpha <- grepl("[^A-Z]", word, perl = TRUE)) && clean)
         warning("unknown characters found, results may not be consistent")
-
+    word <- gsub("[^A-Z]*", "", word, perl = TRUE)
+    
     word <- metaphone_internal(word, maxCodeLen)
 
     ## Yeah, we already processed them, but now get rid of them

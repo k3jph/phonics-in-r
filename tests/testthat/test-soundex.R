@@ -19,8 +19,7 @@ test_that("Test that soundex works", {
     ## return NA, so we are going to assume that's an error
     for(i in 1:nrow(test)) {
         if(is.na(test$value[i])) {
-            expect_warning(testValue <- soundex(test$word[i], clean = FALSE))
-            expect_false(is.na(testValue))
+            expect_false(is.na(testValue <- soundex(test$word[i], clean = FALSE)))
         } else
             expect_true(soundex(test$word[i], clean = FALSE) == test$value[i])
     }
@@ -60,8 +59,7 @@ test_that("Test that refined soundex works", {
     ## return NA, so we are going to assume that's an error
     for(i in 1:nrow(test)) {
         if(is.na(test$value[i])) {
-            expect_warning(testValue <- refinedSoundex(test$word[i], clean = FALSE))
-            expect_false(is.na(testValue))
+            expect_false(is.na(testValue <- refinedSoundex(test$word[i], clean = FALSE)))
         } else
             expect_true(refinedSoundex(test$word[i], clean = FALSE) == test$value[i])
     }

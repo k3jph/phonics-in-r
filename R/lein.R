@@ -72,6 +72,10 @@ lein <- function(word, maxCodeLen = 4, clean = TRUE) {
     word <- toupper(word)
     listNulls <- is.null(word)
     listNAs <- is.na(word)
+    if(any(nonalpha <- grepl("[^A-Z]", word, perl = TRUE)) && clean)
+        warning("unknown characters found, results may not be consistent")
+    word <- gsub("[^A-Z]*", "", word, perl = TRUE)
+
     word <- gsub("[^[:alpha:]]*", "", word, perl = TRUE)
     if(any(nonalpha <- grepl("[^A-Z]", word, perl = TRUE)) && clean)
         warning("unknown characters found, results may not be consistent")
