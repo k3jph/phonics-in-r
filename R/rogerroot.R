@@ -75,10 +75,10 @@ rogerroot <- function(word, maxCodeLen = 5, clean = TRUE) {
     word <- toupper(word)
     word[is.null(word)] <- NA
     listNAs <- is.na(word)
-    word <- gsub("[^[:alpha:]]*", "", word, perl = TRUE)
     if(any(nonalpha <- grepl("[^A-Z]", word, perl = TRUE)) && clean)
         warning("unknown characters found, results may not be consistent")
-
+    word <- gsub("[^A-Z]*", "", word, perl = TRUE)
+    
     ## First letter table...these are write-once tables...
     letterTable<-"letter,code\n^A,1\n^B,09\n^CE,00\n^CH,06\n^CI,00\n^CY,00\n^C,07\n^DG,07\n^D,01\n^E,1\n^F,08\n^GF,08\n^GM,03\n^GN,02\n^G,07\n^H,2\n^I,1\n^J,3\n^KN,02\n^K,07\n^L,05\n^M,03\n^N,02\n^O,1\n^PF,08\n^PH,08\n^PN,02\n^P,09\n^Q,07\n^R,04\n^SCH,06\n^SH,06\n^S,00\n^TSCH,06\n^TSH,06\n^TS,00\n^T,01\n^U,1\n^V,08\n^WR,04\n^W,4\n^X,07\n^Y,5\n^Z,00\n"
     letters <- read.csv(colClasses=c("character", "character"), text = letterTable)

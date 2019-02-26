@@ -89,7 +89,7 @@ caverphone <- function(word, maxCodeLen = NULL, modified = FALSE, clean = TRUE) 
     listNAs <- is.na(word)
     if(any(nonalpha <- grepl("[^a-z]", word, perl = TRUE)) && clean)
         warning("unknown characters found, results may not be consistent")
-    word <- gsub("[^[:alpha:]]*", "", word, perl = TRUE)
+    word <- gsub("[^a-z]*", "", word, perl = TRUE)
 
     if(modified == TRUE)
         word <- caverphone_modified(word)

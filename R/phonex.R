@@ -78,10 +78,10 @@ phonex <- function(word, maxCodeLen = 4, clean = TRUE) {
     ## First, uppercase it and test for unprocessable characters
     word[is.null(word)] <- NA
     listNAs <- is.na(word)
-    word <- gsub("[^[:alpha:]]*", "", word, perl = TRUE)
     if(any(nonalpha <- grepl("[^A-Z]", word, perl = TRUE)) && clean)
         warning("unknown characters found, results may not be consistent")
-
+    word <- gsub("[^A-Z]*", "", word, perl = TRUE)
+    
     ## Preprocess the name
     word <- gsub("S+$", "", word, perl = TRUE)
     word <- gsub("^KN", "N", word, perl = TRUE)

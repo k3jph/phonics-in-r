@@ -81,10 +81,10 @@ nysiis <- function(word, maxCodeLen = 6, modified = FALSE, clean = TRUE) {
     word <- toupper(word)
     word[is.null(word)] <- NA
     listNAs <- is.na(word)
-    word <- gsub("[^[:alpha:]]*", "", word, perl = TRUE)
     if(any(nonalpha <- grepl("[^A-Z]", word, perl = TRUE)) && clean)
         warning("unknown characters found, results may not be consistent")
-
+    word <- gsub("[^A-Z]*", "", word, perl = TRUE)
+    
     if(modified == TRUE)
         word <- nysiis_modified(word, maxCodeLen)
     else

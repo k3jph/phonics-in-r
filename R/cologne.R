@@ -80,9 +80,9 @@ cologne <- function(word, maxCodeLen = NULL, clean = TRUE) {
     word <- gsub("\u00D6", "O", word, perl = TRUE)
     word <- gsub("\u00DF", "S", word, perl = TRUE)
 
-    word <- gsub("[^[:alpha:]]*", "", word, perl = TRUE)
     if(any(nonalpha <- grepl("[^A-Z]", word, perl = TRUE)) && clean)
         warning("unknown characters found, results may not be consistent")
+    word <- gsub("[^A-Z]*", "", word, perl = TRUE)
     
     ## Work through the rules...but backwards, mostly, here's 8s
 	word <- gsub("([CKQ])X", "\\18", word, perl = TRUE)

@@ -72,9 +72,9 @@ lein <- function(word, maxCodeLen = 4, clean = TRUE) {
     word <- toupper(word)
     listNulls <- is.null(word)
     listNAs <- is.na(word)
-    word <- gsub("[^[:alpha:]]*", "", word, perl = TRUE)
     if(any(nonalpha <- grepl("[^A-Z]", word, perl = TRUE)) && clean)
         warning("unknown characters found, results may not be consistent")
+    word <- gsub("[^A-Z]*", "", word, perl = TRUE)
 
     ## First character of key = first character of name
     first <- substr(word, 1, 1)
