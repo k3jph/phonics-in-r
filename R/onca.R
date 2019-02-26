@@ -32,13 +32,15 @@
 #' @param word string or vector of strings to encode
 #' @param maxCodeLen   maximum length of the resulting encodings, in characters
 #' @param clean if \code{TRUE}, return \code{NA} for unknown alphabetical characters
+#' @param modified if \code{TRUE}, use the modified \code{nysiis} function
+#' @param refined if \code{TRUE}, use the \code{refinedSoundex} function
 #'
 #' @details
 #'
 #' The variable \code{word} is the name to be encoded.  The variable
 #' \code{maxCodeLen} is the limit on how long the returned name code
 #' should be.  The default is 4.
-#' 
+#'
 #' The \code{onca} algorithm is only defined for inputs over the
 #' standard English alphabet, \emph{i.e.}, "A-Z.". Non-alphabetical
 #' characters are removed from the string in a locale-dependent fashion.
@@ -63,10 +65,14 @@
 #' onca("Stevenson", maxCodeLen = 8)
 #'
 #' @export
-onca <- function(word, maxCodeLen = 4, clean = TRUE) {
+onca <- function(word, maxCodeLen = 4, clean = TRUE, modified = FALSE, refined = FALSE) {
 
     ## Yes, it really is this simple, but maxCodeLen * 2 is kind of eyeballing it
     word <- nysiis(word, maxCodeLen = maxCodeLen * 2, clean = clean)
-    word <- soundex(word, maxCodeLen, clean = clean)
+    if(refined)
+        word <- refinedSoundex(word, maxCodeLen, clean = clean)
+    else
+        word <- soundex(word, maxCodeLen, clean = clean)
+    
     return(word)
 }

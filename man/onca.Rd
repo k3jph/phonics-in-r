@@ -4,7 +4,8 @@
 \alias{onca}
 \title{Oxford Name Compression Algorithm}
 \usage{
-onca(word, maxCodeLen = 4, clean = TRUE)
+onca(word, maxCodeLen = 4, clean = TRUE, modified = FALSE,
+  refined = FALSE)
 }
 \arguments{
 \item{word}{string or vector of strings to encode}
@@ -12,6 +13,10 @@ onca(word, maxCodeLen = 4, clean = TRUE)
 \item{maxCodeLen}{maximum length of the resulting encodings, in characters}
 
 \item{clean}{if \code{TRUE}, return \code{NA} for unknown alphabetical characters}
+
+\item{modified}{if \code{TRUE}, use the modified \code{nysiis} function}
+
+\item{refined}{if \code{TRUE}, use the \code{refinedSoundex} function}
 }
 \value{
 the ONCA encoded character vector
