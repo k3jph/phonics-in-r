@@ -42,7 +42,7 @@
 #' because the algorithm itself is dependent upon its six-character
 #' length.  The variables \code{x} and \code{y} are MRA-encoded and are
 #' compared to each other using the MRA comparison specification.
-#' 
+#'
 #' The \code{mra_encode} algorithm is only defined for inputs over the
 #' standard English alphabet, \emph{i.e.}, "A-Z.". Non-alphabetical
 #' characters are removed from the string in a locale-dependent fashion.
@@ -84,7 +84,7 @@ mra_encode <- function(word, clean = TRUE) {
     if(any(nonalpha <- grepl("[^A-Z]", word, perl = TRUE)) && clean)
         warning("unknown characters found, results may not be consistent")
     word <- gsub("[^A-Z]*", "", word, perl = TRUE)
-    
+
     ## First character of key = first character of name
     first <- substr(word, 1, 1)
     word <- substr(word, 2, nchar(word))
@@ -118,6 +118,9 @@ mra_encode <- function(word, clean = TRUE) {
 #' @name mra_compare
 #' @export
 mra_compare <- function(x, y) {
+    if(all(is.na(x)) | all(is.na(y)))
+       return(NA)
+
     mra <- data.frame(x = x, y = y, sim = 0, min = 100, stringsAsFactors = FALSE)
 
     ## Obtain the minimum rating value by calculating the length sum of
@@ -125,8 +128,8 @@ mra_compare <- function(x, y) {
     ## by setting the minimum to be the sum and move from there.
     mra$lensum <- nchar(mra$x) + nchar(mra$y)
     mra$min[mra$lensum == 12] <- 2
-    mra$min[mra$lensum > 7 && mra$lensum <= 11] <- 3
-    mra$min[mra$lensum > 4 && mra$lensum <= 7] <- 4
+    mra$min[mra$lensum > 7 & mra$lensum <= 11] <- 3
+    mra$min[mra$lensum > 4 & mra$lensum <= 7] <- 4
     mra$min[mra$lensum <= 4] <- 5
 
     ## If the length difference between the encoded strings is 3 or
@@ -173,5 +176,9 @@ mra_compare <- function(x, y) {
     ## If the similarity is greater than or equal to the minimum
     ## required, it is a successful match.
     mra$match <- (mra$sim >= mra$min)
+
+    ## Return NA for NAs
+    mra$match[is.na(mra$x) | is.na(mra$y)] <- NA
+
     return(mra$match)
 }
