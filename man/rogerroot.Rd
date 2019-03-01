@@ -52,7 +52,7 @@ Other phonics: \code{\link{caverphone}},
   \code{\link{cologne}}, \code{\link{lein}},
   \code{\link{metaphone}}, \code{\link{mra_encode}},
   \code{\link{nysiis}}, \code{\link{onca}},
-  \code{\link{phonex}}, \code{\link{soundex}},
-  \code{\link{statcan}}
+  \code{\link{phonex}}, \code{\link{phonics}},
+  \code{\link{soundex}}, \code{\link{statcan}}
 }
 \concept{phonics}
