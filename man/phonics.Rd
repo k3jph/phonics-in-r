@@ -39,19 +39,23 @@ to a symbolic representation approximating the sound.  It can be used
 to match names, strings, and as a proxy for assorted string distance
 algorithms.
 
-The variable \code{word} is the name to be encoded.  The variable
-\code{maxCodeLen} is \emph{not} supported in this algorithm encoder
-because the algorithm itself is dependent upon its six-character
-length.  The variables \code{x} and \code{y} are MRA-encoded and are
-compared to each other using the MRA comparison specification.
+The variable \code{word} is a character string or a vector of
+character strings to be encoded.
 
 Different phonetic algorithm are only defined for inputs over the
 limited alphabets, Non-alphabetical characters are removed from the
-string in a locale-dependent fashion.  This strips spaces, hyphens,
-and numbers.  For inputs outside of its known range, the output is
-undefined and \code{NA} is returned and a \code{warning} this thrown.
-If \code{clean} is \code{FALSE}, \code{phonics} attempts to process
-the strings.  The default is \code{TRUE}.
+string in a locale-dependent fashion. This strips spaces, hyphens,
+and numbers. For inputs outside of its known range, the output is
+undefined and \code{NA} is returned and a warning this thrown. If
+\code{clean} is \code{FALSE}, \code{phonics} attempts to process the
+strings. The default is \code{TRUE}.
+
+The \code{method} parameter should be a character vector containing one or
+more methods that should be used. The available list of methods is
+"caverphone", "caverphone.modified", "cologne", "lein", "metaphone",
+"nysiis", "nysiis.modified", "onca", "onca.modified", "onca.refined",
+"onca.modified.refined", "phonex", "rogerroot", "soundex",
+"soundex.refined", and "statcan".
 }
 \examples{
 phonics(c("Peter", "Peady"), c("soundex", "soundex.refined"))
