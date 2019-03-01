@@ -1,5 +1,5 @@
-## Test values from Robert L. Taft, Name search techniques, Bureau of
-## Systems Development, Albany, New York, 1970.
+## Test values from Robert L. Taft, Name search techniques
+## Systems Development, Albany, New York
 word,value 
 Johnson,32020
 Williams,45300
@@ -19,3 +19,8 @@ Witted,41100
 ## I am not sure "Ongoog" is correct, but it yields the correct result
 Ongoog,12770
 Ching,06270
+"",""
+Müller-Lü denscheidt,NA
+Wikipedia,47810
+garçon,NA
+Breschnew,09406

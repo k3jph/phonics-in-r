@@ -4,12 +4,14 @@
 \alias{rogerroot}
 \title{Roger Root Name Coding Procedure}
 \usage{
-rogerroot(word, maxCodeLen = 5)
+rogerroot(word, maxCodeLen = 5, clean = TRUE)
 }
 \arguments{
 \item{word}{string or vector of strings to encode}
 
 \item{maxCodeLen}{maximum length of the resulting encodings, in characters}
+
+\item{clean}{if \code{TRUE}, return \code{NA} for unknown alphabetical characters}
 }
 \value{
 the Roger Root encoded character vector
@@ -24,14 +26,17 @@ or vector of strings to encode.
 
 The variable \code{maxCodeLen} is the limit on how long the returned
 code should be.  The default is 5.
-}
-\section{Caveats}{
 
-The \code{rogerroot} algorithm is only
-defined for inputs over the standard English alphabet, \emph{i.e.},
-"A-Z." For inputs outside this range, the output is undefined.
+The \code{rogerroot} algorithm is only defined for inputs over the
+standard English alphabet, \emph{i.e.}, "A-Z.". Non-alphabetical
+characters are removed from the string in a locale-dependent fashion.
+This strips spaces, hyphens, and numbers.  Other letters, such as
+"Ü," may be permissible in the current locale but are unknown to
+\code{rogerroot}.  For inputs outside of its known range, the output
+is undefined and \code{NA} is returned and a \code{warning} this
+thrown.  If \code{clean} is \code{FALSE}, \code{rogerroot} attempts
+to process the strings.  The default is \code{TRUE}.
 }
-
 \examples{
 rogerroot("William")
 rogerroot(c("Peter", "Peady"))
@@ -47,7 +52,7 @@ Other phonics: \code{\link{caverphone}},
   \code{\link{cologne}}, \code{\link{lein}},
   \code{\link{metaphone}}, \code{\link{mra_encode}},
   \code{\link{nysiis}}, \code{\link{onca}},
-  \code{\link{phonex}}, \code{\link{soundex}},
-  \code{\link{statcan}}
+  \code{\link{phonex}}, \code{\link{phonics}},
+  \code{\link{soundex}}, \code{\link{statcan}}
 }
 \concept{phonics}

@@ -1,4 +1,4 @@
-## Copyright (c) 2016, James P. Howard, II <jh@jameshoward.us>
+## Copyright (c) 2015-2019, James P. Howard, II <jh@jameshoward.us>
 ##
 ## Redistribution and use in source and binary forms, with or without
 ## modification, are permitted provided that the following conditions are
@@ -30,7 +30,8 @@
 #' The Cologne phonetic name coding procedure.
 #'
 #' @param word string or vector of strings to encode
-#' @param maxCodeLen   maximum length of the resulting encodings, in characters
+#' @param maxCodeLen maximum length of the resulting encodings, in characters
+#' @param clean if \code{TRUE}, return \code{NA} for unknown alphabetical characters
 #'
 #' @details
 #'
@@ -38,13 +39,18 @@
 #' \code{maxCodeLen} is the limit on how long the returned name code
 #' should be.  The default is 4.
 #'
-#' @return the Cologne encoded character vector
+#' The \code{cologne} algorithm is only defined for inputs over the
+#' standard English alphabet, \emph{i.e.}, "A-Z," "Ä," "Ö," "Ü," and
+#' "ß." Non-alphabetical characters are removed from the string in a
+#' locale-dependent fashion.  This strips spaces, hyphens, and numbers.
+#' Other letters, such as "ç," may be permissible in the current locale
+#' but are unknown to \code{cologne}.  For inputs outside of its known
+#' range, the output is undefined and \code{NA} is returned and a
+#' \code{warning} this thrown.  If \code{clean} is \code{FALSE},
+#' \code{cologne} attempts to process the strings.  The default is
+#' \code{TRUE}.
 #'
-#' @section Caveats:
-#' The \code{cologne} algorithm is only
-#' defined for inputs over the standard German alphabet, \emph{i.e.},
-#' "A-Z,", "Ä," "Ö," "Ü," and "ß.  For inputs outside this range, the
-#' output is undefined.
+#' @return the Cologne encoded character vector
 #'
 #' @references
 #'
@@ -56,23 +62,28 @@
 #' @family phonics
 #'
 #' @examples
-#' lein("William")
-#' lein(c("Peter", "Peady"))
-#' lein("Stevenson", maxCodeLen = 8)
+#' cologne("William")
+#' cologne(c("Peter", "Peady"))
+#' cologne("Stevenson", maxCodeLen = 8)
 #'
 #' @export
-cologne <- function(word, maxCodeLen = NULL) {
+cologne <- function(word, maxCodeLen = NULL, clean = TRUE) {
 
-    ## First, remove any nonalphabetical characters and uppercase it
-    word <- gsub("[^[:alpha:]]*", "", word, perl = TRUE)
+    ## First, uppercase it and test for unprocessable characters
     word <- toupper(word)
-
+    listNulls <- is.null(word)
+    listNAs <- is.na(word)
+    
     ## Remove umlauts and eszett
     word <- gsub("\u00C4", "A", word, perl = TRUE)
     word <- gsub("\u00DC", "U", word, perl = TRUE)
     word <- gsub("\u00D6", "O", word, perl = TRUE)
     word <- gsub("\u00DF", "S", word, perl = TRUE)
 
+    if(any(nonalpha <- grepl("[^A-Z]", word, perl = TRUE)) && clean)
+        warning("unknown characters found, results may not be consistent")
+    word <- gsub("[^A-Z]*", "", word, perl = TRUE)
+    
     ## Work through the rules...but backwards, mostly, here's 8s
 	word <- gsub("([CKQ])X", "\\18", word, perl = TRUE)
     word <- gsub("[DT]([CSZ])", "8\\1", word, perl = TRUE)
@@ -120,6 +131,12 @@ cologne <- function(word, maxCodeLen = NULL) {
     word <- substr(word, 2, nchar(word))
 	word <- gsub("0", "", word, perl = TRUE)
     word <- paste(first, word, sep = "")
+
+    ## Yeah, we already processed them, but now get rid of them
+    word[listNulls] <- NA
+    word[listNAs] <- NA
+    if(clean)
+        word[nonalpha] <- NA
 
     return(word)
 }

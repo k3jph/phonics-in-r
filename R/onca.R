@@ -1,4 +1,4 @@
-## Copyright (c) 2016, James P. Howard, II <jh@jameshoward.us>
+## Copyright (c) 2015-2019, James P. Howard, II <jh@jameshoward.us>
 ##
 ## Redistribution and use in source and binary forms, with or without
 ## modification, are permitted provided that the following conditions are
@@ -31,6 +31,9 @@
 #'
 #' @param word string or vector of strings to encode
 #' @param maxCodeLen   maximum length of the resulting encodings, in characters
+#' @param clean if \code{TRUE}, return \code{NA} for unknown alphabetical characters
+#' @param modified if \code{TRUE}, use the modified \code{nysiis} function
+#' @param refined if \code{TRUE}, use the \code{refinedSoundex} function
 #'
 #' @details
 #'
@@ -38,12 +41,17 @@
 #' \code{maxCodeLen} is the limit on how long the returned name code
 #' should be.  The default is 4.
 #'
-#' @return the ONCA encoded character vector
+#' The \code{onca} algorithm is only defined for inputs over the
+#' standard English alphabet, \emph{i.e.}, "A-Z.". Non-alphabetical
+#' characters are removed from the string in a locale-dependent fashion.
+#' This strips spaces, hyphens, and numbers.  Other letters, such as
+#' "Ü," may be permissible in the current locale but are unknown to
+#' \code{onca}.  For inputs outside of its known range, the output is
+#' undefined and \code{NA} is returned and a \code{warning} this thrown.
+#' If \code{clean} is \code{FALSE}, \code{onca} attempts to process the
+#' strings.  The default is \code{TRUE}.
 #'
-#' @section Caveats:
-#' The \code{onca} algorithm is only
-#' defined for inputs over the standard English alphabet, \emph{i.e.},
-#' "A-Z." For inputs outside this range, the output is undefined.
+#' @return the ONCA encoded character vector
 #'
 #' @references
 #'
@@ -57,10 +65,14 @@
 #' onca("Stevenson", maxCodeLen = 8)
 #'
 #' @export
-onca <- function(word, maxCodeLen = 4) {
+onca <- function(word, maxCodeLen = 4, clean = TRUE, modified = FALSE, refined = FALSE) {
 
-    ## Yes, it really is this simple.
-
-    word <- soundex(nysiis(word, maxCodeLen = 10), maxCodeLen)
+    ## Yes, it really is this simple, but maxCodeLen * 2 is kind of eyeballing it
+    word <- nysiis(word, maxCodeLen = maxCodeLen * 2, clean = clean)
+    if(refined)
+        word <- refinedSoundex(word, maxCodeLen, clean = clean)
+    else
+        word <- soundex(word, maxCodeLen, clean = clean)
+    
     return(word)
 }

@@ -4,12 +4,14 @@
 \alias{phonex}
 \title{Phonex Name Coding}
 \usage{
-phonex(word, maxCodeLen = 4)
+phonex(word, maxCodeLen = 4, clean = TRUE)
 }
 \arguments{
 \item{word}{string or vector of strings to encode}
 
 \item{maxCodeLen}{maximum length of the resulting encodings, in characters}
+
+\item{clean}{if \code{TRUE}, return \code{NA} for unknown alphabetical characters}
 }
 \value{
 the Phonex encoded character vector
@@ -21,14 +23,18 @@ The Phonex name coding procedure.
 The variable \code{word} is the name to be encoded.  The variable
 \code{maxCodeLen} is the limit on how long the returned name code
 should be.  The default is 4.
-}
-\section{Caveats}{
 
-The \code{phonex} algorithm is only
-defined for inputs over the standard English alphabet, \emph{i.e.},
-"A-Z." For inputs outside this range, the output is undefined.
+The \code{phonex} algorithm is only defined for inputs over the
+standard English alphabet, \emph{i.e.}, "A-Z," "Ä," "Ö," "Ü," and
+"ß." Non-alphabetical characters are removed from the string in a
+locale-dependent fashion.  This strips spaces, hyphens, and numbers.
+Other letters, such as "ç," may be permissible in the current locale
+but are unknown to \code{phonex}.  For inputs outside of its known
+range, the output is undefined and \code{NA} is returned and a
+\code{warning} this thrown.  If \code{clean} is \code{FALSE},
+\code{phonex} attempts to process the strings.  The default is
+\code{TRUE}.
 }
-
 \examples{
 phonex("William")
 phonex(c("Peter", "Peady"))
@@ -45,7 +51,7 @@ Other phonics: \code{\link{caverphone}},
   \code{\link{cologne}}, \code{\link{lein}},
   \code{\link{metaphone}}, \code{\link{mra_encode}},
   \code{\link{nysiis}}, \code{\link{onca}},
-  \code{\link{rogerroot}}, \code{\link{soundex}},
-  \code{\link{statcan}}
+  \code{\link{phonics}}, \code{\link{rogerroot}},
+  \code{\link{soundex}}, \code{\link{statcan}}
 }
 \concept{phonics}

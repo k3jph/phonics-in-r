@@ -4,7 +4,7 @@
 \alias{caverphone}
 \title{Caverphone}
 \usage{
-caverphone(word, maxCodeLen = NULL, modified = FALSE)
+caverphone(word, maxCodeLen = NULL, modified = FALSE, clean = TRUE)
 }
 \arguments{
 \item{word}{string or vector of strings to encode}
@@ -12,6 +12,8 @@ caverphone(word, maxCodeLen = NULL, modified = FALSE)
 \item{maxCodeLen}{maximum length of the resulting encodings, in characters}
 
 \item{modified}{if \code{TRUE}, use the Caverphone 2 algorithm}
+
+\item{clean}{if \code{TRUE}, return \code{NA} for unknown alphabetical characters}
 }
 \value{
 the Caverphone encoded character vector
@@ -26,14 +28,17 @@ is set to \code{TRUE}, then the default is 10.
 
 The variable \code{modified} directs \code{caverphone} to use the
 Caverphone2 method, instead of the original.
-}
-\section{Caveats}{
 
-The \code{caverphone} algorithm is only
-defined for inputs over the standard English alphabet, \emph{i.e.},
-"A-Z." For inputs outside this range, the output is undefined.
+The \code{caverphone} algorithm is only defined for inputs over the
+standard English alphabet, \emph{i.e.}, "A-Z.". Non-alphabetical
+characters are removed from the string in a locale-dependent fashion.
+This strips spaces, hyphens, and numbers.  Other letters, such as
+"Ü," may be permissible in the current locale but are unknown to
+\code{caverphone}.  For inputs outside of its known range, the output is
+undefined and \code{NA} is returned and a \code{warning} this thrown.
+If \code{clean} is \code{FALSE}, \code{caverphone} attempts to process the
+strings.  The default is \code{TRUE}.
 }
-
 \examples{
 caverphone("William")
 caverphone(c("Peter", "Peady"), modified = TRUE)
@@ -51,7 +56,8 @@ University of Otago, New Zealand, 2004.
 Other phonics: \code{\link{cologne}}, \code{\link{lein}},
   \code{\link{metaphone}}, \code{\link{mra_encode}},
   \code{\link{nysiis}}, \code{\link{onca}},
-  \code{\link{phonex}}, \code{\link{rogerroot}},
-  \code{\link{soundex}}, \code{\link{statcan}}
+  \code{\link{phonex}}, \code{\link{phonics}},
+  \code{\link{rogerroot}}, \code{\link{soundex}},
+  \code{\link{statcan}}
 }
 \concept{phonics}

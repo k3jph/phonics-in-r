@@ -1,18 +1,18 @@
-## Test values taken from https://github.com/spronkey/phphonex/
+## Test values taken from https://github.com/spronkey/phphonex/,
 word,value
 Schüßler,S246
-123 testsss,T230
-24/7 test,T230
-ZYX test,S232
+123 testsss,NA
+24/7 test,NA
+ZYX test,NA
 A,A000
 Lee,L000
 Kuhne,C500
-Meyer-Lansky,M452
+Meyer-Lansky,NA
 Oepping,A150
 Daley,D400
 Dalitz,D432
 Duhlitz,D432
-De Ledes,D430
+De Ledes,NA
 Schmidt,S253
 Sandemann,S500
 Sinatra,S536
@@ -47,3 +47,8 @@ Fripp,F610
 Czarkowska,C200
 Hornblower,A514
 Looser,L260
+"",""
+Müller-Lü denscheidt,NA
+Wikipedia,W213
+garçon,NA
+Breschnew,B625

@@ -4,7 +4,7 @@
 \alias{nysiis}
 \title{New York State Identification and Intelligence System}
 \usage{
-nysiis(word, maxCodeLen = 6, modified = FALSE)
+nysiis(word, maxCodeLen = 6, modified = FALSE, clean = TRUE)
 }
 \arguments{
 \item{word}{string or vector of strings to encode}
@@ -12,6 +12,8 @@ nysiis(word, maxCodeLen = 6, modified = FALSE)
 \item{maxCodeLen}{maximum length of the resulting encodings, in characters}
 
 \item{modified}{if \code{TRUE}, use the modified NYSIIS algorithm}
+
+\item{clean}{if \code{TRUE}, return \code{NA} for unknown alphabetical characters}
 }
 \value{
 the NYSIIS encoded character vector
@@ -31,14 +33,17 @@ NYSIIS code should be.  The default is 6.
 
 The variable \code{modified} directs \code{nysiis} to use the
 modified method instead of the original.
-}
-\section{Caveats}{
 
-The \code{nysiis} algorithm is only
-defined for inputs over the standard English alphabet, \emph{i.e.},
-"A-Z." For inputs outside this range, the output is undefined.
+The \code{nysiis} algorithm is only defined for inputs over the
+standard English alphabet, \emph{i.e.}, "A-Z.". Non-alphabetical
+characters are removed from the string in a locale-dependent fashion.
+This strips spaces, hyphens, and numbers.  Other letters, such as
+"Ü," may be permissible in the current locale but are unknown to
+\code{nysiis}.  For inputs outside of its known range, the output is
+undefined and \code{NA} is returned and a \code{warning} this thrown.
+If \code{clean} is \code{FALSE}, \code{nysiis} attempts to process the
+strings.  The default is \code{TRUE}.
 }
-
 \examples{
 nysiis("Robert")
 nysiis("rupert")
@@ -55,7 +60,7 @@ Other phonics: \code{\link{caverphone}},
   \code{\link{cologne}}, \code{\link{lein}},
   \code{\link{metaphone}}, \code{\link{mra_encode}},
   \code{\link{onca}}, \code{\link{phonex}},
-  \code{\link{rogerroot}}, \code{\link{soundex}},
-  \code{\link{statcan}}
+  \code{\link{phonics}}, \code{\link{rogerroot}},
+  \code{\link{soundex}}, \code{\link{statcan}}
 }
 \concept{phonics}

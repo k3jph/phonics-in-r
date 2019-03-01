@@ -1,4 +1,4 @@
-// Copyright (c) 2015, James P. Howard, II <jh@jameshoward.us>
+// Copyright (c) 2015-2019, James P. Howard, II <jh@jameshoward.us>
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
@@ -102,52 +102,10 @@ std::string refinedSoundex_single(std::string x, int maxCodeLen) {
     return code;
 }
 
-//' @rdname soundex
-//' @name soundex
-//' @title Soundex
-//'
-//' @description
-//' The Soundex phonetic algorithms
-//'
-//' @param word string or vector of strings to encode
-//' @param maxCodeLen  maximum length of the resulting encodings, in characters
-//'
-//' @details The function \code{soundex} phonentically encodes the given
-//' string using the soundex algorithm.  The function \code{refinedSoundex}
-//' uses Apache's refined soundex algorithm.  Both implementations are loosely
-//' based on the Apache Commons Java editons.
-//'
-//' The variable \code{maxCodeLen} is the limit on how long the returned
-//' soundex should be.
-//'
-//' @return soundex encoded character vector
-//'
-//' @section Caveats:
-//' The \code{soundex} and \code{refinedSoundex} algorithms are only
-//' defined for inputs over the standard English alphabet, \emph{i.e.},
-//' "A-Z." For inputs outside this range, the output is undefined.
-//'
-//' @references
-//' Charles P. Bourne and Donald F. Ford, "A study of methods for
-//' systematically abbreviating English words and names," \emph{Journal
-//' of the ACM}, vol. 8, no. 4 (1961), p. 538-552.
-//'
-//' Howard B. Newcombe, James M. Kennedy, "Record linkage: making
-//' maximum use of the discriminating power of identifying information,"
-//' \emph{Communications of the ACM}, vol. 5, no. 11 (1962), p. 563-566.
-//'
-//' @family phonics
-//'
-//' @examples
-//' soundex("wheel")
-//' soundex(c("school", "benji"))
-//'
 //' @useDynLib phonics
 //' @importFrom Rcpp evalCpp
-//' @export
 //[[Rcpp::export]]
-Rcpp::CharacterVector soundex(Rcpp::CharacterVector word, int maxCodeLen = 4) {
-
+Rcpp::CharacterVector soundex_internal(Rcpp::CharacterVector word, int maxCodeLen = 4) {
     unsigned int input_size = word.size();
     Rcpp::CharacterVector res(input_size);
 
@@ -165,13 +123,10 @@ Rcpp::CharacterVector soundex(Rcpp::CharacterVector word, int maxCodeLen = 4) {
     return res;
 }
 
-//' @rdname soundex
 //' @useDynLib phonics
 //' @importFrom Rcpp evalCpp
-//' @export
 //[[Rcpp::export]]
-Rcpp::CharacterVector refinedSoundex(Rcpp::CharacterVector word, int maxCodeLen = 10) {
-
+Rcpp::CharacterVector refinedSoundex_internal(Rcpp::CharacterVector word, int maxCodeLen = 10) {
     unsigned int input_size = word.size();
     Rcpp::CharacterVector res(input_size);
 

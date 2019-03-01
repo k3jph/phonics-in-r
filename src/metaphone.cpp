@@ -1,4 +1,4 @@
-// Copyright (c) 2015, James P. Howard, II <jh@jameshoward.us>
+// Copyright (c) 2015-2019, James P. Howard, II <jh@jameshoward.us>
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
@@ -24,6 +24,8 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+//' @useDynLib phonics
+//' @importFrom Rcpp evalCpp
 // [[Rcpp::depends(BH)]]
 #include <Rcpp.h>
 #include <boost/algorithm/string.hpp>
@@ -232,49 +234,8 @@ std::string metaphone_single(std::string x, int maxCodeLen, bool traditional) {
     return meta;
 }
 
-//' @rdname metaphone
-//' @name metaphone
-//' @title Generate phonetic versions of strings with Metaphone
-//'
-//' @description
-//' The function \code{metaphone} phonentically encodes the
-//' given string using the metaphone algorithm.
-//'
-//' @param word string or vector of strings to encode
-//' @param maxCodeLen  maximum length of the resulting encodings, in characters
-//'
-//' @details There is some discrepency
-//' with respect to how the metaphone algorithm actually works. For
-//' instance, there is a version in the Java Apache Commons library.
-//' There is a version provided within PHP. These do not provide the same
-//' results.  On the questionable theory that the implementation in PHP
-//' is probably more well known, this code should match it in output.
-//'
-//' This implementation is based on a Javascript implementation which is
-//' itself based on the PHP internal implementation.
-//'
-//' The variable \code{maxCodeLen} is the limit on how long the returned
-//' metaphone should be.
-//'
-//' @return a character vector containing the metaphones of \code{word},
-//' or an NA if the \code{word} value is NA
-//'
-//' @section Caveats:
-//' The \code{metaphone} algorithm is only
-//' defined for inputs over the standard English alphabet, \emph{i.e.},
-//' "A-Z." For inputs outside this range, the output is undefined.
-//'
-//' @family phonics
-//'
-//' @examples
-//' metaphone("wheel")
-//' metaphone(c("school", "benji"))
-//'
-//' @useDynLib phonics
-//' @importFrom Rcpp evalCpp
-//' @export
 //[[Rcpp::export]]
-Rcpp::CharacterVector metaphone(Rcpp::CharacterVector word, int maxCodeLen = 10) {
+Rcpp::CharacterVector metaphone_internal(Rcpp::CharacterVector word, int maxCodeLen = 10) {
 
     unsigned int input_size = word.size();
     Rcpp::CharacterVector res(input_size);

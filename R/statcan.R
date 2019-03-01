@@ -1,4 +1,4 @@
-## Copyright (c) 2015, James P. Howard, II <jh@jameshoward.us>
+## Copyright (c) 2015-2019, James P. Howard, II <jh@jameshoward.us>
 ##
 ## Redistribution and use in source and binary forms, with or without
 ## modification, are permitted provided that the following conditions are
@@ -31,6 +31,7 @@
 #'
 #' @param word string or vector of strings to encode
 #' @param maxCodeLen   maximum length of the resulting encodings, in characters
+#' @param clean if \code{TRUE}, return \code{NA} for unknown alphabetical characters
 #'
 #' @details
 #'
@@ -38,11 +39,17 @@
 #' \code{maxCodeLen} is the limit on how long the returned name code
 #' should be.  The default is 4.
 #'
-#' @return the Statistics Canada encoded character vector
+#' The \code{statcan} algorithm is only defined for inputs over the
+#' standard French alphabet. Non-alphabetical characters are removed
+#' from the string in a locale-dependent fashion.  This strips spaces,
+#' hyphens, and numbers.  Other letters, such as "Ü," may be permissible
+#' in the current locale but are unknown to \code{statcan}.  For inputs
+#' outside of its known range, the output is undefined and \code{NA} is
+#' returned and a \code{warning} this thrown.  If \code{clean} is
+#' \code{FALSE}, \code{statcan} attempts to process the strings.  The
+#' default is \code{TRUE}.
 #'
-#' @section Caveats:
-#' The \code{statcan} algorithm is only
-#' defined for inputs over the standard French alphabet.
+#' @return the Statistics Canada encoded character vector
 #'
 #' @references
 #'
@@ -59,11 +66,7 @@
 #' statcan("Stevenson", maxCodeLen = 8)
 #'
 #' @export
-statcan <- function(word, maxCodeLen = 4) {
-
-    ## First, remove any nonalphabetical characters and uppercase it
-    word <- gsub("[^[:alpha:]]*", "", word, perl = TRUE)
-    word <- toupper(word)
+statcan <- function(word, maxCodeLen = 4, clean = TRUE) {
 
     ## Remove umlauts and eszett
     word <- gsub("\u00C0|\u00C2", "A", word, perl = TRUE)
@@ -74,6 +77,14 @@ statcan <- function(word, maxCodeLen = 4) {
     word <- gsub("\u0178", "Y", word, perl = TRUE)
     word <- gsub("\u00C7", "C", word, perl = TRUE)
 
+    ## First, uppercase it and test for unprocessable characters
+    word <- toupper(word)
+    word[is.null(word)] <- NA
+    listNAs <- is.na(word)
+    if(any(nonalpha <- grepl("[^A-Z]", word, perl = TRUE)) && clean)
+        warning("unknown characters found, results may not be consistent")
+    word <- gsub("[^A-Z]*", "", word, perl = TRUE)
+    
     ## First character of key = first character of name
     first <- substr(word, 1, 1)
     word <- substr(word, 2, nchar(word))
@@ -89,6 +100,11 @@ statcan <- function(word, maxCodeLen = 4) {
 
     ## Truncate to requested length
     word <- substr(word, 1, maxCodeLen)
+
+    ## Yeah, we already processed them, but now get rid of them
+    word[listNAs] <- NA
+    if(clean)
+        word[nonalpha] <- NA
 
     return(word)
 }

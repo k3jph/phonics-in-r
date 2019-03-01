@@ -24,96 +24,64 @@
 ## (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 ## OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#' @title Lein Name Coding
+#' @rdname metaphone
+#' @name metaphone
+#' @title Generate phonetic versions of strings with Metaphone
 #'
 #' @description
-#' The Lein name coding procedure.
+#' The function \code{metaphone} phonentically encodes the
+#' given string using the metaphone algorithm.
 #'
 #' @param word string or vector of strings to encode
-#' @param maxCodeLen   maximum length of the resulting encodings, in characters
+#' @param maxCodeLen  maximum length of the resulting encodings, in characters
 #' @param clean if \code{TRUE}, return \code{NA} for unknown alphabetical characters
-#' 
+#'
 #' @details
+#' There is some discrepency with respect to how the metaphone algorithm
+#' actually works. For instance, there is a version in the Java Apache
+#' Commons library.  There is a version provided within PHP. These do
+#' not provide the same results.  On the questionable theory that the
+#' implementation in PHP is probably more well known, this code should
+#' match it in output.
 #'
-#' The variable \code{word} is the name to be encoded.  The variable
-#' \code{maxCodeLen} is the limit on how long the returned name code
-#' should be.  The default is 4.
+#' This implementation is based on a Javascript implementation which is
+#' itself based on the PHP internal implementation.
 #'
-#' The \code{lein} algorithm is only defined for inputs over the
+#' The variable \code{maxCodeLen} is the limit on how long the returned
+#' metaphone should be.
+#'
+#' The \code{metaphone} algorithm is only defined for inputs over the
 #' standard English alphabet, \emph{i.e.}, "A-Z.". Non-alphabetical
 #' characters are removed from the string in a locale-dependent fashion.
 #' This strips spaces, hyphens, and numbers.  Other letters, such as
 #' "Ü," may be permissible in the current locale but are unknown to
-#' \code{lein}.  For inputs outside of its known range, the output is
-#' undefined and \code{NA} is returned and a \code{warning} this thrown.
-#' If \code{clean} is \code{FALSE}, \code{lein} attempts to process the
-#' strings.  The default is \code{TRUE}.
+#' \code{metaphone}.  For inputs outside of its known range, the output
+#' is undefined and \code{NA} is returned and a \code{warning} this
+#' thrown.  If \code{clean} is \code{FALSE}, \code{metaphone} attempts
+#' to process the strings.  The default is \code{TRUE}.
 #'
-#' @return the Lein encoded character vector
-#'
-#' @references
-#'
-#' Billy T. Lynch and William L. Arends. "Selection of surname coding
-#' procedure for the SRS record linkage system." United States
-#' Department of Agriculture, Sample Survey Research Branch, Research
-#' Division, Washington, 1977.
+#' @return a character vector containing the metaphones of \code{word},
+#' or an NA if the \code{word} value is NA
 #'
 #' @family phonics
 #'
 #' @examples
-#' lein("William")
-#' lein(c("Peter", "Peady"))
-#' lein("Stevenson", maxCodeLen = 8)
+#' metaphone("wheel")
+#' metaphone(c("school", "benji"))
 #'
 #' @export
-lein <- function(word, maxCodeLen = 4, clean = TRUE) {
+metaphone <- function(word, maxCodeLen = 10L, clean = TRUE) {
 
     ## First, uppercase it and test for unprocessable characters
     word <- toupper(word)
-    listNulls <- is.null(word)
-    listNAs <- is.na(word)
+    word[is.null(word)] <- NA
     if(any(nonalpha <- grepl("[^A-Z]", word, perl = TRUE)) && clean)
         warning("unknown characters found, results may not be consistent")
     word <- gsub("[^A-Z]*", "", word, perl = TRUE)
-
-    ## First character of key = first character of name
-    first <- substr(word, 1, 1)
-    word <- substr(word, 2, nchar(word))
-
-    ## Delete vowels and Y, W, and H
-    word <- gsub("A|E|I|O|U|Y|W|H", "", word, perl = TRUE)
-
-    ## Remove duplicate consecutive characters
-    word <- gsub("([A-Z])\\1+", "\\1", word, perl = TRUE)
-
-    ## D, T -> 1
-    word <- gsub("D|T", "1", word, perl = TRUE)
-
-    ## M, N -> 2
-    word <- gsub("M|N", "2", word, perl = TRUE)
-
-    ## L, R -> 3
-    word <- gsub("L|R", "3", word, perl = TRUE)
-
-    ## B, F, P, V -> 4
-    word <- gsub("B|F|P|V", "4", word, perl = TRUE)
-
-    ## C, J, K, G, Q, S, X, Z -> 5
-    word <- gsub("C|J|K|G|Q|S|X|Z", "5", word, perl = TRUE)
-
-    ## Append word except for first character to first
-    word <- paste(first, word, sep = "")
-
-    ## Zero-pad and truncate to requested length
-    word <- gsub("$", paste(rep(0, maxCodeLen), collapse = ""), word, perl = TRUE)
-    word <- substr(word, 1, maxCodeLen)
-
-    ## Manage some edge cases
-    word <- sub("0000", "", word, perl = TRUE)
+    
+    word <- metaphone_internal(word, maxCodeLen)
 
     ## Yeah, we already processed them, but now get rid of them
-    word[listNulls] <- NA
-    word[listNAs] <- NA
     if(clean)
         word[nonalpha] <- NA
 

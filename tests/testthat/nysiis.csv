@@ -1,4 +1,4 @@
-##  Test values from http://www.dropby.com/NYSIISTextStrings.html
+##  Test values from http://www.dropby.com/NYSIISTextStrings.html,
 word,value
 MacIntosh,MCANT
 Knuth,NAT
@@ -44,3 +44,8 @@ ANTHONY,ANTANY
 HYMAN,HYNAN
 TIMOTHY,TANATY
 EVE,EV
+"",""
+Müller-Lü denscheidt,NA
+Wikipedia,WACAPA
+garçon,NA
+Breschnew,BRASN

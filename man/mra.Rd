@@ -5,12 +5,14 @@
 \alias{mra_compare}
 \title{Match Rating Approach Encoder}
 \usage{
-mra_encode(word)
+mra_encode(word, clean = TRUE)
 
 mra_compare(x, y)
 }
 \arguments{
 \item{word}{string or vector of strings to encode}
+
+\item{clean}{if \code{TRUE}, return \code{NA} for unknown alphabetical characters}
 
 \item{x}{MRA-encoded character vector}
 
@@ -31,14 +33,17 @@ The variable \code{word} is the name to be encoded.  The variable
 because the algorithm itself is dependent upon its six-character
 length.  The variables \code{x} and \code{y} are MRA-encoded and are
 compared to each other using the MRA comparison specification.
-}
-\section{Caveats}{
 
-The \code{mra_encode} and \code{mra_compare} algorithms are only
-defined for inputs over the standard English alphabet, \emph{i.e.},
-"A-Z." For inputs outside this range, the output is undefined.
+The \code{mra_encode} algorithm is only defined for inputs over the
+standard English alphabet, \emph{i.e.}, "A-Z.". Non-alphabetical
+characters are removed from the string in a locale-dependent fashion.
+This strips spaces, hyphens, and numbers.  Other letters, such as
+"Ü," may be permissible in the current locale but are unknown to
+\code{mra_encode}.  For inputs outside of its known range, the output is
+undefined and \code{NA} is returned and a \code{warning} this thrown.
+If \code{clean} is \code{FALSE}, \code{mra_encode} attempts to process the
+strings.  The default is \code{TRUE}.
 }
-
 \examples{
 mra_encode("William")
 mra_encode(c("Peter", "Peady"))
@@ -55,7 +60,7 @@ Other phonics: \code{\link{caverphone}},
   \code{\link{cologne}}, \code{\link{lein}},
   \code{\link{metaphone}}, \code{\link{nysiis}},
   \code{\link{onca}}, \code{\link{phonex}},
-  \code{\link{rogerroot}}, \code{\link{soundex}},
-  \code{\link{statcan}}
+  \code{\link{phonics}}, \code{\link{rogerroot}},
+  \code{\link{soundex}}, \code{\link{statcan}}
 }
 \concept{phonics}

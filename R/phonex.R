@@ -1,4 +1,4 @@
-## Copyright (c) 2016, James P. Howard, II <jh@jameshoward.us>
+## Copyright (c) 2015-2019, James P. Howard, II <jh@jameshoward.us>
 ##
 ## Redistribution and use in source and binary forms, with or without
 ## modification, are permitted provided that the following conditions are
@@ -31,6 +31,7 @@
 #'
 #' @param word string or vector of strings to encode
 #' @param maxCodeLen maximum length of the resulting encodings, in characters
+#' @param clean if \code{TRUE}, return \code{NA} for unknown alphabetical characters
 #'
 #' @details
 #'
@@ -38,12 +39,18 @@
 #' \code{maxCodeLen} is the limit on how long the returned name code
 #' should be.  The default is 4.
 #'
+#' The \code{phonex} algorithm is only defined for inputs over the
+#' standard English alphabet, \emph{i.e.}, "A-Z," "Ä," "Ö," "Ü," and
+#' "ß." Non-alphabetical characters are removed from the string in a
+#' locale-dependent fashion.  This strips spaces, hyphens, and numbers.
+#' Other letters, such as "ç," may be permissible in the current locale
+#' but are unknown to \code{phonex}.  For inputs outside of its known
+#' range, the output is undefined and \code{NA} is returned and a
+#' \code{warning} this thrown.  If \code{clean} is \code{FALSE},
+#' \code{phonex} attempts to process the strings.  The default is
+#' \code{TRUE}.
+#' 
 #' @return the Phonex encoded character vector
-#'
-#' @section Caveats:
-#' The \code{phonex} algorithm is only
-#' defined for inputs over the standard English alphabet, \emph{i.e.},
-#' "A-Z." For inputs outside this range, the output is undefined.
 #'
 #' @references
 #'
@@ -59,18 +66,22 @@
 #' phonex("Stevenson", maxCodeLen = 8)
 #'
 #' @export
-phonex <- function(word, maxCodeLen = 4) {
-
-    ## First, remove any nonalphabetical characters and uppercase it
-    word <- gsub("[^[:alpha:]]*", "", word, perl = TRUE)
-    word <- toupper(word)
+phonex <- function(word, maxCodeLen = 4, clean = TRUE) {
 
     ## Remove umlauts and eszett
+    word <- toupper(word)
     word <- gsub("\u00C4", "A", word, perl = TRUE)
     word <- gsub("\u00DC", "U", word, perl = TRUE)
     word <- gsub("\u00D6", "O", word, perl = TRUE)
     word <- gsub("\u00DF", "S", word, perl = TRUE)
 
+    ## First, uppercase it and test for unprocessable characters
+    word[is.null(word)] <- NA
+    listNAs <- is.na(word)
+    if(any(nonalpha <- grepl("[^A-Z]", word, perl = TRUE)) && clean)
+        warning("unknown characters found, results may not be consistent")
+    word <- gsub("[^A-Z]*", "", word, perl = TRUE)
+    
     ## Preprocess the name
     word <- gsub("S+$", "", word, perl = TRUE)
     word <- gsub("^KN", "N", word, perl = TRUE)
@@ -119,8 +130,15 @@ phonex <- function(word, maxCodeLen = 4) {
     word <- paste(first, word, sep = "")
 
     ## Zero-pad and truncate to requested length
-    word <- gsub("$", paste(rep(0, maxCodeLen), collapse = ""), word, perl = TRUE)
+    zeros <- paste(rep(0, maxCodeLen), sep = "", collapse = "")
+    word <- gsub("$", zeros, word, perl = TRUE)
     word <- substr(word, 1, maxCodeLen)
+    word <- gsub(zeros, "", word, perl = TRUE)
+
+    ## Yeah, we already processed them, but now get rid of them
+    word[listNAs] <- NA
+    if(clean)
+        word[nonalpha] <- NA
 
     return(word)
 }

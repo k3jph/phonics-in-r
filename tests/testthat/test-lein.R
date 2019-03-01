@@ -1,13 +1,41 @@
 context("lein")
 
-##  Test the lein algorithm
-test_that("Lein works", {
+##  Test the LEIN algorithm
+test_that("Test that LEIN works", {
     skip_on_cran()
 
-    test <- read.csv("lein.csv", comment.char = "#", stringsAsFactors = FALSE, colClasses = c("character", "character"), encoding = "UTF-8")
-    for(i in 1:nrow(test))
-        expect_true(lein(test$word[i]) == test$value[i])
-    test$test <- lein(test$word)
-    for(i in 1:nrow(test))
-        expect_true(test$test[i] == test$value[i])
+    test <- read.csv("lein.csv", comment.char = "#", stringsAsFactors = FALSE, colClasses = rep("character", 2), encoding = "UTF-8")
+
+    ## Test for cases where clean = TRUE
+    for(i in 1:nrow(test)) {
+        if(is.na(test$value[i])) {
+            expect_warning(testValue <- lein(test$word[i]))
+            expect_true(is.na(testValue))
+        } else
+            expect_true(lein(test$word[i]) == test$value[i])
+    }
+
+    ## Test for cases where clean = FALSE, which should not
+    ## return NA, so we are going to assume that's an error
+    for(i in 1:nrow(test)) {
+        if(is.na(test$value[i]))
+            expect_false(is.na(lein(test$word[i], clean = FALSE)))
+        else
+            expect_true(lein(test$word[i], clean = FALSE) == test$value[i])
+    }
+
+})
+
+test_that("The LEIN algorithm implementation can handle NAs", {
+    skip_on_cran()
+
+    test_data <- lein(NA_character_)
+    expect_true(is.na(test_data))
+})
+
+test_that("The LEIN algorithm implementation can handle NULLs", {
+    skip_on_cran()
+
+    test_data <- lein(NULL)
+    expect_true(is.na(test_data))
 })

@@ -3,15 +3,15 @@ note <- sprintf("R package version %s", meta$Version)
 
 bibentry(bibtype = "Manual",
          title = "{phonics}: Phonetic Spelling Algorithms in R",
-         author = "James P. Howard",
+         author = "James P. Howard, II",
          year = year,
          note = note,
-         doi = "10.5281/zenodo.1172760",
-         url = "https://jameshoward.us/software/phonics")
+         doi = "10.5281/zenodo.2555492",
+         url = "https://github.com/howardjp/phonics")
 
 bibentry(bibtype = "Article",
          title = "Phonetic Algorithms in R",
-         author = "James P. Howard",
+         author = "James P. Howard, II",
          year = "2018",
          journal = "Journal of Open Source Software",
          volume = "3",

@@ -1,14 +1,15 @@
 language: r
-sudo: required
 
-# System dependencies for building
-r_binary_packages:
+r:
+  - oldrel
+  - release
+  - devel
+
+r_packages:
  - BH
  - Rcpp
  - testthat
-
-r_github_packages:
- - jimhester/covr
+ - covr
 
 after_success:
  - Rscript -e 'covr::coveralls()'

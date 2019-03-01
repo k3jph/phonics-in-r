@@ -1,4 +1,4 @@
-## Copyright (c) 2015, James P. Howard, II <jh@jameshoward.us>
+## Copyright (c) 2015-2019, James P. Howard, II <jh@jameshoward.us>
 ##
 ## Redistribution and use in source and binary forms, with or without
 ## modification, are permitted provided that the following conditions are
@@ -32,6 +32,7 @@
 #' @param word string or vector of strings to encode
 #' @param maxCodeLen   maximum length of the resulting encodings, in characters
 #' @param modified     if \code{TRUE}, use the modified NYSIIS algorithm
+#' @param clean if \code{TRUE}, return \code{NA} for unknown alphabetical characters
 #'
 #' @details The \code{nysiis} function phentically encodes the given
 #' string using the New York State Identification and Intelligence
@@ -45,12 +46,17 @@
 #' The variable \code{modified} directs \code{nysiis} to use the
 #' modified method instead of the original.
 #'
-#' @return the NYSIIS encoded character vector
+#' The \code{nysiis} algorithm is only defined for inputs over the
+#' standard English alphabet, \emph{i.e.}, "A-Z.". Non-alphabetical
+#' characters are removed from the string in a locale-dependent fashion.
+#' This strips spaces, hyphens, and numbers.  Other letters, such as
+#' "Ü," may be permissible in the current locale but are unknown to
+#' \code{nysiis}.  For inputs outside of its known range, the output is
+#' undefined and \code{NA} is returned and a \code{warning} this thrown.
+#' If \code{clean} is \code{FALSE}, \code{nysiis} attempts to process the
+#' strings.  The default is \code{TRUE}.
 #'
-#' @section Caveats:
-#' The \code{nysiis} algorithm is only
-#' defined for inputs over the standard English alphabet, \emph{i.e.},
-#' "A-Z." For inputs outside this range, the output is undefined.
+#' @return the NYSIIS encoded character vector
 #'
 #' @references
 #'
@@ -66,22 +72,33 @@
 #' nysiis("mississippi", 4)
 #'
 #' @export
-nysiis <- function(word, maxCodeLen = 6, modified = FALSE) {
+nysiis <- function(word, maxCodeLen = 6, modified = FALSE, clean = TRUE) {
     ## Both NYSIIS and the modified NYSIIS are based on the
     ## implementation described at
     ## http://www.dropby.com/NYSIISTextStrings.html
 
+    ## First, uppercase it and test for unprocessable characters
+    word <- toupper(word)
+    word[is.null(word)] <- NA
+    listNAs <- is.na(word)
+    if(any(nonalpha <- grepl("[^A-Z]", word, perl = TRUE)) && clean)
+        warning("unknown characters found, results may not be consistent")
+    word <- gsub("[^A-Z]*", "", word, perl = TRUE)
+    
     if(modified == TRUE)
-        return(nysiis_modified(word, maxCodeLen))
+        word <- nysiis_modified(word, maxCodeLen)
     else
-        return(nysiis_original(word, maxCodeLen))
+        word <- nysiis_original(word, maxCodeLen)
+
+    ## Yeah, we already processed them, but now get rid of them
+    word[listNAs] <- NA
+    if(clean)
+        word[nonalpha] <- NA
+
+    return(word)
 }
 
 nysiis_original <- function(word, maxCodeLen = 6) {
-
-    ## First, remove any nonalphabetical characters and capitalize it
-    word <- gsub("[^[:alpha:]]*", "", word)
-    word <- toupper(word)
 
     ## Translate first characters of name: MAC to MCC, KN to N, K to C, PH,
     ## PF to FF, SCH to SSS
@@ -121,11 +138,11 @@ nysiis_original <- function(word, maxCodeLen = 6) {
 
     ## Put back first letter before applying remaining rules
     word <- paste(first, word, sep = "")
-    
+
     ## H to If previous or next is non-vowel, previous.
     word <- gsub("([^AEIOU])H", "\\1\\1", word, perl = TRUE)
     word <- gsub("(.)H(?=([^AEIOU]|$))", "\\1\\1", word, perl= TRUE)
-    
+
     ## W to If previous is vowel, A
     word <- gsub("([AEIOU])W", "A", word, perl = TRUE)
 
@@ -148,10 +165,6 @@ nysiis_original <- function(word, maxCodeLen = 6) {
 }
 
 nysiis_modified <- function(word, maxCodeLen = 6) {
-
-    ## First, remove any nonalphabetical characters and capitalize it
-    word <- gsub("[^[:alpha:]]*", "", word, perl = TRUE)
-    word <- toupper(word)
 
     ## Translate first characters of name: MAC to MC, PF to FF
     word <- gsub("^MAC", "MC", word, perl = TRUE)

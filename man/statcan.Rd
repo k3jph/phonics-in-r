@@ -4,12 +4,14 @@
 \alias{statcan}
 \title{Statistics Canada Name Coding}
 \usage{
-statcan(word, maxCodeLen = 4)
+statcan(word, maxCodeLen = 4, clean = TRUE)
 }
 \arguments{
 \item{word}{string or vector of strings to encode}
 
 \item{maxCodeLen}{maximum length of the resulting encodings, in characters}
+
+\item{clean}{if \code{TRUE}, return \code{NA} for unknown alphabetical characters}
 }
 \value{
 the Statistics Canada encoded character vector
@@ -21,13 +23,17 @@ The modified Statistics Canada name coding procedure
 The variable \code{word} is the name to be encoded.  The variable
 \code{maxCodeLen} is the limit on how long the returned name code
 should be.  The default is 4.
-}
-\section{Caveats}{
 
-The \code{statcan} algorithm is only
-defined for inputs over the standard French alphabet.
+The \code{statcan} algorithm is only defined for inputs over the
+standard French alphabet. Non-alphabetical characters are removed
+from the string in a locale-dependent fashion.  This strips spaces,
+hyphens, and numbers.  Other letters, such as "Ü," may be permissible
+in the current locale but are unknown to \code{statcan}.  For inputs
+outside of its known range, the output is undefined and \code{NA} is
+returned and a \code{warning} this thrown.  If \code{clean} is
+\code{FALSE}, \code{statcan} attempts to process the strings.  The
+default is \code{TRUE}.
 }
-
 \examples{
 statcan("William")
 statcan(c("Peter", "Peady"))
@@ -45,7 +51,7 @@ Other phonics: \code{\link{caverphone}},
   \code{\link{cologne}}, \code{\link{lein}},
   \code{\link{metaphone}}, \code{\link{mra_encode}},
   \code{\link{nysiis}}, \code{\link{onca}},
-  \code{\link{phonex}}, \code{\link{rogerroot}},
-  \code{\link{soundex}}
+  \code{\link{phonex}}, \code{\link{phonics}},
+  \code{\link{rogerroot}}, \code{\link{soundex}}
 }
 \concept{phonics}

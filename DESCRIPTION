@@ -1,8 +1,8 @@
 Package: phonics
 Type: Package
 Title: Phonetic Spelling Algorithms
-Version: 1.2.3
-Date: 2019-01-09
+Version: 1.3.0
+Date: 2019-03-01
 Encoding: UTF-8
 Authors@R: c(person(given = "James P.", family = "Howard, II",
                     email = "jh@jameshoward.us", role = c("aut", "cre")),
@@ -15,7 +15,8 @@ Description: Provides a collection of phonetic algorithms including
 License: BSD_2_clause + file LICENSE
 LazyData: TRUE
 Imports:
-    Rcpp (>= 0.12.1)
+    Rcpp (>= 0.12.1),
+	data.table
 Suggests:
     testthat,
     knitr
