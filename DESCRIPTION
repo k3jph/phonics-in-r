@@ -1,14 +1,13 @@
 Package: phonics
 Type: Package
 Title: Phonetic Spelling Algorithms
-Version: 1.3.0
-Date: 2019-03-01
+Version: 1.3.1
+Date: 2019-06-18
 Encoding: UTF-8
 Authors@R: c(person(given = "James P.", family = "Howard, II",
                     email = "jh@jameshoward.us", role = c("aut", "cre")),
                     person(given = "Oliver", family = "Keyes", role = "ctb"))
-URL: https://jameshoward.us/software/phonics/,
-    https://github.com/howardjp/phonics
+URL: http://howardjp.github.io/phonics/
 BugReports: https://github.com/howardjp/phonics/issues
 Description: Provides a collection of phonetic algorithms including
     Soundex, Metaphone, NYSIIS, Caverphone, and others.
