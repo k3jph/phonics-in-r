@@ -49,8 +49,8 @@ phonetic spelling and test phonetic similarity.
 
 ## For more information
 
-* [Phonics in R website](https://jameshoward.us/software/phonics)
-* James P. Howard, II &lt;jh@jameshoward.us&gt;
+* [Phonics in R website](http://howardjp.github.io/phonics/)
+* James P. Howard, II <jh@jameshoward.us>
 
 _This work used the Extreme Science and Engineering Discovery Environment
 (XSEDE), which is supported by National Science Foundation grant number
