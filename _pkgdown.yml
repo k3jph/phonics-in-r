@@ -1,0 +1,11 @@
+url: https://howardjp.github.io/phonics/
+destination: docs
+
+home:
+  links:
+  - text: James Howard's Blog
+    href: https://jameshoward.us/phonics
+
+authors:
+  James P. Howard, II:
+    href: https://jameshoward.us
