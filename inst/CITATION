@@ -7,7 +7,7 @@ bibentry(bibtype = "Manual",
          year = year,
          note = note,
          doi = "10.5281/zenodo.1041982",
-         url = "https://howardjp.github.io/phonics/")
+         url = "https://jameshoward.us/phonics-in-r/")
 
 bibentry(bibtype = "Article",
          title = "Phonetic Algorithms in R",

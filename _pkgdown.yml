@@ -1,10 +1,10 @@
-url: https://howardjp.github.io/phonics/
+url: https://jameshoward.us/phonics-in-r
 destination: docs
 
 home:
   links:
-  - text: James Howard's Blog
-    href: https://jameshoward.us/phonics
+  - text: Phonics in R
+    href: https://jameshoward.us/phonics-in-r
 
 authors:
   James P. Howard, II:
