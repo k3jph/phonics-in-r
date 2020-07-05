@@ -5,4 +5,7 @@ paper.md
 paper.bib
 COPYRIGHT.md
 ^.github
-docs
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+^\.github$

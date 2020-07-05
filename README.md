@@ -1,7 +1,7 @@
 # Phonetic Spelling Algorithms in R
 
-[![Build Status](https://img.shields.io/travis/howardjp/phonics.svg)](https://travis-ci.org/howardjp/phonics)
-[![Coverage Status](https://img.shields.io/coveralls/github/howardjp/phonics.svg)](https://coveralls.io/github/howardjp/phonics?branch=master)
+[![Build Status](https://img.shields.io/travis/k3jph/phonics-in-r.svg)](https://travis-ci.org/k3jph/phonics-in-r)
+[![Coverage Status](https://img.shields.io/coveralls/github/k3jph/phonics-in-r.svg)](https://coveralls.io/github/k3jph/phonics-in-r?branch=master)
 [![Downloads from the RStudio CRAN mirror](https://cranlogs.r-pkg.org/badges/phonics)](https://cran.r-project.org/package=phonics)
 [![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.1041982-blue.svg)](https://dx.doi.org/10.5281/zenodo.1041982)
 [![JOSS Status](http://joss.theoj.org/papers/13e41c9bd376fe2fc948f8af10b138b6/status.svg)](http://joss.theoj.org/papers/13e41c9bd376fe2fc948f8af10b138b6)
@@ -50,7 +50,7 @@ phonetic spelling and test phonetic similarity.
 
 ## For more information
 
-* [Phonics in R website](https://howardjp.github.io/phonics/)
+* [Phonics in R website](https://jameshoward.us/phonics-in-r/)
 * James P. Howard, II <<jh@jameshoward.us>>
 
 ## Acknowledgements
