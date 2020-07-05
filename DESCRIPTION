@@ -21,7 +21,8 @@ Imports:
 	data.table
 Suggests:
     testthat,
-    knitr
+    knitr,
+    markdown
 LinkingTo: Rcpp,
     BH
 RoxygenNote: 7.1.0
