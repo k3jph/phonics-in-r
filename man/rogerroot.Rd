@@ -48,11 +48,17 @@ Robert L. Taft, \emph{Name search techniques}, Bureau of Systems
 Development, Albany, New York, 1970.
 }
 \seealso{
-Other phonics: \code{\link{caverphone}},
-  \code{\link{cologne}}, \code{\link{lein}},
-  \code{\link{metaphone}}, \code{\link{mra_encode}},
-  \code{\link{nysiis}}, \code{\link{onca}},
-  \code{\link{phonex}}, \code{\link{phonics}},
-  \code{\link{soundex}}, \code{\link{statcan}}
+Other phonics: 
+\code{\link{caverphone}()},
+\code{\link{cologne}()},
+\code{\link{lein}()},
+\code{\link{metaphone}()},
+\code{\link{mra_encode}()},
+\code{\link{nysiis}()},
+\code{\link{onca}()},
+\code{\link{phonex}()},
+\code{\link{phonics}()},
+\code{\link{soundex}()},
+\code{\link{statcan}()}
 }
 \concept{phonics}

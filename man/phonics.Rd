@@ -62,11 +62,17 @@ phonics(c("Peter", "Peady"), c("soundex", "soundex.refined"))
 
 }
 \seealso{
-Other phonics: \code{\link{caverphone}},
-  \code{\link{cologne}}, \code{\link{lein}},
-  \code{\link{metaphone}}, \code{\link{mra_encode}},
-  \code{\link{nysiis}}, \code{\link{onca}},
-  \code{\link{phonex}}, \code{\link{rogerroot}},
-  \code{\link{soundex}}, \code{\link{statcan}}
+Other phonics: 
+\code{\link{caverphone}()},
+\code{\link{cologne}()},
+\code{\link{lein}()},
+\code{\link{metaphone}()},
+\code{\link{mra_encode}()},
+\code{\link{nysiis}()},
+\code{\link{onca}()},
+\code{\link{phonex}()},
+\code{\link{rogerroot}()},
+\code{\link{soundex}()},
+\code{\link{statcan}()}
 }
 \concept{phonics}

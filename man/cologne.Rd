@@ -48,11 +48,17 @@ Gestaltanalyse."  \emph{IBM-Nachrichten} 19. Jahrgang, 1969,
 p. 925-931.
 }
 \seealso{
-Other phonics: \code{\link{caverphone}},
-  \code{\link{lein}}, \code{\link{metaphone}},
-  \code{\link{mra_encode}}, \code{\link{nysiis}},
-  \code{\link{onca}}, \code{\link{phonex}},
-  \code{\link{phonics}}, \code{\link{rogerroot}},
-  \code{\link{soundex}}, \code{\link{statcan}}
+Other phonics: 
+\code{\link{caverphone}()},
+\code{\link{lein}()},
+\code{\link{metaphone}()},
+\code{\link{mra_encode}()},
+\code{\link{nysiis}()},
+\code{\link{onca}()},
+\code{\link{phonex}()},
+\code{\link{phonics}()},
+\code{\link{rogerroot}()},
+\code{\link{soundex}()},
+\code{\link{statcan}()}
 }
 \concept{phonics}

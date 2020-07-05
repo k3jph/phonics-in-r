@@ -65,11 +65,17 @@ maximum use of the discriminating power of identifying information,"
 \emph{Communications of the ACM}, vol. 5, no. 11 (1962), p. 563-566.
 }
 \seealso{
-Other phonics: \code{\link{caverphone}},
-  \code{\link{cologne}}, \code{\link{lein}},
-  \code{\link{metaphone}}, \code{\link{mra_encode}},
-  \code{\link{nysiis}}, \code{\link{onca}},
-  \code{\link{phonex}}, \code{\link{phonics}},
-  \code{\link{rogerroot}}, \code{\link{statcan}}
+Other phonics: 
+\code{\link{caverphone}()},
+\code{\link{cologne}()},
+\code{\link{lein}()},
+\code{\link{metaphone}()},
+\code{\link{mra_encode}()},
+\code{\link{nysiis}()},
+\code{\link{onca}()},
+\code{\link{phonex}()},
+\code{\link{phonics}()},
+\code{\link{rogerroot}()},
+\code{\link{statcan}()}
 }
 \concept{phonics}

@@ -56,11 +56,17 @@ Nonunique Identifiers,} US National Institute of Standards and
 Technology, SP-500-2 (1977), p. 17.
 }
 \seealso{
-Other phonics: \code{\link{caverphone}},
-  \code{\link{cologne}}, \code{\link{lein}},
-  \code{\link{metaphone}}, \code{\link{nysiis}},
-  \code{\link{onca}}, \code{\link{phonex}},
-  \code{\link{phonics}}, \code{\link{rogerroot}},
-  \code{\link{soundex}}, \code{\link{statcan}}
+Other phonics: 
+\code{\link{caverphone}()},
+\code{\link{cologne}()},
+\code{\link{lein}()},
+\code{\link{metaphone}()},
+\code{\link{nysiis}()},
+\code{\link{onca}()},
+\code{\link{phonex}()},
+\code{\link{phonics}()},
+\code{\link{rogerroot}()},
+\code{\link{soundex}()},
+\code{\link{statcan}()}
 }
 \concept{phonics}

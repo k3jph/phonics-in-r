@@ -4,8 +4,7 @@
 \alias{onca}
 \title{Oxford Name Compression Algorithm}
 \usage{
-onca(word, maxCodeLen = 4, clean = TRUE, modified = FALSE,
-  refined = FALSE)
+onca(word, maxCodeLen = 4, clean = TRUE, modified = FALSE, refined = FALSE)
 }
 \arguments{
 \item{word}{string or vector of strings to encode}
@@ -49,11 +48,17 @@ onca("Stevenson", maxCodeLen = 8)
 Gill, Leicester. "OX-LINK: the Oxford medical record linkage system." (1997).
 }
 \seealso{
-Other phonics: \code{\link{caverphone}},
-  \code{\link{cologne}}, \code{\link{lein}},
-  \code{\link{metaphone}}, \code{\link{mra_encode}},
-  \code{\link{nysiis}}, \code{\link{phonex}},
-  \code{\link{phonics}}, \code{\link{rogerroot}},
-  \code{\link{soundex}}, \code{\link{statcan}}
+Other phonics: 
+\code{\link{caverphone}()},
+\code{\link{cologne}()},
+\code{\link{lein}()},
+\code{\link{metaphone}()},
+\code{\link{mra_encode}()},
+\code{\link{nysiis}()},
+\code{\link{phonex}()},
+\code{\link{phonics}()},
+\code{\link{rogerroot}()},
+\code{\link{soundex}()},
+\code{\link{statcan}()}
 }
 \concept{phonics}
