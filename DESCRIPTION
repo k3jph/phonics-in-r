@@ -22,7 +22,8 @@ Imports:
 Suggests:
     testthat,
     knitr,
-    markdown
+    markdown,
+    devtools
 LinkingTo: Rcpp,
     BH
 RoxygenNote: 7.1.0
