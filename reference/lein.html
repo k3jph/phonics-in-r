@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Simplified BSD License • phonics</title>
+<title>Lein Name Coding — lein • phonics</title>
 
 
 <!-- jquery -->
@@ -18,8 +18,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
 
 <!-- bootstrap-toc -->
-<link rel="stylesheet" href="bootstrap-toc.css">
-<script src="bootstrap-toc.js"></script>
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
@@ -33,13 +33,14 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
-<link href="pkgdown.css" rel="stylesheet">
-<script src="pkgdown.js"></script>
+<link href="../pkgdown.css" rel="stylesheet">
+<script src="../pkgdown.js"></script>
 
 
 
 
-<meta property="og:title" content="Simplified BSD License" />
+<meta property="og:title" content="Lein Name Coding — lein" />
+<meta property="og:description" content="The Lein name coding procedure." />
 
 
 
@@ -58,7 +59,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-title-body">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -70,7 +71,7 @@
         <span class="icon-bar"></span>
       </button>
       <span class="navbar-brand">
-        <a class="navbar-link" href="index.html">phonics</a>
+        <a class="navbar-link" href="../index.html">phonics</a>
         <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.5</span>
       </span>
     </div>
@@ -78,16 +79,16 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="index.html">
+  <a href="../index.html">
     <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
 <li>
-  <a href="articles/phonics.html">Get started</a>
+  <a href="../articles/phonics.html">Get started</a>
 </li>
 <li>
-  <a href="reference/index.html">Reference</a>
+  <a href="../reference/index.html">Reference</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -108,32 +109,83 @@
       </header>
 
 <div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Simplified BSD License</h1>
+    <h1>Lein Name Coding</h1>
+    <small class="dont-index">Source: <a href='https://github.com/k3jph/phonics-in-r/blob/master/R/lein.R'><code>R/lein.R</code></a></small>
+    <div class="hidden name"><code>lein.Rd</code></div>
     </div>
 
-<div id="simplified-bsd-license" class="section level1">
+    <div class="ref-description">
+    <p>The Lein name coding procedure.</p>
+    </div>
 
-<p><em>Copyright © 2015-2019, James P. Howard, II &lt;<a href="mailto:jh@jameshoward.us" class="email">jh@jameshoward.us</a>&gt;</em><br><em>All rights reserved.</em></p>
-<p>Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:</p>
-<ol>
-<li>Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.</li>
-<li>Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.</li>
-</ol>
-<p>THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS “AS IS” AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p>
-</div>
+    <pre class="usage"><span class='fu'>lein</span>(<span class='kw'>word</span>, maxCodeLen = <span class='fl'>4</span>, clean = <span class='fl'>TRUE</span>)</pre>
 
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>word</th>
+      <td><p>string or vector of strings to encode</p></td>
+    </tr>
+    <tr>
+      <th>maxCodeLen</th>
+      <td><p>maximum length of the resulting encodings, in characters</p></td>
+    </tr>
+    <tr>
+      <th>clean</th>
+      <td><p>if <code>TRUE</code>, return <code>NA</code> for unknown alphabetical characters</p></td>
+    </tr>
+    </table>
+
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>the Lein encoded character vector</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>The variable <code>word</code> is the name to be encoded.  The variable
+<code>maxCodeLen</code> is the limit on how long the returned name code
+should be.  The default is 4.</p>
+<p>The <code>lein</code> algorithm is only defined for inputs over the
+standard English alphabet, <em>i.e.</em>, "A-Z.". Non-alphabetical
+characters are removed from the string in a locale-dependent fashion.
+This strips spaces, hyphens, and numbers.  Other letters, such as
+"Ü," may be permissible in the current locale but are unknown to
+<code>lein</code>.  For inputs outside of its known range, the output is
+undefined and <code>NA</code> is returned and a <code>warning</code> this thrown.
+If <code>clean</code> is <code>FALSE</code>, <code>lein</code> attempts to process the
+strings.  The default is <code>TRUE</code>.</p>
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <p>Billy T. Lynch and William L. Arends. "Selection of surname coding
+procedure for the SRS record linkage system." United States
+Department of Agriculture, Sample Survey Research Branch, Research
+Division, Washington, 1977.</p>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p>Other phonics: 
+<code>caverphone()</code>,
+<code>cologne()</code>,
+<code>metaphone()</code>,
+<code>mra_encode()</code>,
+<code>nysiis()</code>,
+<code>onca()</code>,
+<code>phonex()</code>,
+<code>phonics()</code>,
+<code>rogerroot()</code>,
+<code>soundex()</code>,
+<code>statcan()</code></p></div>
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'>lein</span>(<span class='st'>"William"</span>)</div><div class='output co'>#&gt; [1] "W320"</div><div class='input'><span class='fu'>lein</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Peter"</span>, <span class='st'>"Peady"</span>))</div><div class='output co'>#&gt; [1] "P130" "P100"</div><div class='input'><span class='fu'>lein</span>(<span class='st'>"Stevenson"</span>, maxCodeLen = <span class='fl'>8</span>)</div><div class='output co'>#&gt; [1] "S1425200"</div><div class='input'></div></pre>
   </div>
-
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
       <h2 data-toc-skip>Contents</h2>
     </nav>
   </div>
-
 </div>
-
 
 
       <footer>

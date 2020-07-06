@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Articles • phonics</title>
+<title>Roger Root Name Coding Procedure — rogerroot • phonics</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,8 @@
 
 
 
-<meta property="og:title" content="Articles" />
+<meta property="og:title" content="Roger Root Name Coding Procedure — rogerroot" />
+<meta property="og:description" content="Provides the Roger Root name coding system" />
 
 
 
@@ -58,7 +59,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-article-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -110,18 +111,79 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Articles</h1>
+    <h1>Roger Root Name Coding Procedure</h1>
+    <small class="dont-index">Source: <a href='https://github.com/k3jph/phonics-in-r/blob/master/R/rogerroot.R'><code>R/rogerroot.R</code></a></small>
+    <div class="hidden name"><code>rogerroot.Rd</code></div>
     </div>
 
-    <div class="section ">
-      <h3>All vignettes</h3>
-      <p class="section-desc"></p>
-
-      <dl>
-        <dt><a href="phonics.html">Overview of the ``phonics`` Package</a></dt>
-        <dd></dt>
-      </dl>
+    <div class="ref-description">
+    <p>Provides the Roger Root name coding system</p>
     </div>
+
+    <pre class="usage"><span class='fu'>rogerroot</span>(<span class='kw'>word</span>, maxCodeLen = <span class='fl'>5</span>, clean = <span class='fl'>TRUE</span>)</pre>
+
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>word</th>
+      <td><p>string or vector of strings to encode</p></td>
+    </tr>
+    <tr>
+      <th>maxCodeLen</th>
+      <td><p>maximum length of the resulting encodings, in characters</p></td>
+    </tr>
+    <tr>
+      <th>clean</th>
+      <td><p>if <code>TRUE</code>, return <code>NA</code> for unknown alphabetical characters</p></td>
+    </tr>
+    </table>
+
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>the Roger Root encoded character vector</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>The <code>rogerroot</code> function phentically encodes the given string
+using the Roger Root algorithm.  The variable <code>word</code> is a string
+or vector of strings to encode.</p>
+<p>The variable <code>maxCodeLen</code> is the limit on how long the returned
+code should be.  The default is 5.</p>
+<p>The <code>rogerroot</code> algorithm is only defined for inputs over the
+standard English alphabet, <em>i.e.</em>, "A-Z.". Non-alphabetical
+characters are removed from the string in a locale-dependent fashion.
+This strips spaces, hyphens, and numbers.  Other letters, such as
+"Ü," may be permissible in the current locale but are unknown to
+<code>rogerroot</code>.  For inputs outside of its known range, the output
+is undefined and <code>NA</code> is returned and a <code>warning</code> this
+thrown.  If <code>clean</code> is <code>FALSE</code>, <code>rogerroot</code> attempts
+to process the strings.  The default is <code>TRUE</code>.</p>
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <p>Robert L. Taft, <em>Name search techniques</em>, Bureau of Systems
+Development, Albany, New York, 1970.</p>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p>Other phonics: 
+<code>caverphone()</code>,
+<code>cologne()</code>,
+<code>lein()</code>,
+<code>metaphone()</code>,
+<code>mra_encode()</code>,
+<code>nysiis()</code>,
+<code>onca()</code>,
+<code>phonex()</code>,
+<code>phonics()</code>,
+<code>soundex()</code>,
+<code>statcan()</code></p></div>
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'>rogerroot</span>(<span class='st'>"William"</span>)</div><div class='output co'>#&gt; [1] "45300"</div><div class='input'><span class='fu'>rogerroot</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Peter"</span>, <span class='st'>"Peady"</span>))</div><div class='output co'>#&gt; [1] "09140" "09100"</div><div class='input'><span class='fu'>rogerroot</span>(<span class='st'>"Stevenson"</span>)</div><div class='output co'>#&gt; [1] "00182"</div><div class='input'></div></pre>
+  </div>
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Function reference • phonics</title>
+<title>Soundex — soundex • phonics</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,8 @@
 
 
 
-<meta property="og:title" content="Function reference" />
+<meta property="og:title" content="Soundex — soundex" />
+<meta property="og:description" content="The Soundex phonetic algorithms" />
 
 
 
@@ -58,7 +59,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-reference-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -108,108 +109,93 @@
       </header>
 
 <div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Reference</h1>
+    <h1>Soundex</h1>
+    <small class="dont-index">Source: <a href='https://github.com/k3jph/phonics-in-r/blob/master/R/soundex.R'><code>R/soundex.R</code></a></small>
+    <div class="hidden name"><code>soundex.Rd</code></div>
     </div>
 
-    <table class="ref-index">
+    <div class="ref-description">
+    <p>The Soundex phonetic algorithms</p>
+    </div>
 
-    <colgroup>
-      
-      <col class="alias" />
-      <col class="title" />
-    </colgroup>
+    <pre class="usage"><span class='fu'>soundex</span>(<span class='kw'>word</span>, maxCodeLen = <span class='fl'>4L</span>, clean = <span class='fl'>TRUE</span>)
 
-    <tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      
-      
-    </tbody><tbody>
-      
-      
-      <tr>
-        
-        <td>
-          <p><code><a href="caverphone.html">caverphone()</a></code> </p>
-        </td>
-        <td><p>Caverphone</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="cologne.html">cologne()</a></code> </p>
-        </td>
-        <td><p>Cologne Phonetic Name Coding</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="lein.html">lein()</a></code> </p>
-        </td>
-        <td><p>Lein Name Coding</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="metaphone.html">metaphone()</a></code> </p>
-        </td>
-        <td><p>Generate phonetic versions of strings with Metaphone</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="mra.html">mra_encode()</a></code> <code><a href="mra.html">mra_compare()</a></code> </p>
-        </td>
-        <td><p>Match Rating Approach Encoder</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="nysiis.html">nysiis()</a></code> </p>
-        </td>
-        <td><p>New York State Identification and Intelligence System</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="onca.html">onca()</a></code> </p>
-        </td>
-        <td><p>Oxford Name Compression Algorithm</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="phonex.html">phonex()</a></code> </p>
-        </td>
-        <td><p>Phonex Name Coding</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="phonics.html">phonics()</a></code> </p>
-        </td>
-        <td><p>Phonetic Spelling Algorithms</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="rogerroot.html">rogerroot()</a></code> </p>
-        </td>
-        <td><p>Roger Root Name Coding Procedure</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="soundex.html">soundex()</a></code> <code><a href="soundex.html">refinedSoundex()</a></code> </p>
-        </td>
-        <td><p>Soundex</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="statcan.html">statcan()</a></code> </p>
-        </td>
-        <td><p>Statistics Canada Name Coding</p></td>
-      </tr>
-    </tbody>
+<span class='fu'>refinedSoundex</span>(<span class='kw'>word</span>, maxCodeLen = <span class='fl'>10L</span>, clean = <span class='fl'>TRUE</span>)</pre>
+
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>word</th>
+      <td><p>string or vector of strings to encode</p></td>
+    </tr>
+    <tr>
+      <th>maxCodeLen</th>
+      <td><p>maximum length of the resulting encodings, in characters</p></td>
+    </tr>
+    <tr>
+      <th>clean</th>
+      <td><p>if <code>TRUE</code>, return <code>NA</code> for unknown alphabetical characters</p></td>
+    </tr>
     </table>
-  </div>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>soundex encoded character vector</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>The function <code>soundex</code> phonentically encodes the given
+string using the soundex algorithm.  The function <code>refinedSoundex</code>
+uses Apache's refined soundex algorithm.  Both implementations are loosely
+based on the Apache Commons Java editons.</p>
+<p>The variable <code>maxCodeLen</code> is the limit on how long the returned
+soundex should be.</p>
+<p>The <code>soundex</code> and <code>revisedSoundex</code> algorithms are only
+defined for inputs over the standard English alphabet, <em>i.e.</em>,
+"A-Z." Non-alphabetical characters are removed from the string in a
+locale-dependent fashion.  This strips spaces, hyphens, and numbers.
+Other letters, such as "Ü," may be permissible in the current locale
+but are unknown to <code>soundex</code> and <code>revisedSoundex</code>.  For
+inputs outside of its known range, the output is undefined and
+<code>NA</code> is returned and a <code>warning</code> this thrown.  If
+<code>clean</code> is <code>FALSE</code>, <code>soundex</code> and
+<code>revisedSoundex</code> attempts to process the strings.  The default
+is <code>TRUE</code>.</p>
+    <h2 class="hasAnchor" id="caveats"><a class="anchor" href="#caveats"></a>Caveats</h2>
+
+    
+
+<p>The <code>soundex</code> and <code>refinedSoundex</code> algorithms are only
+defined for inputs over the standard English alphabet, <em>i.e.</em>,
+"A-Z." For inputs outside this range, the output is undefined.</p>
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <p>Charles P. Bourne and Donald F. Ford, "A study of methods for
+systematically abbreviating English words and names," <em>Journal
+of the ACM</em>, vol. 8, no. 4 (1961), p. 538-552.</p>
+<p>Howard B. Newcombe, James M. Kennedy, "Record linkage: making
+maximum use of the discriminating power of identifying information,"
+<em>Communications of the ACM</em>, vol. 5, no. 11 (1962), p. 563-566.</p>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p>Other phonics: 
+<code>caverphone()</code>,
+<code>cologne()</code>,
+<code>lein()</code>,
+<code>metaphone()</code>,
+<code>mra_encode()</code>,
+<code>nysiis()</code>,
+<code>onca()</code>,
+<code>phonex()</code>,
+<code>phonics()</code>,
+<code>rogerroot()</code>,
+<code>statcan()</code></p></div>
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'>soundex</span>(<span class='st'>"wheel"</span>)</div><div class='output co'>#&gt; [1] "W400"</div><div class='input'><span class='fu'>soundex</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"school"</span>, <span class='st'>"benji"</span>))</div><div class='output co'>#&gt; [1] "S400" "B520"</div><div class='input'></div></pre>
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
       <h2 data-toc-skip>Contents</h2>
