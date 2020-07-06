@@ -1,7 +1,7 @@
 Package: phonics
 Type: Package
 Title: Phonetic Spelling Algorithms
-Version: 1.3.5
+Version: 1.3.6
 Date: 2020-07-05
 Encoding: UTF-8
 Authors@R: c(person(given = "James", family = "Howard",
@@ -22,7 +22,8 @@ Imports:
 Suggests:
     testthat,
     knitr,
-    markdown
+    markdown,
+    devtools
 LinkingTo: Rcpp,
     BH
 RoxygenNote: 7.1.0

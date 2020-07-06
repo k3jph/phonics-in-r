@@ -1,6 +1,6 @@
 on:
   push:
-    branches: master
+    branches: develop
 
 name: pkgdown
 
@@ -35,6 +35,10 @@ jobs:
           install.packages("remotes")
           remotes::install_deps(dependencies = TRUE)
           remotes::install_dev("pkgdown")
+        shell: Rscript {0}
+
+      - name: Generate documentation
+        run: devtools::document()
         shell: Rscript {0}
 
       - name: Install package
