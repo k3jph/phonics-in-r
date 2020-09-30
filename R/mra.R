@@ -60,6 +60,10 @@
 #'
 #' @references
 #'
+#' James P. Howard, II, "Phonetic Spelling Algorithm Implementations
+#' for R," \emph{Journal of Statistical Software}, vol. 25, no. 8,
+#' (2020), p. 1--21, <10.18637/jss.v095.i08>.
+#'
 #' G.B. Moore, J.L. Kuhns, J.L. Treffzs, and C.A. Montgomery,
 #' \emph{Accessing Individual Records from Personal Data Files Using
 #' Nonunique Identifiers,} US National Institute of Standards and
@@ -72,7 +76,6 @@
 #' mra_encode(c("Peter", "Peady"))
 #' mra_encode("Stevenson")
 
-#' @rdname mra
 #' @name mra_encode
 #' @export
 mra_encode <- function(word, clean = TRUE) {

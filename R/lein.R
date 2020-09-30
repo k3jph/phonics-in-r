@@ -53,6 +53,10 @@
 #'
 #' @references
 #'
+#' James P. Howard, II, "Phonetic Spelling Algorithm Implementations
+#' for R," \emph{Journal of Statistical Software}, vol. 25, no. 8,
+#' (2020), p. 1--21, <10.18637/jss.v095.i08>.
+#'
 #' Billy T. Lynch and William L. Arends. "Selection of surname coding
 #' procedure for the SRS record linkage system." United States
 #' Department of Agriculture, Sample Survey Research Branch, Research
