@@ -1,5 +1,6 @@
 # Phonetic Spelling Algorithms in R
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/08ad4c6ccb8d4bf59ca47b7524af04be)](https://app.codacy.com/gh/k3jph/phonics-in-r?utm_source=github.com&utm_medium=referral&utm_content=k3jph/phonics-in-r&utm_campaign=Badge_Grade)
 [![Build Status](https://api.travis-ci.org/k3jph/phonics-in-r.svg?branch=master)](https://travis-ci.org/k3jph/phonics-in-r)
 [![Coverage Status](https://coveralls.io/repos/github/k3jph/phonics-in-r/badge.svg?branch=develop)](https://coveralls.io/github/k3jph/phonics-in-r?branch=develop)
 [![codecov](https://codecov.io/gh/k3jph/phonics-in-r/branch/master/graph/badge.svg)](https://codecov.io/gh/k3jph/phonics-in-r)
