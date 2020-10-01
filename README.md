@@ -1,7 +1,6 @@
 # Phonetic Spelling Algorithms in R
 
 [![Build Status](https://api.travis-ci.org/k3jph/phonics-in-r.svg?branch=master)](https://travis-ci.org/k3jph/phonics-in-r)
-[![Coverage Status](https://coveralls.io/repos/github/k3jph/phonics-in-r/badge.svg?branch=develop)](https://coveralls.io/github/k3jph/phonics-in-r?branch=develop)
 [![codecov](https://codecov.io/gh/k3jph/phonics-in-r/branch/master/graph/badge.svg)](https://codecov.io/gh/k3jph/phonics-in-r)
 [![Downloads from the RStudio CRAN mirror](https://cranlogs.r-pkg.org/badges/phonics)](https://cran.r-project.org/package=phonics)
 [![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.1041982-blue.svg)](https://dx.doi.org/10.5281/zenodo.1041982)
