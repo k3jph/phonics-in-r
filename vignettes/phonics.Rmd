@@ -1,5 +1,5 @@
 ---
-title: "Overview of the ``phonics`` Package"
+title: "Overview of the phonics Package"
 author: "James P. Howard, II"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
