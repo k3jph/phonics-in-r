@@ -19,21 +19,25 @@ phonetic spelling and test phonetic similarity.
 * Caverphone
   * Original Caverphone
   * Caverphone 2
+
 * Cologne (Kölner)
 * Lein
 * Match Rating Approach
   * Encoder
   * Comparison
+
 * Metaphone
 * New York State Identification and Intelligence System
   * NYSIIS
   * Modified NYSIIS
+
 * Oxford Name Compression Algorithm
 * Phonex
 * Roger Root
 * Soundex
   * Original Soundex
   * Apache Refined Soundex
+
 * Statistics Canada
   * Census Modified
 
