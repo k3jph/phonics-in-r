@@ -24,6 +24,7 @@ Suggests:
     testthat,
     knitr,
     markdown,
+    rmarkdown,
     devtools
 LinkingTo: Rcpp,
     BH
