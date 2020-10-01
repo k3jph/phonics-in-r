@@ -27,8 +27,7 @@ bibentry(bibtype = "Article",
          volume = "3",
          number = "22",
          pages = "480",
-         doi = "10.21105/joss.00480",
-         url = "https://joss.theoj.org/papers/10.21105/joss.00480")
+         doi = "10.21105/joss.00480")
 
 bibentry(bibtype = "Manual",
          title = "{phonics}: Phonetic Spelling Algorithms in R",
