@@ -54,6 +54,10 @@
 #'
 #' @references
 #'
+#' James P. Howard, II, "Phonetic Spelling Algorithm Implementations
+#' for R," \emph{Journal of Statistical Software}, vol. 25, no. 8,
+#' (2020), p. 1--21, <10.18637/jss.v095.i08>.
+#'
 #' A.J. Lait and Brian Randell. "An assessment of name matching
 #' algorithms." Technical Report Series-University of Newcastle Upon
 #' Tyne Computing Science (1996).

@@ -63,9 +63,14 @@
 #' "A-Z." For inputs outside this range, the output is undefined.
 #'
 #' @references
+#'
 #' Charles P. Bourne and Donald F. Ford, "A study of methods for
 #' systematically abbreviating English words and names," \emph{Journal
 #' of the ACM}, vol. 8, no. 4 (1961), p. 538-552.
+#'
+#' James P. Howard, II, "Phonetic Spelling Algorithm Implementations
+#' for R," \emph{Journal of Statistical Software}, vol. 25, no. 8,
+#' (2020), p. 1--21, <10.18637/jss.v095.i08>.
 #'
 #' Howard B. Newcombe, James M. Kennedy, "Record linkage: making
 #' maximum use of the discriminating power of identifying information,"

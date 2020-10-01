@@ -1,21 +1,40 @@
 year <- sub("-.*", "", meta$Date)
 note <- sprintf("R package version %s", meta$Version)
 
-bibentry(bibtype = "Manual",
-         title = "{phonics}: Phonetic Spelling Algorithms in R",
-         author = "James P. Howard",
-         year = year,
-         note = note,
-         doi = "10.5281/zenodo.1041982",
-         url = "https://jameshoward.us/phonics-in-r/")
 
 bibentry(bibtype = "Article",
-         title = "Phonetic Algorithms in R",
-         author = "James P. Howard",
+  title        = "Phonetic Spelling Algorithm Implementations for {R}",
+  author       = c(person(given = c("James", "P."),
+                          family = "Howard, II",
+                          email = "jh@jameshoward.us")),
+  journal      = "Journal of Statistical Software",
+  year         = "2020",
+  volume       = "95",
+  number       = "8",
+  pages        = "1--21",
+  doi          = "10.18637/jss.v095.i08",
+
+  header       = "To cite phonics in publications use:"
+)
+
+bibentry(bibtype = "Article",
+         title = "Phonetic Algorithms in {R}",
+         author       = c(person(given = c("James", "P."),
+                          family = "Howard, II",
+                          email = "jh@jameshoward.us")),
          year = "2018",
          journal = "Journal of Open Source Software",
          volume = "3",
          number = "22",
          pages = "480",
-         doi = "10.21105/joss.00480",
-         url = "https://joss.theoj.org/papers/10.21105/joss.00480")
+         doi = "10.21105/joss.00480")
+
+bibentry(bibtype = "Manual",
+         title = "{phonics}: Phonetic Spelling Algorithms in R",
+         author       = c(person(given = c("James", "P."),
+                          family = "Howard, II",
+                          email = "jh@jameshoward.us")),
+         year = year,
+         note = note,
+         doi = "10.5281/zenodo.1041982",
+         url = "https://jameshoward.us/phonics-in-r/")
