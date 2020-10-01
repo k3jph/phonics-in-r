@@ -1,8 +1,10 @@
 # Phonetic Spelling Algorithms in R
 
+![CRAN/METACRAN](https://img.shields.io/cran/v/phonics)
+[![Downloads from the RStudio CRAN mirror](https://cranlogs.r-pkg.org/badges/phonics)](https://cran.r-project.org/package=phonics)
 [![Build Status](https://api.travis-ci.org/k3jph/phonics-in-r.svg?branch=master)](https://travis-ci.org/k3jph/phonics-in-r)
 [![codecov](https://codecov.io/gh/k3jph/phonics-in-r/branch/master/graph/badge.svg)](https://codecov.io/gh/k3jph/phonics-in-r)
-[![Downloads from the RStudio CRAN mirror](https://cranlogs.r-pkg.org/badges/phonics)](https://cran.r-project.org/package=phonics)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/08ad4c6ccb8d4bf59ca47b7524af04be)](https://app.codacy.com/gh/k3jph/phonics-in-r])
 [![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.1041982-blue.svg)](https://dx.doi.org/10.5281/zenodo.1041982)
 [![JOSS Status](http://joss.theoj.org/papers/13e41c9bd376fe2fc948f8af10b138b6/status.svg)](https://joss.theoj.org/papers/10.21105/joss.00480)
 [![JSS Status](https://img.shields.io/badge/JSS-10.18637%2Fjss.v095.i08-yellow.svg)](https://joss.theoj.org/papers/10.21105/joss.00480)
