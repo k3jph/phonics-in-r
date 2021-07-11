@@ -1,9 +1,9 @@
 pandoc: 2.7.3
-pkgdown: 1.6.1.9000
-pkgdown_sha: e1e46f2e13c7efdb17bc4eae40bc3779c2b0b517
+pkgdown: 1.6.1.9001
+pkgdown_sha: ce9781a15c7ea07df9fb17a11295ba4abec0b54b
 articles:
   phonics: phonics.html
-last_built: 2020-10-12T16:17Z
+last_built: 2021-07-11T13:00Z
 urls:
   reference: https://jameshoward.us/phonics-in-r/reference
   article: https://jameshoward.us/phonics-in-r/articles

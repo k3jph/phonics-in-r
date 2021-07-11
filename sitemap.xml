@@ -1,13 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://jameshoward.us/phonics-in-r/404.html</loc>
+  </url>
+  <url>
+    <loc>https://jameshoward.us/phonics-in-r/COPYRIGHT.html</loc>
+  </url>
+  <url>
+    <loc>https://jameshoward.us/phonics-in-r/LICENSE-text.html</loc>
+  </url>
+  <url>
+    <loc>https://jameshoward.us/phonics-in-r/articles/index.html</loc>
+  </url>
+  <url>
+    <loc>https://jameshoward.us/phonics-in-r/articles/phonics.html</loc>
+  </url>
+  <url>
+    <loc>https://jameshoward.us/phonics-in-r/authors.html</loc>
+  </url>
+  <url>
     <loc>https://jameshoward.us/phonics-in-r/index.html</loc>
+  </url>
+  <url>
+    <loc>https://jameshoward.us/phonics-in-r/paper.html</loc>
   </url>
   <url>
     <loc>https://jameshoward.us/phonics-in-r/reference/caverphone.html</loc>
   </url>
   <url>
     <loc>https://jameshoward.us/phonics-in-r/reference/cologne.html</loc>
+  </url>
+  <url>
+    <loc>https://jameshoward.us/phonics-in-r/reference/index.html</loc>
   </url>
   <url>
     <loc>https://jameshoward.us/phonics-in-r/reference/lein.html</loc>
@@ -38,8 +62,5 @@
   </url>
   <url>
     <loc>https://jameshoward.us/phonics-in-r/reference/statcan.html</loc>
-  </url>
-  <url>
-    <loc>https://jameshoward.us/phonics-in-r/articles/phonics.html</loc>
   </url>
 </urlset>
