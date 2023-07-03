@@ -34,7 +34,7 @@
 #' @param modified     if \code{TRUE}, use the modified NYSIIS algorithm
 #' @param clean if \code{TRUE}, return \code{NA} for unknown alphabetical characters
 #'
-#' @details The \code{nysiis} function phentically encodes the given
+#' @details The \code{nysiis} function phonetically encodes the given
 #' string using the New York State Identification and Intelligence
 #' System (NYSIIS) algorithm. The algorithm is based on the
 #' implementation provided by Wikipedia and is implemented in pure R
