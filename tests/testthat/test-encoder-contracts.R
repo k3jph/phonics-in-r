@@ -177,6 +177,8 @@ test_that("bounded deterministic properties hold for ASCII inputs", {
         )
         expect_length(upper, length(generated))
         expect_true(all(grepl(spec$alphabet, upper)), info = spec$name)
-        expect_true(all(nchar(upper) <= spec$max_code_len), info = spec$name)
+        if (!is.null(spec$max_code_len)) {
+            expect_true(all(nchar(upper) <= spec$max_code_len), info = spec$name)
+        }
     }
 })
