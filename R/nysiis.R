@@ -97,14 +97,10 @@ nysiis <- function(word, maxCodeLen = 6, modified = FALSE, clean = TRUE) {
     if(any(invalidModified, na.rm = TRUE))
         warning("modified NYSIIS cannot encode names ending in JR or SR")
 
-    word <- vapply(
-        word,
-        nysiis_encode_one,
-        character(1),
-        maxCodeLen = maxCodeLen,
-        modified = modified,
-        USE.NAMES = FALSE
-    )
+    word <- if(modified)
+        nysiis_modified(word, maxCodeLen)
+    else
+        nysiis_original(word, maxCodeLen)
     word[invalidModified] <- NA_character_
 
     ## Yeah, we already processed them, but now get rid of them

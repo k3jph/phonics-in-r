@@ -46,6 +46,10 @@ test_that("Modified NYSIIS applies the USDA modifications in scan order", {
         expect_identical(nysiis("MAJR", modified = TRUE), NA_character_),
         "ending in JR or SR"
     )
+    expect_identical(
+        nysiis(c("WRIGHT", "DGAN", "BASCH", "BASH", "S"), modified = TRUE),
+        c("RAT", "GAN", "BAS", "BAS", "")
+    )
 })
 
 test_that("Cologne evaluates C and X against their original neighbors", {
