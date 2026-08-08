@@ -75,6 +75,8 @@
 #' @export
 rogerroot <- function(word, maxCodeLen = 5, clean = TRUE) {
 
+    maxCodeLen <- .validate_max_code_len(maxCodeLen)
+
     ## First, uppercase it and test for unprocessable characters
     word <- toupper(word)
     word[is.null(word)] <- NA

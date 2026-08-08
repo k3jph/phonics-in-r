@@ -1,3 +1,5 @@
+## Locally maintained end-to-end regression corpus for phonics() dispatch.
+## Values are checked against direct encoder calls in test-phonics.R.
 word,caverphone,caverphone.modified,cologne,lein,metaphone,nysiis,nysiis.modified,onca,onca.modified,onca.refined,onca.modified.refined,phonex,rogerroot,soundex,soundex.refined,statcan
 andersen,ANTSN1,ANTSN11111,062786,A213,ANTRSN,ANDARS,ANDARS,A536,A536,A086,A086,A525,12140,A536,A08609308,ANDR
 Anderson,ANTSN1,ANTSN11111,062786,A213,ANTRSN,ANDARS,ANDARS,A536,A536,A086,A086,A525,12140,A536,A08609308,ANDR

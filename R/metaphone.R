@@ -78,6 +78,8 @@
 #' @export
 metaphone <- function(word, maxCodeLen = 10L, clean = TRUE) {
 
+    maxCodeLen <- .validate_max_code_len(maxCodeLen)
+
     ## First, uppercase it and test for unprocessable characters
     word <- toupper(word)
     word[is.null(word)] <- NA
@@ -86,6 +88,7 @@ metaphone <- function(word, maxCodeLen = 10L, clean = TRUE) {
     word <- gsub("[^A-Z]*", "", word, perl = TRUE)
     
     word <- metaphone_internal(word, maxCodeLen)
+    word <- substr(word, 1, maxCodeLen)
 
     ## Yeah, we already processed them, but now get rid of them
     if(clean)
@@ -93,4 +96,3 @@ metaphone <- function(word, maxCodeLen = 10L, clean = TRUE) {
 
     return(word)
 }
-

@@ -85,6 +85,8 @@
 #' @export
 soundex <- function(word, maxCodeLen = 4L, clean = TRUE) {
 
+    maxCodeLen <- .validate_max_code_len(maxCodeLen)
+
     ## First, uppercase it and test for unprocessable characters
     word <- toupper(word)
     word[is.null(word)] <- NA
@@ -104,6 +106,8 @@ soundex <- function(word, maxCodeLen = 4L, clean = TRUE) {
 #' @rdname soundex
 #' @export
 refinedSoundex <- function(word, maxCodeLen = 10L, clean = TRUE) {
+
+    maxCodeLen <- .validate_max_code_len(maxCodeLen)
     
     ## First, uppercase it and test for unprocessable characters
     word <- toupper(word)

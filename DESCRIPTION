@@ -20,7 +20,7 @@ Imports:
     Rcpp (>= 0.12.1),
 	data.table
 Suggests:
-    testthat,
+    testthat (>= 3.0.0),
     knitr,
     markdown,
     rmarkdown,
@@ -28,3 +28,4 @@ Suggests:
 LinkingTo: Rcpp
 RoxygenNote: 7.1.1
 VignetteBuilder: knitr
+Config/testthat/edition: 3

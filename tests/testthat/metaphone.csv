@@ -1,3 +1,5 @@
+## Legacy package regression corpus. The original upstream provenance was
+## not recorded; expected values are preserved unless independently verified.
 word,value
     abc,NA
 1234.678!@abc,NA

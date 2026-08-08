@@ -72,6 +72,8 @@
 #' @export
 statcan <- function(word, maxCodeLen = 4, clean = TRUE) {
 
+    maxCodeLen <- .validate_max_code_len(maxCodeLen)
+
     ## Remove umlauts and eszett
     word <- gsub("\u00C0|\u00C2", "A", word, perl = TRUE)
     word <- gsub("\u00C8|\u00C9|\u00CA|\u00CB", "E", word, perl = TRUE)
