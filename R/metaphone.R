@@ -88,6 +88,7 @@ metaphone <- function(word, maxCodeLen = 10L, clean = TRUE) {
     word <- gsub("[^A-Z]*", "", word, perl = TRUE)
     
     word <- metaphone_internal(word, maxCodeLen)
+    word <- substr(word, 1, maxCodeLen)
 
     ## Yeah, we already processed them, but now get rid of them
     if(clean)

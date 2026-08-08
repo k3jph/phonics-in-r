@@ -13,3 +13,7 @@ test_that("Metaphone handles GH and end-of-word boundaries safely", {
         c("", LETTERS, NA_character_)
     )
 })
+
+test_that("Metaphone never exceeds maxCodeLen when a rule emits two symbols", {
+    expect_identical(metaphone("AX", maxCodeLen = 2), "AK")
+})

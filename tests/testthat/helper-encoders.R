@@ -77,7 +77,7 @@ encoder_specs <- list(
         args = list(modified = TRUE),
         fixture = "caverphone-modified.csv",
         max_code_len = 10L,
-        alphabet = "^[A-Z0-9]*$",
+        alphabet = "^[A-Za-z0-9]*$",
         accepts_umlaut = FALSE
     ),
     cologne = list(
