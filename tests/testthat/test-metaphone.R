@@ -39,3 +39,17 @@ test_that("The metaphone algorithm implementation can handle NULLs", {
     test_data <- metaphone(NULL)
     expect_true(is.na(test_data))
 })
+
+test_that("Metaphone handles GH and end-of-word boundaries safely", {
+    skip_on_cran()
+
+    expect_identical(
+        metaphone(c("sigh", "rough", "bughouse", "funhouse")),
+        c("SF", "RF", "BFS", "FNHS")
+    )
+
+    expect_identical(
+        metaphone(c("", LETTERS, NA_character_)),
+        c("", LETTERS, NA_character_)
+    )
+})

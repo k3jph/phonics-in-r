@@ -79,3 +79,16 @@ test_that("The refined soundex algorithm implementation can handle NULLs", {
     test_data <- refinedSoundex(NULL)
     expect_true(is.na(test_data))
 })
+
+test_that("Soundex implementations handle empty and one-letter inputs", {
+    skip_on_cran()
+
+    expect_identical(
+        soundex(c("", LETTERS, NA_character_)),
+        c("", paste0(LETTERS, "000"), NA_character_)
+    )
+    expect_identical(
+        refinedSoundex(c("", LETTERS, NA_character_)),
+        c("", LETTERS, NA_character_)
+    )
+})
