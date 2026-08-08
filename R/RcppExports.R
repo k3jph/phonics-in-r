@@ -20,3 +20,4 @@ soundex_internal <- function(word, maxCodeLen = 4L) {
 refinedSoundex_internal <- function(word, maxCodeLen = 10L) {
     .Call('_phonics_refinedSoundex_internal', PACKAGE = 'phonics', word, maxCodeLen)
 }
+
