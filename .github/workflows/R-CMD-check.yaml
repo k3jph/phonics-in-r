@@ -14,6 +14,38 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  documentation:
+    runs-on: ubuntu-latest
+    name: Documentation freshness
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: 'release'
+
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: any::roxygen2
+          needs: check
+
+      - name: Regenerate documentation
+        run: roxygen2::roxygenise()
+        shell: Rscript {0}
+
+      - name: Upload generated documentation
+        uses: actions/upload-artifact@v4
+        with:
+          name: generated-documentation
+          path: |
+            DESCRIPTION
+            NAMESPACE
+            man
+
+      - name: Verify generated files are current
+        run: git diff --exit-code
+
   R-CMD-check:
     runs-on: ${{ matrix.config.os }}
     name: ${{ matrix.config.os }} (R ${{ matrix.config.r }})
@@ -47,10 +79,6 @@ jobs:
         with:
           extra-packages: any::rcmdcheck
           needs: check
-
-      - name: Generate documentation
-        run: devtools::document()
-        shell: Rscript {0}
 
       - uses: r-lib/actions/check-r-package@v2
         with:

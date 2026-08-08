@@ -1,6 +1,4 @@
-##  This is a collection of sample values for the Apache
-##  refined soundex algorithm.  The list can be found on the
-##  web at http://ntz-develop.blogspot.com/2011/03/phonetic-algorithms.html
+## Rule-derived values checked against Apache Commons Codec RefinedSoundex.
 word,value
 Braz,B1905
 Broz,B1905

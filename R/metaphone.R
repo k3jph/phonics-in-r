@@ -29,7 +29,7 @@
 #' @title Generate phonetic versions of strings with Metaphone
 #'
 #' @description
-#' The function \code{metaphone} phonentically encodes the
+#' The function \code{metaphone} phonetically encodes the
 #' given string using the metaphone algorithm.
 #'
 #' @param word string or vector of strings to encode
@@ -37,15 +37,10 @@
 #' @param clean if \code{TRUE}, return \code{NA} for unknown alphabetical characters
 #'
 #' @details
-#' There is some discrepency with respect to how the metaphone algorithm
-#' actually works. For instance, there is a version in the Java Apache
-#' Commons library.  There is a version provided within PHP. These do
-#' not provide the same results.  On the questionable theory that the
-#' implementation in PHP is probably more well known, this code should
-#' match it in output.
-#'
-#' This implementation is based on a Javascript implementation which is
-#' itself based on the PHP internal implementation.
+#' Metaphone has accumulated incompatible implementation variants. This
+#' function follows the traditional rules from Philips' 1990 algorithm; it is
+#' therefore not expected to reproduce PHP or Apache Commons Codec for every
+#' input.
 #'
 #' The variable \code{maxCodeLen} is the limit on how long the returned
 #' metaphone should be.
@@ -66,8 +61,11 @@
 #' @references
 #'
 #' James P. Howard, II, "Phonetic Spelling Algorithm Implementations
-#' for R," \emph{Journal of Statistical Software}, vol. 25, no. 8,
+#' for R," \emph{Journal of Statistical Software}, vol. 95, no. 8,
 #' (2020), p. 1--21, <10.18637/jss.v095.i08>.
+#'
+#' Lawrence Philips, "Hanging on the Metaphone," \emph{Computer Language},
+#' vol. 7, no. 12 (1990), p. 38--44.
 #'
 #' @family phonics
 #'

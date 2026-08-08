@@ -49,7 +49,7 @@
 #' This strips spaces, hyphens, and numbers.  Other letters, such as
 #' "Ü," may be permissible in the current locale but are unknown to
 #' \code{caverphone}.  For inputs outside of its known range, the output is
-#' undefined and \code{NA} is returned and a \code{warning} this thrown.
+#' undefined and \code{NA} is returned and a \code{warning} is issued.
 #' If \code{clean} is \code{FALSE}, \code{caverphone} attempts to process the
 #' strings.  The default is \code{TRUE}.
 #'
@@ -64,7 +64,7 @@
 #' University of Otago, New Zealand, 2004.
 #'
 #' James P. Howard, II, "Phonetic Spelling Algorithm Implementations
-#' for R," \emph{Journal of Statistical Software}, vol. 25, no. 8,
+#' for R," \emph{Journal of Statistical Software}, vol. 95, no. 8,
 #' (2020), p. 1--21, <10.18637/jss.v095.i08>.
 #'
 #' @family phonics
@@ -211,7 +211,7 @@ caverphone_modified <- function(word) {
     word <- gsub("[aeiou]", "3", word, perl = TRUE)
     word <- gsub("j", "y", word, perl = TRUE)
     word <- gsub("^y3", "Y3", word, perl = TRUE)
-    word <- gsub("^y", "a", word, perl = TRUE)
+    word <- gsub("^y", "A", word, perl = TRUE)
     word <- gsub("y", "3", word, perl = TRUE)
     word <- gsub("3gh3", "3kh3", word, perl = TRUE)
     word <- gsub("gh", "22", word, perl = TRUE)

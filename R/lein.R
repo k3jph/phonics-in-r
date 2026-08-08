@@ -45,7 +45,7 @@
 #' This strips spaces, hyphens, and numbers.  Other letters, such as
 #' "Ü," may be permissible in the current locale but are unknown to
 #' \code{lein}.  For inputs outside of its known range, the output is
-#' undefined and \code{NA} is returned and a \code{warning} this thrown.
+#' undefined and \code{NA} is returned and a \code{warning} is issued.
 #' If \code{clean} is \code{FALSE}, \code{lein} attempts to process the
 #' strings.  The default is \code{TRUE}.
 #'
@@ -54,7 +54,7 @@
 #' @references
 #'
 #' James P. Howard, II, "Phonetic Spelling Algorithm Implementations
-#' for R," \emph{Journal of Statistical Software}, vol. 25, no. 8,
+#' for R," \emph{Journal of Statistical Software}, vol. 95, no. 8,
 #' (2020), p. 1--21, <10.18637/jss.v095.i08>.
 #'
 #' Billy T. Lynch and William L. Arends. "Selection of surname coding
@@ -111,11 +111,10 @@ lein <- function(word, maxCodeLen = 4, clean = TRUE) {
     word <- paste(first, word, sep = "")
 
     ## Zero-pad and truncate to requested length
-    word <- gsub("$", paste(rep(0, maxCodeLen), collapse = ""), word, perl = TRUE)
+    empty <- !is.na(word) & !nzchar(word)
+    word <- paste0(word, paste(rep(0, maxCodeLen), collapse = ""))
     word <- substr(word, 1, maxCodeLen)
-
-    ## Manage some edge cases
-    word <- sub("0000", "", word, perl = TRUE)
+    word[empty] <- ""
 
     ## Yeah, we already processed them, but now get rid of them
     word[listNulls] <- NA

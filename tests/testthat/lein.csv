@@ -1,5 +1,4 @@
-##  Test values cross-refereneced vis-á-vis the Talisman JavaScript
-##  implementation.
+## Rule-derived corpus checked against Lynch and Arends (1977), Appendix B.
 word,value
 Euler,E330
 Ellery,E330

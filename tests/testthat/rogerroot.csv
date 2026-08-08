@@ -1,5 +1,5 @@
-## Test values from Robert L. Taft, Name search techniques
-## Systems Development, Albany, New York
+## Published examples and table-derived values from Lynch and Arends (1977),
+## Appendix B.
 word,value 
 Johnson,32020
 Williams,45300
@@ -23,4 +23,4 @@ Ching,06270
 Müller-Lü denscheidt,NA
 Wikipedia,47810
 garçon,NA
-Breschnew,09406
+Breschnew,09462
