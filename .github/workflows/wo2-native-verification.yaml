@@ -27,10 +27,27 @@ jobs:
             -Wall -Wextra -Wpedantic -Wconversion -Wsign-conversion
         run: R CMD INSTALL --preclean .
 
-      - name: Run focused native tests
+      - name: Run focused native checks
         run: |
-          testthat::test_file("tests/testthat/test-metaphone.R")
-          testthat::test_file("tests/testthat/test-soundex.R")
+          library(phonics)
+          stopifnot(
+            identical(
+              metaphone(c("sigh", "rough", "bughouse", "funhouse")),
+              c("SF", "RF", "BFS", "FNHS")
+            ),
+            identical(
+              metaphone(c("", LETTERS, NA_character_)),
+              c("", LETTERS, NA_character_)
+            ),
+            identical(
+              soundex(c("", LETTERS, NA_character_)),
+              c("", paste0(LETTERS, "000"), NA_character_)
+            ),
+            identical(
+              refinedSoundex(c("", LETTERS, NA_character_)),
+              c("", LETTERS, NA_character_)
+            )
+          )
         shell: Rscript {0}
 
   alpine-musl:
