@@ -1,0 +1,62 @@
+name: WO-2 native verification
+
+on:
+  pull_request:
+    branches: [develop]
+  workflow_dispatch:
+
+permissions: read-all
+
+jobs:
+  strict-native:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: r-lib/actions/setup-r@v2
+
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: any::testthat
+          needs: check
+
+      - name: Compile with strict native diagnostics
+        env:
+          PKG_CXXFLAGS: >-
+            -Wall -Wextra -Wpedantic -Wconversion -Wsign-conversion
+        run: R CMD INSTALL --preclean .
+
+      - name: Run focused native tests
+        run: |
+          testthat::test_file("tests/testthat/test-metaphone.R")
+          testthat::test_file("tests/testthat/test-soundex.R")
+        shell: Rscript {0}
+
+  alpine-musl:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Compile and install on Alpine Linux
+        run: |
+          docker run --rm \
+            --volume "$PWD:/src" \
+            --workdir /src \
+            alpine:3.22 \
+            sh -euxc '
+              apk add --no-cache R R-dev build-base curl-dev linux-headers
+              g++ --version
+              Rscript -e '\''install.packages(c("Rcpp", "data.table"), repos = "https://cloud.r-project.org")'\''
+              R CMD INSTALL --preclean .
+              Rscript -e '\''library(phonics); stopifnot(identical(metaphone(c("sigh", "rough", "bughouse", "funhouse")), c("SF", "RF", "BFS", "FNHS")))'\''
+            '
+
+      - name: Record PHP reference encodings
+        run: |
+          docker run --rm php:8.4-cli-alpine php -r '
+            foreach (["sigh", "rough", "bughouse", "funhouse"] as $word) {
+              echo $word, "=", metaphone($word), PHP_EOL;
+            }
+          '

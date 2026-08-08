@@ -44,7 +44,6 @@ phonetic spelling and test phonetic similarity.
 * testthat
 * roxygen2
 * Rcpp
-* BH
 * data.table
 
 ## Contribution guidelines
