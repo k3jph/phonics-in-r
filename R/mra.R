@@ -101,7 +101,7 @@ mra_encode <- function(word, clean = TRUE) {
 
     ## If longer than 6 characters, take first and last 3...and we have
     ## to vectorize it
-    for(i in 1:length(word)) {
+    for(i in seq_along(word)) {
         if((l = nchar(word[i])) > 6) {
             first <- substr(word[i], 1, 3)
             last <- substr(word[i], l - 2, l)
@@ -121,8 +121,8 @@ mra_encode <- function(word, clean = TRUE) {
 #' @name mra_compare
 #' @export
 mra_compare <- function(x, y) {
-    if(all(is.na(x)) | all(is.na(y)))
-       return(NA)
+    if(length(x) == 0L && length(y) == 0L)
+        return(logical())
 
     mra <- data.frame(x = x, y = y, sim = 0, min = 100, stringsAsFactors = FALSE)
 
@@ -146,6 +146,9 @@ mra_compare <- function(x, y) {
     y <- strsplit(mra$y, split = "")
     rows <- nrow(mra)
     for(i in 1:rows) {
+        if(is.na(mra$x[i]) || is.na(mra$y[i]))
+            next
+
         ## Process the encoded strings from left to right and remove any
         ## identical characters found from both strings respectively.
         j <- 1

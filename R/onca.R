@@ -71,8 +71,15 @@
 #' @export
 onca <- function(word, maxCodeLen = 4, clean = TRUE, modified = FALSE, refined = FALSE) {
 
+    maxCodeLen <- .validate_max_code_len(maxCodeLen)
+
     ## Yes, it really is this simple, but maxCodeLen * 2 is kind of eyeballing it
-    word <- nysiis(word, maxCodeLen = maxCodeLen * 2, clean = clean)
+    word <- nysiis(
+        word,
+        maxCodeLen = maxCodeLen * 2,
+        modified = modified,
+        clean = clean
+    )
     if(refined)
         word <- refinedSoundex(word, maxCodeLen, clean = clean)
     else

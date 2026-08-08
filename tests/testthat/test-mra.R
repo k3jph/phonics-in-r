@@ -1,56 +1,67 @@
-context("mra")
-
-##  This is structured a bit differently from the other tests in order
-##  to test both the encoder and the comparison.
-
-##  Test the MRA encoding algorithm
-test_that("Test that MRA encoder works", {
-    skip_on_cran()
-
-    test <- read.csv("mra-encode.csv", comment.char = "#", stringsAsFactors = FALSE, colClasses = rep("character", 2), encoding = "UTF-8")
-
-    ## Test for cases where clean = TRUE
-    for(i in 1:nrow(test)) {
-        if(is.na(test$value[i])) {
-            expect_warning(testValue <- mra_encode(test$word[i]))
-            expect_true(is.na(testValue))
-        } else
-            expect_true(mra_encode(test$word[i]) == test$value[i])
-    }
-
-    ## Test for cases where clean = FALSE, which should not
-    ## return NA, so we are going to assume that's an error
-    for(i in 1:nrow(test)) {
-        if(is.na(test$value[i]))
-            expect_false(is.na(mra_encode(test$word[i], clean = FALSE)))
-        else
-            expect_true(mra_encode(test$word[i], clean = FALSE) == test$value[i])
-    }
-
+test_that("MRA encoder reference corpus is preserved", {
+    expect_encoder_fixture(encoder_specs$mra)
 })
 
-test_that("The MRA encoder algorithm implementation can handle NAs", {
-    skip_on_cran()
+test_that("MRA encoder has scalar and vector contracts", {
+    input <- c("Byrne", "Boern", "Christopher", "", NA_character_)
 
-    test_data <- mra_encode(NA_character_)
-    expect_true(is.na(test_data))
+    expect_scalar_vector_equivalence(encoder_specs$mra, input)
+    expect_identical(mra_encode("Byrne"), "BYRN")
+    expect_identical(mra_encode("Christopher"), "CHRPHR")
+    expect_identical(mra_encode(""), "")
+    expect_identical(mra_encode(NA_character_), NA_character_)
+    expect_identical(mra_encode(NULL), NA_character_)
 })
 
-test_that("The MRA encoder algorithm implementation can handle NULLs", {
-    skip_on_cran()
+test_that("MRA comparison reference corpus is preserved", {
+    fixture <- read.csv(
+        test_path("mra-compare.csv"),
+        comment.char = "#",
+        stringsAsFactors = FALSE,
+        colClasses = "character",
+        encoding = "UTF-8"
+    )
+    actual <- mra_compare(
+        mra_encode(fixture[[1]]),
+        mra_encode(fixture[[2]])
+    )
 
-    test_data <- mra_encode(NULL)
-    expect_true(is.na(test_data))
+    expect_identical(actual, as.logical(fixture[[3]]))
 })
 
-##  Test the MRA compare algorithm
-test_that("Test that MRA comparison works", {
-    skip_on_cran()
+test_that("MRA comparison handles vector boundaries and recycling", {
+    expect_true(mra_compare("SMTH", "SMTH"))
+    expect_false(mra_compare("ABC", "XYZ"))
+    expect_true(mra_compare("", ""))
+    expect_false(mra_compare("", "ABC"))
 
-    test <- read.csv("mra-compare.csv", comment.char = "#", stringsAsFactors = FALSE, colClasses = c("character", "character"), encoding = "UTF-8")
-    for(i in 1:nrow(test))
-        expect_true(mra_compare(mra_encode(test$word1[i]), mra_encode(test$word2[i])) == test$value[i])
-    test$test <- mra_compare(mra_encode(test$word1), mra_encode(test$word2))
-    for(i in 1:nrow(test))
-        expect_true(test$test[i] == test$value[i])
+    expect_identical(mra_compare(NA_character_, "SMTH"), NA)
+    expect_identical(
+        mra_compare(c(NA_character_, "SMTH"), c("JNS", "SMTH")),
+        c(NA, TRUE)
+    )
+    expect_identical(
+        mra_compare(c(NA_character_, NA_character_), c("ABC", "DEF")),
+        c(NA, NA)
+    )
+    expect_identical(mra_compare(character(), character()), logical())
+
+    recycled <- mra_compare("SMTH", c("SMTH", "JNS"))
+    scalar <- c(mra_compare("SMTH", "SMTH"), mra_compare("SMTH", "JNS"))
+    expect_identical(recycled, scalar)
+    expect_error(mra_compare(c("ABC", "DEF"), c("ABC", "DEF", "GHI")))
+})
+
+test_that("MRA comparison consumes encoded values", {
+    left <- mra_encode(c("Byrne", "Smith", "Christopher"))
+    right <- mra_encode(c("Boern", "Smyth", "Kristoffer"))
+
+    expect_identical(
+        mra_compare(left, right),
+        vapply(
+            seq_along(left),
+            function(i) mra_compare(left[i], right[i]),
+            logical(1)
+        )
+    )
 })

@@ -86,6 +86,7 @@ caverphone <- function(word, maxCodeLen = NULL, modified = FALSE, clean = TRUE) 
             maxCodeLen <- 10
         else
             maxCodeLen <- 6
+    maxCodeLen <- .validate_max_code_len(maxCodeLen)
 
     ## First, uppercase it and test for unprocessable characters
     word <- tolower(word)

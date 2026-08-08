@@ -72,6 +72,8 @@
 #' @export
 phonex <- function(word, maxCodeLen = 4, clean = TRUE) {
 
+    maxCodeLen <- .validate_max_code_len(maxCodeLen)
+
     ## Remove umlauts and eszett
     word <- toupper(word)
     word <- gsub("\u00C4", "A", word, perl = TRUE)
