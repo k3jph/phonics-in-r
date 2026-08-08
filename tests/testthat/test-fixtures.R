@@ -36,8 +36,8 @@ test_that("every fixture has provenance and a well-formed unique corpus", {
             check.names = FALSE
         )
 
-        expect_gte(nrow(fixture), 1L, info = file)
-        expect_gte(ncol(fixture), 2L, info = file)
+        expect_gte(nrow(fixture), 1L)
+        expect_gte(ncol(fixture), 2L)
         expect_false(anyDuplicated(fixture) > 0L, info = file)
         expect_true(all(vapply(fixture, is.character, logical(1))), info = file)
         expect_true(nzchar(fixture_provenance[[file]]), info = file)

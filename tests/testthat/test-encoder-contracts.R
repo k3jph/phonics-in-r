@@ -10,11 +10,11 @@ test_that("every encoder has scalar/vector equivalence", {
 
 test_that("every encoder handles empty, one-character, NA, and NULL inputs", {
     for (spec in encoder_specs) {
-        expect_no_warning(empty <- call_encoder(spec, ""), info = spec$name)
+        expect_no_warning(empty <- call_encoder(spec, ""))
         expect_identical(empty, "", info = spec$name)
 
-        expect_no_warning(letters <- call_encoder(spec, LETTERS), info = spec$name)
-        expect_length(letters, length(LETTERS), info = spec$name)
+        expect_no_warning(letters <- call_encoder(spec, LETTERS))
+        expect_length(letters, length(LETTERS))
         expect_false(anyNA(letters), info = spec$name)
 
         expect_identical(
@@ -60,8 +60,7 @@ test_that("clean semantics are explicit across every encoder", {
         expect_identical(digits, NA_character_, info = spec$name)
 
         expect_no_warning(
-            unclean <- call_encoder(spec, "Smith-Jones", clean = FALSE),
-            info = paste(spec$name, "clean = FALSE")
+            unclean <- call_encoder(spec, "Smith-Jones", clean = FALSE)
         )
         expect_identical(
             unclean,
@@ -70,7 +69,7 @@ test_that("clean semantics are explicit across every encoder", {
         )
 
         if (spec$accepts_umlaut) {
-            expect_no_warning(umlaut <- call_encoder(spec, "Übel"), info = spec$name)
+            expect_no_warning(umlaut <- call_encoder(spec, "Übel"))
             expect_false(is.na(umlaut), info = spec$name)
         } else {
             expect_warning(
@@ -113,11 +112,7 @@ test_that("maxCodeLen supports safe boundaries and rejects invalid values", {
                 "Stevenson",
                 extra = list(maxCodeLen = value)
             )
-            expect_lte(
-                nchar(result),
-                value,
-                info = paste(spec$name, "maxCodeLen =", value)
-            )
+            expect_lte(nchar(result), value)
         }
 
         for (value in invalid) {
@@ -150,16 +145,16 @@ test_that("maxCodeLen supports safe boundaries and rejects invalid values", {
 })
 
 test_that("Cologne maxCodeLen remains a characterized historical no-op", {
-    baseline <- cologne("Müller-Lüdenscheidt")
+    baseline <- cologne("MüllerLüdenscheidt")
 
-    expect_identical(cologne("Müller-Lüdenscheidt", maxCodeLen = 0), baseline)
-    expect_identical(cologne("Müller-Lüdenscheidt", maxCodeLen = 1), baseline)
-    expect_identical(cologne("Müller-Lüdenscheidt", maxCodeLen = 1000), baseline)
-    expect_identical(cologne("Müller-Lüdenscheidt", maxCodeLen = -1), baseline)
-    expect_identical(cologne("Müller-Lüdenscheidt", maxCodeLen = NA), baseline)
-    expect_identical(cologne("Müller-Lüdenscheidt", maxCodeLen = 1.5), baseline)
-    expect_identical(cologne("Müller-Lüdenscheidt", maxCodeLen = "4"), baseline)
-    expect_identical(cologne("Müller-Lüdenscheidt", maxCodeLen = c(1, 2)), baseline)
+    expect_identical(cologne("MüllerLüdenscheidt", maxCodeLen = 0), baseline)
+    expect_identical(cologne("MüllerLüdenscheidt", maxCodeLen = 1), baseline)
+    expect_identical(cologne("MüllerLüdenscheidt", maxCodeLen = 1000), baseline)
+    expect_identical(cologne("MüllerLüdenscheidt", maxCodeLen = -1), baseline)
+    expect_identical(cologne("MüllerLüdenscheidt", maxCodeLen = NA), baseline)
+    expect_identical(cologne("MüllerLüdenscheidt", maxCodeLen = 1.5), baseline)
+    expect_identical(cologne("MüllerLüdenscheidt", maxCodeLen = "4"), baseline)
+    expect_identical(cologne("MüllerLüdenscheidt", maxCodeLen = c(1, 2)), baseline)
 })
 
 test_that("bounded deterministic properties hold for ASCII inputs", {
@@ -171,7 +166,7 @@ test_that("bounded deterministic properties hold for ASCII inputs", {
     )
 
     for (spec in encoder_specs) {
-        expect_no_error(upper <- call_encoder(spec, generated), info = spec$name)
+        expect_no_error(upper <- call_encoder(spec, generated))
         lower <- call_encoder(spec, tolower(generated))
 
         expect_identical(upper, lower, info = paste(spec$name, "case invariant"))
@@ -180,7 +175,7 @@ test_that("bounded deterministic properties hold for ASCII inputs", {
             call_encoder(spec, generated),
             info = paste(spec$name, "deterministic")
         )
-        expect_length(upper, length(generated), info = spec$name)
+        expect_length(upper, length(generated))
         expect_true(all(grepl(spec$alphabet, upper)), info = spec$name)
         expect_true(all(nchar(upper) <= spec$max_code_len), info = spec$name)
     }

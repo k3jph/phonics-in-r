@@ -30,16 +30,12 @@ expect_encoder_fixture <- function(spec) {
             info = spec$fixture
         )
     } else {
-        expect_no_warning(
-            actual <- call_encoder(spec, fixture$word),
-            info = spec$fixture
-        )
+        expect_no_warning(actual <- call_encoder(spec, fixture$word))
     }
     expect_identical(actual, fixture$value, info = spec$fixture)
 
     expect_no_warning(
-        unclean <- call_encoder(spec, fixture$word, clean = FALSE),
-        info = paste(spec$fixture, "with clean = FALSE")
+        unclean <- call_encoder(spec, fixture$word, clean = FALSE)
     )
     expect_identical(
         unclean[valid],
@@ -57,11 +53,12 @@ expect_scalar_vector_equivalence <- function(spec, input) {
     scalar_result <- vapply(
         input,
         function(value) suppressWarnings(call_encoder(spec, value)),
-        character(1)
+        character(1),
+        USE.NAMES = FALSE
     )
 
     expect_identical(vector_result, scalar_result, info = spec$name)
-    expect_length(vector_result, length(input), info = spec$name)
+    expect_length(vector_result, length(input))
 }
 
 encoder_specs <- list(
