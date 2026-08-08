@@ -24,37 +24,88 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-// [[Rcpp::depends(BH)]]
 #include <Rcpp.h>
-#include <boost/algorithm/string.hpp>
+#include <algorithm>
+#include <cctype>
+#include <cstddef>
+#include <string>
+
+namespace {
+
+constexpr R_xlen_t INTERRUPT_INTERVAL = 10000;
+
+bool is_space(char value) {
+    return std::isspace(static_cast<unsigned char>(value)) != 0;
+}
+
+std::string trim_and_uppercase(std::string value) {
+    value.erase(
+        std::find_if_not(value.rbegin(), value.rend(), is_space).base(),
+        value.end()
+    );
+    value.erase(
+        value.begin(),
+        std::find_if_not(value.begin(), value.end(), is_space)
+    );
+
+    std::transform(
+        value.begin(),
+        value.end(),
+        value.begin(),
+        [](char character) {
+            return static_cast<char>(
+                std::toupper(static_cast<unsigned char>(character))
+            );
+        }
+    );
+
+    return value;
+}
+
+bool is_ascii_upper(char value) {
+    return value >= 'A' && value <= 'Z';
+}
+
+int alphabet_index(char value) {
+    if(!is_ascii_upper(value))
+        return -1;
+
+    return static_cast<int>(value - 'A');
+}
+
+std::size_t code_length(int maxCodeLen) {
+    // Preserve the existing negative-value behavior pending an API decision.
+    return static_cast<std::size_t>(maxCodeLen);
+}
 
 std::string soundex_single(std::string x, int maxCodeLen) {
     const std::string SOUNDEX = "01230120022455012623010202";
-    std::string::iterator i;
-    std::string code = "";
-    char lastCode = (char)NULL;
+    std::string code;
 
-    boost::trim(x);
-    boost::to_upper(x);
+    x = trim_and_uppercase(x);
 
-    for(i = x.begin(); i != x.end() && !isalpha(*i); ++i);
+    std::string::const_iterator i = std::find_if(
+        x.cbegin(),
+        x.cend(),
+        is_ascii_upper
+    );
     if(i == x.end())
         return "";
     if(x.length() == 1) {
         x += "0000";
-        x = x.substr(0, maxCodeLen);
+        x = x.substr(0, code_length(maxCodeLen));
         return(x);
     }
 
     code = *i;
-    lastCode = SOUNDEX.at(*i - 'A');
+    char lastCode = SOUNDEX[static_cast<std::size_t>(alphabet_index(*i))];
 
     for(++i; i != x.end(); ++i) {
-        char currCode = *i - 'A';
-        if(currCode < 0 || currCode > 25)
+        const int currCode = alphabet_index(*i);
+        if(currCode < 0)
             break;
 
-        char nextCode = SOUNDEX.at(currCode);
+        const char nextCode = SOUNDEX[static_cast<std::size_t>(currCode)];
         if(nextCode != '0' && nextCode != lastCode)
             code += (lastCode = nextCode);
         if(nextCode ==  '0' && *i != 'H' && *i != 'W')
@@ -63,54 +114,58 @@ std::string soundex_single(std::string x, int maxCodeLen) {
 
     //  "0"-pad string then truncate
     code += "0000";
-    code = code.substr(0, maxCodeLen);
+    code = code.substr(0, code_length(maxCodeLen));
 
     return code;
 }
 
 std::string refinedSoundex_single(std::string x, int maxCodeLen) {
     const std::string SOUNDEX = "01360240043788015936020505";
-    std::string::iterator i;
-    std::string code = "";
-    char lastCode = (char)NULL;
+    std::string code;
 
-    boost::trim(x);
-    boost::to_upper(x);
+    x = trim_and_uppercase(x);
 
-    for(i = x.begin(); i != x.end() && !isalpha(*i); ++i);
+    std::string::const_iterator i = std::find_if(
+        x.cbegin(),
+        x.cend(),
+        is_ascii_upper
+    );
     if(i == x.end())
         return "";
     if(x.length() == 1)
         return(x);
 
     code = *i;
-    code += (lastCode = SOUNDEX.at(*i - 'A'));
+    char lastCode = SOUNDEX[static_cast<std::size_t>(alphabet_index(*i))];
+    code += lastCode;
 
     for(++i; i != x.end(); ++i) {
-        char currCode = *i - 'A';
-        if(currCode < 0 || currCode > 25)
+        const int currCode = alphabet_index(*i);
+        if(currCode < 0)
             break;
 
-        char nextCode = SOUNDEX.at(currCode);
+        const char nextCode = SOUNDEX[static_cast<std::size_t>(currCode)];
         if(nextCode != lastCode)
             code += (lastCode = nextCode);
     }
 
     // Do not "0"-pad for refined
-    code = code.substr(0, maxCodeLen);
+    code = code.substr(0, code_length(maxCodeLen));
 
     return code;
 }
+
+} // namespace
 
 //' @useDynLib phonics
 //' @importFrom Rcpp evalCpp
 //[[Rcpp::export]]
 Rcpp::CharacterVector soundex_internal(Rcpp::CharacterVector word, int maxCodeLen = 4) {
-    unsigned int input_size = word.size();
+    const R_xlen_t input_size = word.size();
     Rcpp::CharacterVector res(input_size);
 
-    for(unsigned int i = 0; i < input_size; i++){
-        if((i % 10000) == 0){
+    for(R_xlen_t i = 0; i < input_size; ++i){
+        if((i % INTERRUPT_INTERVAL) == 0){
             Rcpp::checkUserInterrupt();
         }
         if(word[i] == NA_STRING){
@@ -127,11 +182,11 @@ Rcpp::CharacterVector soundex_internal(Rcpp::CharacterVector word, int maxCodeLe
 //' @importFrom Rcpp evalCpp
 //[[Rcpp::export]]
 Rcpp::CharacterVector refinedSoundex_internal(Rcpp::CharacterVector word, int maxCodeLen = 10) {
-    unsigned int input_size = word.size();
+    const R_xlen_t input_size = word.size();
     Rcpp::CharacterVector res(input_size);
 
-    for(unsigned int i = 0; i < input_size; i++){
-        if((i % 10000) == 0){
+    for(R_xlen_t i = 0; i < input_size; ++i){
+        if((i % INTERRUPT_INTERVAL) == 0){
             Rcpp::checkUserInterrupt();
         }
         if(word[i] == NA_STRING){
