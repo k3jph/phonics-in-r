@@ -25,6 +25,6 @@ Suggests:
     rmarkdown,
     roxygen2
 LinkingTo: Rcpp
-RoxygenNote: 7.1.1
 VignetteBuilder: knitr
 Config/testthat/edition: 3
+Config/roxygen2/version: 8.1.0

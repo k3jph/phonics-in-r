@@ -74,6 +74,9 @@ lein <- function(word, maxCodeLen = 4, clean = TRUE) {
 
     maxCodeLen <- .validate_max_code_len(maxCodeLen)
 
+    if(is.null(word))
+        return(NA_character_)
+
     ## First, uppercase it and test for unprocessable characters
     word <- toupper(word)
     listNulls <- is.null(word)

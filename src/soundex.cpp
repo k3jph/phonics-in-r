@@ -132,6 +132,9 @@ std::string refinedSoundex_single(std::string x, int maxCodeLen) {
     );
     if(i == x.end())
         return "";
+    if(x.length() == 1)
+        return(x);
+
     code = *i;
     char lastCode = SOUNDEX[static_cast<std::size_t>(alphabet_index(*i))];
     code += lastCode;

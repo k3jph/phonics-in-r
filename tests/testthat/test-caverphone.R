@@ -12,6 +12,6 @@ test_that("Caverphone variants remain distinct", {
     ))
 })
 
-test_that("Modified Caverphone preserves its historical initial-Y output", {
-    expect_identical(caverphone("Y", modified = TRUE), "a111111111")
+test_that("Modified Caverphone preserves its canonical initial-Y output", {
+    expect_identical(caverphone("Y", modified = TRUE), "A111111111")
 })

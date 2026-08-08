@@ -34,15 +34,6 @@ jobs:
         run: roxygen2::roxygenise()
         shell: Rscript {0}
 
-      - name: Upload generated documentation
-        uses: actions/upload-artifact@v4
-        with:
-          name: generated-documentation
-          path: |
-            DESCRIPTION
-            NAMESPACE
-            man
-
       - name: Verify generated files are current
         run: git diff --exit-code
 

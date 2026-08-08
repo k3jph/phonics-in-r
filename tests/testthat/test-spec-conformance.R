@@ -107,9 +107,10 @@ test_that("Roger Root uses the published DC entry and retains earlier digits", {
     expect_identical(rogerroot(c("DC", "BDC", "ASS")), c("07000", "09700", "10000"))
 })
 
-test_that("Refined Soundex maps a one-letter consonant", {
-    # Apache Commons Codec RefinedSoundex: append the mapping for every letter.
-    expect_identical(refinedSoundex(c("A", "B")), c("A0", "B1"))
+test_that("Refined Soundex retains a one-letter name", {
+    # Apache Commons Codec RefinedSoundex starts scanning after the retained
+    # first letter, so a one-letter name has no appended mapping.
+    expect_identical(refinedSoundex(c("A", "B")), c("A", "B"))
 })
 
 test_that("Statistics Canada normalization is case invariant", {
