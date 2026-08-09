@@ -1,0 +1,244 @@
+name: Release qualification
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-qualification-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  build-candidate:
+    if: startsWith(github.head_ref, 'release/')
+    runs-on: ubuntu-latest
+    name: Build and inspect CRAN candidate
+
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - uses: r-lib/actions/setup-pandoc@v2
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: release
+          use-public-rspm: true
+
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: any::Rcpp, any::roxygen2
+          needs: check
+
+      - name: Verify generated sources are current
+        run: |
+          Rcpp::compileAttributes()
+          roxygen2::roxygenise()
+        shell: Rscript {0}
+
+      - name: Require a zero generation diff
+        run: git diff --exit-code
+
+      - name: Build source package
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p release-audit
+          R CMD build --compact-vignettes=gs+qpdf .
+          test -f phonics_1.4.0.tar.gz
+
+          {
+            echo "release candidate commit: $(git rev-parse HEAD)"
+            echo "artifact: phonics_1.4.0.tar.gz"
+            echo "built at UTC: $(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+            echo "platform: $(uname -a)"
+            R --version | head -n 1
+            echo "bytes: $(wc -c < phonics_1.4.0.tar.gz)"
+            echo "sha256: $(sha256sum phonics_1.4.0.tar.gz | cut -d' ' -f1)"
+          } | tee release-audit/provenance.txt
+
+      - name: Inspect source package contents
+        shell: bash
+        run: |
+          set -euo pipefail
+          tar -tzf phonics_1.4.0.tar.gz | sort > release-audit/tarball-contents.txt
+
+          for required in \
+            DESCRIPTION NAMESPACE LICENSE NEWS.md R src man tests vignettes inst; do
+            grep -Eq "^phonics/${required}(/|$)" release-audit/tarball-contents.txt
+          done
+
+          if grep -Eq '(^|/)(\.git|\.github|docs|pkgdown|cran-comments\.md|_pkgdown\.yml|\.Rproj\.user)(/|$)' \
+              release-audit/tarball-contents.txt; then
+            echo 'Repository or release-only infrastructure entered the tarball.' >&2
+            exit 1
+          fi
+
+          unpacked="$(mktemp -d)"
+          tar -xzf phonics_1.4.0.tar.gz -C "$unpacked"
+
+          if find "$unpacked/phonics" -type f \
+              \( -name '*.o' -o -name '*.so' -o -name '*.dll' -o \
+                 -name '*.dylib' -o -name '*~' -o -name '*.swp' \) \
+              -print -quit | grep -q .; then
+            echo 'Compiled or editor-temporary files entered the tarball.' >&2
+            exit 1
+          fi
+
+          if grep -RIlE '/home/runner|/tmp/|/Users/|[A-Za-z]:\\\\Users\\\\' \
+              "$unpacked/phonics" > release-audit/absolute-path-matches.txt; then
+            cat release-audit/absolute-path-matches.txt >&2
+            echo 'Build-machine paths entered the tarball.' >&2
+            exit 1
+          fi
+
+          if [ "$(wc -c < phonics_1.4.0.tar.gz)" -ge 10485760 ]; then
+            echo 'Source tarball is 10 MiB or larger.' >&2
+            exit 1
+          fi
+
+      - name: Query current CRAN reverse dependencies
+        shell: Rscript {0}
+        run: |
+          db <- available.packages(repos = "https://cloud.r-project.org")
+          reverse <- tools::package_dependencies(
+            "phonics",
+            db = db,
+            reverse = TRUE,
+            which = "most",
+            recursive = TRUE
+          )[["phonics"]]
+          reverse <- sort(unique(reverse))
+          lines <- if (length(reverse)) reverse else "none"
+          writeLines(lines, "release-audit/reverse-dependencies.txt")
+          cat("Reverse dependencies:\n", paste(lines, collapse = "\n"), "\n")
+
+      - name: Upload frozen source candidate
+        uses: actions/upload-artifact@v4
+        with:
+          name: phonics-1.4.0-candidate-${{ github.run_id }}
+          path: |
+            phonics_1.4.0.tar.gz
+            release-audit
+          if-no-files-found: error
+          retention-days: 30
+
+  check-candidate:
+    if: startsWith(github.head_ref, 'release/')
+    needs: build-candidate
+    runs-on: ubuntu-latest
+    name: R ${{ matrix.r }} tarball check
+
+    strategy:
+      fail-fast: false
+      matrix:
+        r: [release, devel]
+
+    steps:
+      - uses: r-lib/actions/setup-pandoc@v2
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: ${{ matrix.r }}
+          http-user-agent: ${{ matrix.r == 'devel' && 'release' || '' }}
+          use-public-rspm: true
+
+      - uses: r-lib/actions/setup-tinytex@v2
+
+      - uses: actions/download-artifact@v5
+        with:
+          name: phonics-1.4.0-candidate-${{ github.run_id }}
+          path: candidate
+
+      - name: Unpack candidate for dependency discovery
+        shell: bash
+        run: tar -xzf candidate/phonics_1.4.0.tar.gz -C candidate
+
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          working-directory: candidate/phonics
+          extra-packages: any::rcmdcheck
+          needs: check
+
+      - name: Check exact tarball as CRAN
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd candidate
+          R CMD check --as-cran phonics_1.4.0.tar.gz
+
+      - name: Upload check results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: phonics-1.4.0-check-${{ matrix.r }}-${{ github.run_id }}
+          path: candidate/phonics.Rcheck
+          if-no-files-found: warn
+          retention-days: 30
+
+  install-isolation:
+    if: startsWith(github.head_ref, 'release/')
+    needs: build-candidate
+    runs-on: ubuntu-latest
+    name: Fresh-library installation
+
+    steps:
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: release
+          use-public-rspm: true
+
+      - uses: actions/download-artifact@v5
+        with:
+          name: phonics-1.4.0-candidate-${{ github.run_id }}
+          path: candidate
+
+      - name: Install candidate and dependencies into an empty library
+        shell: bash
+        run: |
+          set -euo pipefail
+          candidate_library="$(mktemp -d)"
+          test -z "$(find "$candidate_library" -mindepth 1 -print -quit)"
+          export CANDIDATE_LIBRARY="$candidate_library"
+
+          Rscript - <<'RS'
+          lib <- Sys.getenv("CANDIDATE_LIBRARY")
+          install.packages(
+            c("Rcpp", "data.table"),
+            lib = lib,
+            repos = "https://cloud.r-project.org",
+            quiet = TRUE
+          )
+          RS
+
+          R CMD INSTALL --library="$candidate_library" candidate/phonics_1.4.0.tar.gz
+
+          Rscript - <<'RS'
+          lib <- Sys.getenv("CANDIDATE_LIBRARY")
+          .libPaths(c(lib, .Library))
+          library(phonics)
+
+          print(citation("phonics"))
+          stopifnot(length(help(package = "phonics")) > 0L)
+
+          results <- list(
+            soundex = soundex("Robert"),
+            metaphone = metaphone("Smith"),
+            caverphone = caverphone("Stevenson"),
+            nysiis = nysiis("MacIntosh"),
+            cologne = cologne("Muller"),
+            mra = mra_encode("Byrne"),
+            onca = onca("Andersen"),
+            driver = phonics(
+              c("Smith", "Smyth"),
+              method = c("soundex", "metaphone", "nysiis")
+            )
+          )
+          stopifnot(all(vapply(results, length, integer(1)) > 0L))
+          print(results)
+          RS
