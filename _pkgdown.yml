@@ -35,9 +35,10 @@ footer:
     right: [built_with]
   components:
     james_howard: >-
-      <span class="jh-site-identity"><img
+      <span class="jh-site-identity"><a href="https://jameshoward.us"><img
       src="https://phonics.jameshoward.us/jh-badge-1x1.svg" alt="Badge of James Howard" width="48"
-      height="48"><span>phonics.jameshoward.us<br>A website of James Howard</span></span>
+      height="48"></a><span>phonics.jameshoward.us<br>A website of <a
+      href="https://jameshoward.us">James Howard</a></span></span>
 
 authors:
   James P. Howard, II:
