@@ -59,12 +59,43 @@ jobs:
           grep -q 'property="og:url" content="https://phonics.jameshoward.us/reference/soundex.html"' docs/reference/soundex.html
           grep -q 'rel="canonical" href="https://phonics.jameshoward.us/articles/phonics.html"' docs/articles/phonics.html
           grep -q 'https://phonics.jameshoward.us' docs/sitemap.xml
-          grep -q 'jh-site-identity' docs/index.html
-          grep -q 'jh-site-identity' docs/reference/soundex.html
-          grep -q 'jh-site-identity' docs/articles/phonics.html
           grep -q 'src="https://phonics.jameshoward.us/jh-badge-1x1.svg"' docs/index.html
           grep -q 'src="https://phonics.jameshoward.us/jh-badge-1x1.svg"' docs/reference/soundex.html
           grep -q 'src="https://phonics.jameshoward.us/jh-badge-1x1.svg"' docs/articles/phonics.html
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          pages = (
+              Path("docs/index.html"),
+              Path("docs/reference/soundex.html"),
+              Path("docs/articles/phonics.html"),
+          )
+          forbidden = (
+              "A website of James Howard",
+              "jh-site-legal",
+              "Disclosure Statement",
+              "Terms of Use",
+              "Privacy Notice",
+              "Cookie Settings",
+          )
+
+          for page in pages:
+              html = page.read_text(encoding="utf-8")
+              identity = re.search(
+                  r'<span class="jh-site-identity">.*?</span></span>',
+                  html,
+                  flags=re.DOTALL,
+              )
+              assert identity is not None, f"Missing site identity in {page}"
+              identity_html = identity.group(0)
+              assert "phonics.jameshoward.us" in identity_html, (
+                  f"Incorrect site identity in {page}"
+              )
+              assert "<a " not in identity_html, f"Linked site identity in {page}"
+              for text in forbidden:
+                  assert text not in html, f"Forbidden footer text {text!r} in {page}"
+          PY
           if grep -R -F 'jameshoward.us/phonics-in-r' docs; then
             echo 'Legacy canonical URL remains in the generated site.' >&2
             exit 1
