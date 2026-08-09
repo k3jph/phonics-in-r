@@ -1,0 +1,24 @@
+name: Weekly R compatibility
+
+on:
+  schedule:
+    - cron: '37 6 * * 1'
+  workflow_dispatch:
+
+permissions:
+  actions: write
+  contents: read
+
+jobs:
+  dispatch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dispatch R CMD check for main
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh workflow run R-CMD-check.yaml --repo "$GITHUB_REPOSITORY" --ref main
+
+      - name: Dispatch R CMD check for develop
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh workflow run R-CMD-check.yaml --repo "$GITHUB_REPOSITORY" --ref develop
