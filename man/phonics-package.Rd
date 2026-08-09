@@ -18,7 +18,8 @@ doi{10.18637/jss.v095.i08}.
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://jameshoward.us/phonics-in-r/}
+  \item \url{https://phonics.jameshoward.us}
+  \item \url{https://github.com/k3jph/phonics-in-r}
   \item Report bugs at \url{https://github.com/k3jph/phonics-in-r/issues}
 }
 

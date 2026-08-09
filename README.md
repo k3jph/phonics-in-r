@@ -72,7 +72,7 @@ tools are development dependencies declared in `DESCRIPTION`.
 
 ## For more information
 
-- [Package reference](https://jameshoward.us/phonics-in-r/)
+- [Package reference](https://phonics.jameshoward.us/)
 - Howard, J. P., II (2020). “Phonetic Spelling Algorithm Implementations
   for R.” *Journal of Statistical Software*, 95(8), 1–21.
   [doi:10.18637/jss.v095.i08](https://doi.org/10.18637/jss.v095.i08)
