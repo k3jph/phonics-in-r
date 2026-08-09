@@ -282,7 +282,10 @@ jobs:
       - name: Compare CRAN and candidate reverse dependencies
         shell: Rscript {0}
         run: |
-          options(repos = c(CRAN = "https://cloud.r-project.org"))
+          binaryMirror <- Sys.getenv("RSPM")
+          if (!nzchar(binaryMirror))
+            binaryMirror <- "https://cloud.r-project.org"
+          options(repos = c(CRAN = binaryMirror))
           revdepcheck::revdep_check(
             pkg = ".",
             dependencies = c("Depends", "Imports", "Suggests", "LinkingTo"),
