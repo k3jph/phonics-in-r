@@ -62,6 +62,9 @@ jobs:
           grep -q 'jh-site-identity' docs/index.html
           grep -q 'jh-site-identity' docs/reference/soundex.html
           grep -q 'jh-site-identity' docs/articles/phonics.html
+          grep -q 'src="https://phonics.jameshoward.us/jh-badge-1x1.svg"' docs/index.html
+          grep -q 'src="https://phonics.jameshoward.us/jh-badge-1x1.svg"' docs/reference/soundex.html
+          grep -q 'src="https://phonics.jameshoward.us/jh-badge-1x1.svg"' docs/articles/phonics.html
           if grep -R -F 'jameshoward.us/phonics-in-r' docs; then
             echo 'Legacy canonical URL remains in the generated site.' >&2
             exit 1
