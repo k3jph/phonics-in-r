@@ -2,6 +2,7 @@
 
 [![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)](https://github.com/k3jph/phonics-in-r)
 [![Homepage](https://img.shields.io/badge/homepage-jameshoward.us-0b2f5b.svg?style=for-the-badge&labelColor=f3dd78)](https://jameshoward.us)
+
 [![CRAN/METACRAN](https://img.shields.io/cran/v/phonics)](https://cran.r-project.org/package=phonics)
 [![Downloads from the RStudio CRAN mirror](https://cranlogs.r-pkg.org/badges/phonics)](https://cran.r-project.org/package=phonics)
 [![Build (main)](https://github.com/k3jph/phonics-in-r/actions/workflows/R-CMD-check.yaml/badge.svg?branch=main)](https://github.com/k3jph/phonics-in-r/actions/workflows/R-CMD-check.yaml?query=branch%3Amain)
