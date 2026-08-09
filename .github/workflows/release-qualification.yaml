@@ -252,7 +252,7 @@ jobs:
   reverse-dependencies:
     if: startsWith(github.head_ref, 'release/')
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 120
     name: CRAN reverse-dependency comparison
 
     steps:
@@ -273,6 +273,12 @@ jobs:
           extra-packages: github::r-lib/revdepcheck
           needs: check
 
+      - name: Install reverse-dependency system requirements
+        shell: bash
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes unixodbc-dev
+
       - name: Compare CRAN and candidate reverse dependencies
         shell: Rscript {0}
         run: |
@@ -281,7 +287,7 @@ jobs:
             pkg = ".",
             dependencies = c("Depends", "Imports", "Suggests", "LinkingTo"),
             quiet = FALSE,
-            timeout = as.difftime(20, units = "mins"),
+            timeout = as.difftime(45, units = "mins"),
             num_workers = 3,
             bioc = TRUE,
             cran = TRUE
@@ -320,6 +326,7 @@ jobs:
           name: phonics-1.4.0-revdeps-${{ github.run_id }}
           path: |
             revdep/README.md
+            revdep/cran.md
             revdep/problems.md
             revdep/failures.md
             revdep/results.rds
