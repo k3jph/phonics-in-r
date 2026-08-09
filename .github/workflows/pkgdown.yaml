@@ -112,7 +112,10 @@ jobs:
               assert text_links == ["James Howard"], (
                   f"James Howard text is not singly linked in {page}"
               )
-              assert all("phonics.jameshoward.us" not in body for _, body in links), (
+              linked_text = [
+                  re.sub(r"<[^>]+>", "", body).strip() for _, body in links
+              ]
+              assert all("phonics.jameshoward.us" not in text for text in linked_text), (
                   f"Phonics domain must remain unlinked in {page}"
               )
               for text in forbidden:
