@@ -270,7 +270,7 @@ jobs:
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: any::revdepcheck
+          extra-packages: github::r-lib/revdepcheck
           needs: check
 
       - name: Compare CRAN and candidate reverse dependencies
