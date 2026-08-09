@@ -277,7 +277,10 @@ jobs:
         shell: bash
         run: |
           sudo apt-get update
-          sudo apt-get install --yes unixodbc-dev
+          sudo apt-get install --yes \
+            libpoppler-cpp-dev \
+            libqpdf-dev \
+            unixodbc-dev
 
       - name: Compare CRAN and candidate reverse dependencies
         shell: Rscript {0}
