@@ -35,7 +35,7 @@
 #'
 #' @details
 #'
-#' The \code{rogerroot} function phentically encodes the given string
+#' The \code{rogerroot} function phonetically encodes the given string
 #' using the Roger Root algorithm.  The variable \code{word} is a string
 #' or vector of strings to encode.
 #'
@@ -57,11 +57,12 @@
 #' @references
 #'
 #' James P. Howard, II, "Phonetic Spelling Algorithm Implementations
-#' for R," \emph{Journal of Statistical Software}, vol. 25, no. 8,
+#' for R," \emph{Journal of Statistical Software}, vol. 95, no. 8,
 #' (2020), p. 1--21, <10.18637/jss.v095.i08>.
 #'
-#' Robert L. Taft, \emph{Name search techniques}, Bureau of Systems
-#' Development, Albany, New York, 1970.
+#' Billy T. Lynch and William L. Arends, \emph{Selection of a Surname
+#' Coding Procedure for the SRS Record Linkage System}, United States
+#' Department of Agriculture, 1977, Appendix B.
 #'
 #' @family phonics
 #'
@@ -69,8 +70,6 @@
 #' rogerroot("William")
 #' rogerroot(c("Peter", "Peady"))
 #' rogerroot("Stevenson")
-#'
-#' @importFrom utils read.csv
 #'
 #' @export
 rogerroot <- function(word, maxCodeLen = 5, clean = TRUE) {
@@ -85,30 +84,14 @@ rogerroot <- function(word, maxCodeLen = 5, clean = TRUE) {
         warning("unknown characters found, results may not be consistent")
     word <- gsub("[^A-Z]*", "", word, perl = TRUE)
     
-    ## First letter table...these are write-once tables...
-    letterTable<-"letter,code\n^A,1\n^B,09\n^CE,00\n^CH,06\n^CI,00\n^CY,00\n^C,07\n^DG,07\n^D,01\n^E,1\n^F,08\n^GF,08\n^GM,03\n^GN,02\n^G,07\n^H,2\n^I,1\n^J,3\n^KN,02\n^K,07\n^L,05\n^M,03\n^N,02\n^O,1\n^PF,08\n^PH,08\n^PN,02\n^P,09\n^Q,07\n^R,04\n^SCH,06\n^SH,06\n^S,00\n^TSCH,06\n^TSH,06\n^TS,00\n^T,01\n^U,1\n^V,08\n^WR,04\n^W,4\n^X,07\n^Y,5\n^Z,00\n"
-    letters <- read.csv(colClasses=c("character", "character"), text = letterTable)
-    for(i in 1:nrow(letters))
-        word <- gsub(letters$letter[i], letters$code[i], word, perl = TRUE)
-
-    ## Basic letter table
-    letterTable<-"letter,code\nB,9\nCE,0\nCH,6\nCI,0\nCY,0\nC,7\nDG,7\nD,1\nF,8\nG,7\nJ,6\nK,7\nL,5\nM,3\nN,2\nPH,8\nP,8\nQ,7\nR,4\nSCH,6\nSH,6\nS,0\nTSCH,6\nTSH,6\nTS,0\nT,1\nV,8\nX,7\nZ,0"
-    letters <- read.csv(colClasses=c("character", "character"), text = letterTable)
-    for(i in 1:nrow(letters))
-        word <- gsub(letters$letter[i], letters$code[i], word, perl = TRUE)
-
-    ## Remove duplicate consecutive characters
-    word <- gsub("([1-9])\\1+", "\\1", word, perl = TRUE)
-    word <- gsub(".([0])\\1+", "\\1", word, perl = TRUE)
-
-    ## Remove non-numeric characters
-    word <- gsub("[^0-9]", "", word, perl = TRUE)
+    word <- vapply(word, rogerroot_encode_one, character(1), USE.NAMES = FALSE)
 
     ## Truncate to requested length
+    empty <- !is.na(word) & !nzchar(word)
     zeros <- paste(rep(0, maxCodeLen), sep = "", collapse = "")
-    word <- gsub("$", zeros, word, perl = TRUE)
+    word <- paste0(word, zeros)
     word <- substr(word, 1, maxCodeLen)
-    word <- gsub(zeros, "", word, perl = TRUE)
+    word[empty] <- ""
     
     ## Yeah, we already processed them, but now get rid of them
     word[listNAs] <- NA
@@ -116,4 +99,52 @@ rogerroot <- function(word, maxCodeLen = 5, clean = TRUE) {
         word[nonalpha] <- NA
 
     return(word)
+}
+
+rogerroot_encode_one <- function(word) {
+    if(is.na(word))
+        return(NA_character_)
+    if(!nzchar(word))
+        return("")
+
+    firstTable <- c(
+        TSCH = "06", SCH = "06", CE = "00", CH = "06", CI = "00",
+        CY = "00", DC = "07", GF = "08", GM = "03", GN = "02",
+        KN = "02", PF = "08", PH = "08", PN = "02", SH = "06",
+        TSH = "06", TS = "00", WR = "04", A = "1", B = "09",
+        C = "07", D = "01", E = "1", F = "08", G = "07", H = "2",
+        I = "1", J = "3", K = "07", L = "05", M = "03", N = "02",
+        O = "1", P = "09", Q = "07", R = "04", S = "00", T = "01",
+        U = "1", V = "08", W = "4", X = "07", Y = "5", Z = "00"
+    )
+    basicTable <- c(
+        TSCH = "6", SCH = "6", CE = "0", CH = "6", CI = "0",
+        CY = "0", DC = "7", PH = "8", SH = "6", TSH = "6",
+        TS = "0", B = "9", C = "7", D = "1", F = "8", G = "7",
+        J = "6", K = "7", L = "5", M = "3", N = "2", P = "8",
+        Q = "7", R = "4", S = "0", T = "1", V = "8", X = "7",
+        Z = "0"
+    )
+
+    firstPattern <- names(firstTable)[startsWith(word, names(firstTable))][1]
+    code <- unname(firstTable[firstPattern])
+    lastValue <- substr(code, nchar(code), nchar(code))
+    position <- nchar(firstPattern) + 1L
+
+    while(position <= nchar(word)) {
+        remaining <- substr(word, position, nchar(word))
+        pattern <- names(basicTable)[startsWith(remaining, names(basicTable))][1]
+        if(is.na(pattern)) {
+            lastValue <- ""
+            position <- position + 1L
+        } else {
+            value <- unname(basicTable[pattern])
+            if(value != lastValue)
+                code <- paste0(code, value)
+            lastValue <- value
+            position <- position + nchar(pattern)
+        }
+    }
+
+    code
 }

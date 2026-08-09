@@ -1,4 +1,4 @@
-##  Test values from https://en.wikipedia.org/wiki/Match_rating_approach
+## Rule-derived corpus checked against Moore et al. (1977), NBS SP 500-2.
 word,value
 Byrne,BYRN
 Boern,BRN

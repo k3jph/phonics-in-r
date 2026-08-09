@@ -46,7 +46,7 @@
 #' Other letters, such as "ç," may be permissible in the current locale
 #' but are unknown to \code{phonex}.  For inputs outside of its known
 #' range, the output is undefined and \code{NA} is returned and a
-#' \code{warning} this thrown.  If \code{clean} is \code{FALSE},
+#' \code{warning} is issued.  If \code{clean} is \code{FALSE},
 #' \code{phonex} attempts to process the strings.  The default is
 #' \code{TRUE}.
 #' 
@@ -55,7 +55,7 @@
 #' @references
 #'
 #' James P. Howard, II, "Phonetic Spelling Algorithm Implementations
-#' for R," \emph{Journal of Statistical Software}, vol. 25, no. 8,
+#' for R," \emph{Journal of Statistical Software}, vol. 95, no. 8,
 #' (2020), p. 1--21, <10.18637/jss.v095.i08>.
 #'
 #' A.J. Lait and Brian Randell. "An assessment of name matching
@@ -105,11 +105,11 @@ phonex <- function(word, maxCodeLen = 4, clean = TRUE) {
     first <- substr(word, 1, 1)
     word <- substr(word, 2, nchar(word))
 
-    ## R -> 6, if not followed by vowel or end of name
+    ## R -> 6, if followed by a vowel or the end of the name
     word <- gsub("R[AEHIOUWY]|R$", "6", word, perl = TRUE)
     word <- gsub("R", "", word, perl = TRUE)
 
-    ## L -> 4, if not followed by vowel or end of name
+    ## L -> 4, if followed by a vowel or the end of the name
     word <- gsub("L[AEHIOUWY]|L$", "4", word, perl = TRUE)
     word <- gsub("L", "", word, perl = TRUE)
 
@@ -117,7 +117,7 @@ phonex <- function(word, maxCodeLen = 4, clean = TRUE) {
     word <- gsub("A|E|H|I|O|U|W|Y", "", word, perl = TRUE)
 
     ## M, N -> 5, ignore next letter if either D or G.
-    word <- gsub("[MN][DG]*", "5", word, perl = TRUE)
+    word <- gsub("[MN][DG]?", "5", word, perl = TRUE)
 
     ## B, F, P, V -> 1
     word <- gsub("B|F|P|V", "1", word, perl = TRUE)
@@ -136,10 +136,11 @@ phonex <- function(word, maxCodeLen = 4, clean = TRUE) {
     word <- paste(first, word, sep = "")
 
     ## Zero-pad and truncate to requested length
+    empty <- !is.na(word) & !nzchar(word)
     zeros <- paste(rep(0, maxCodeLen), sep = "", collapse = "")
-    word <- gsub("$", zeros, word, perl = TRUE)
+    word <- paste0(word, zeros)
     word <- substr(word, 1, maxCodeLen)
-    word <- gsub(zeros, "", word, perl = TRUE)
+    word[empty] <- ""
 
     ## Yeah, we already processed them, but now get rid of them
     word[listNAs] <- NA

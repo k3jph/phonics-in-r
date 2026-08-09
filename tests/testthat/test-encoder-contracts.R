@@ -144,17 +144,20 @@ test_that("maxCodeLen supports safe boundaries and rejects invalid values", {
     }
 })
 
-test_that("Cologne maxCodeLen remains a characterized historical no-op", {
+test_that("Cologne preserves unbounded output by default and validates explicit bounds", {
     baseline <- cologne("MüllerLüdenscheidt")
 
-    expect_identical(cologne("MüllerLüdenscheidt", maxCodeLen = 0), baseline)
-    expect_identical(cologne("MüllerLüdenscheidt", maxCodeLen = 1), baseline)
+    expect_identical(cologne("MüllerLüdenscheidt", maxCodeLen = NULL), baseline)
+    expect_identical(cologne("MüllerLüdenscheidt", maxCodeLen = 0), "")
+    expect_identical(cologne("MüllerLüdenscheidt", maxCodeLen = 1), "6")
     expect_identical(cologne("MüllerLüdenscheidt", maxCodeLen = 1000), baseline)
-    expect_identical(cologne("MüllerLüdenscheidt", maxCodeLen = -1), baseline)
-    expect_identical(cologne("MüllerLüdenscheidt", maxCodeLen = NA), baseline)
-    expect_identical(cologne("MüllerLüdenscheidt", maxCodeLen = 1.5), baseline)
-    expect_identical(cologne("MüllerLüdenscheidt", maxCodeLen = "4"), baseline)
-    expect_identical(cologne("MüllerLüdenscheidt", maxCodeLen = c(1, 2)), baseline)
+
+    for (value in list(-1, NA_real_, 1.5, "4", c(1, 2), Inf)) {
+        expect_error(
+            cologne("MüllerLüdenscheidt", maxCodeLen = value),
+            "maxCodeLen"
+        )
+    }
 })
 
 test_that("bounded deterministic properties hold for ASCII inputs", {

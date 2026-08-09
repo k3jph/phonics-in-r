@@ -1,4 +1,4 @@
-##  Test values from https://github.com/Yomguithereal/talisman/commit/8c2a93607069bf7b9727d0ed94560303d5938f12#diff-a856440b67d94400ef2aed99ff4f78cc
+## Integration corpus derived from Gill's NYSIIS-then-Soundex composition.
 word,value
 andersen,A536
 Anderson,A536

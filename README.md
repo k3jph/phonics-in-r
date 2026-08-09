@@ -11,51 +11,71 @@
 [![JSS Status](https://img.shields.io/badge/JSS-10.18637%2Fjss.v095.i08-success.svg)](https://dx.doi.org/10.18637/jss.v095.i08)
 [![James Howard](https://jameshoward.us/assets/img/identity/jameshoward-badge.svg)](https://jameshoward.us)
 
-This is the R package to support phonetic spelling algorithms in R.
-Several packages provide the Soundex algorithm.  However, other
-algorithms have been developed since Soundex that can also provide
-phonetic spelling and test phonetic similarity.
+`phonics` provides phonetic encoders for English, German, and French
+names, plus the two-stage Match Rating Approach comparison. Every encoder
+accepts character vectors and preserves their length and order.
+
+## Installation
+
+Install the released package from CRAN:
+
+```r
+install.packages("phonics")
+```
+
+Load it and encode one or more names:
+
+```r
+library(phonics)
+
+soundex(c("Robert", "Rupert"))
+caverphone(c("Peter", "Peady"), modified = TRUE)
+phonics(c("Catherine", "Kathryn"), c("soundex", "nysiis", "metaphone"))
+```
+
+By default, an input containing characters outside an encoder's supported
+alphabet produces a warning and an `NA` result. Set `clean = FALSE` to discard
+unsupported characters before encoding. `maxCodeLen` is a validated
+nonnegative whole-number bound where supported; Cologne uses unbounded output
+when `maxCodeLen = NULL`.
 
 ## Algorithms included
 
-* Caverphone
-  * Original Caverphone
-  * Caverphone 2
-* Cologne (Kölner)
-* Lein
-* Match Rating Approach]
-  * Encoder
-  * Comparison
-* Metaphone
-* New York State Identification and Intelligence System
-  * NYSIIS
-  * Modified NYSIIS
-* Oxford Name Compression Algorithm
-* Phonex
-* Roger Root
-* Soundex
-  * Original Soundex
-  * Apache Refined Soundex
-* Statistics Canada
-  * Census Modified
+| Algorithm | Function and variants |
+|:--|:--|
+| Caverphone | `caverphone()` (Caverphone 1 and Caverphone 2) |
+| Cologne Phonetic | `cologne()` |
+| Lein | `lein()` |
+| Match Rating Approach | `mra_encode()` and `mra_compare()` |
+| Metaphone | `metaphone()` |
+| NYSIIS | `nysiis()` (original and USDA modified) |
+| Oxford Name Compression Algorithm | `onca()` |
+| Phonex | `phonex()` |
+| Roger Root | `rogerroot()` |
+| Soundex | `soundex()` and `refinedSoundex()` |
+| Census Modified Statistics Canada | `statcan()` |
 
-## Dependencies
+ONCA's source describes an unpublished “anglicised” NYSIIS first stage.
+`onca()` therefore uses the documented standard NYSIIS rules; its modified
+NYSIIS and Refined Soundex combinations are explicit package extensions.
 
-* testthat
-* roxygen2
-* Rcpp
-* data.table
+## Runtime dependencies
+
+The package imports `Rcpp` and `data.table`. Test, vignette, and documentation
+tools are development dependencies declared in `DESCRIPTION`.
 
 ## Contribution guidelines
 
-* Use [GitFlow](https://nvie.com/posts/a-successful-git-branching-model/)
-* Write unit tests using [testthat](https://github.com/hadley/testthat)
-* Document functions using [roxygen2](https://github.com/yihui/roxygen2)
+- Use [GitFlow](https://nvie.com/posts/a-successful-git-branching-model/).
+- Write unit tests using [testthat](https://testthat.r-lib.org/).
+- Document functions using [roxygen2](https://roxygen2.r-lib.org/).
 
 ## For more information
 
-* [Phonics in R website](https://jameshoward.us/phonics-in-r/)
-* James P. Howard, II <<jh@jameshoward.us>>
+- [Package reference](https://jameshoward.us/phonics-in-r/)
+- Howard, J. P., II (2020). “Phonetic Spelling Algorithm Implementations
+  for R.” *Journal of Statistical Software*, 95(8), 1–21.
+  [doi:10.18637/jss.v095.i08](https://doi.org/10.18637/jss.v095.i08)
 
 ## Acknowledgements
 

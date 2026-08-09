@@ -1,5 +1,4 @@
-##  Test values from the PHP documentation for the Soundex function.
-##  More examples would be better.
+## Rule-derived values checked against the U.S. National Archives guide.
 word,value
 Euler,E460
 Ellery,E460

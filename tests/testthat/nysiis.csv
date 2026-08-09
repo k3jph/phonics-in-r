@@ -1,4 +1,5 @@
-##  Test values from http://www.dropby.com/NYSIISTextStrings.html,
+## Rule-derived corpus checked against Taft (1970), as reproduced in
+## Lynch and Arends (1977), Appendix B.
 word,value
 MacIntosh,MCANT
 Knuth,NAT
