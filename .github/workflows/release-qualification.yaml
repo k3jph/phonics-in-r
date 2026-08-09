@@ -282,10 +282,7 @@ jobs:
       - name: Compare CRAN and candidate reverse dependencies
         shell: Rscript {0}
         run: |
-          binaryMirror <- Sys.getenv("RSPM")
-          if (!nzchar(binaryMirror))
-            binaryMirror <- "https://cloud.r-project.org"
-          options(repos = c(CRAN = binaryMirror))
+          options(repos = c(CRAN = "https://cloud.r-project.org"))
           revdepcheck::revdep_check(
             pkg = ".",
             dependencies = c("Depends", "Imports", "Suggests", "LinkingTo"),
@@ -312,6 +309,14 @@ jobs:
             file = "revdep/failures.md",
             results = results
           )
+
+          reports <- unlist(lapply(
+            c("revdep/problems.md", "revdep/failures.md"),
+            readLines,
+            warn = FALSE
+          ))
+          if (any(grepl("Only \\*source\\* packages can be checked", reports)))
+            stop("Reverse dependencies were not checked from source packages")
 
           newProblems <- vapply(
             results,
