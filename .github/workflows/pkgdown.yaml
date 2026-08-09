@@ -72,7 +72,6 @@ jobs:
               Path("docs/articles/phonics.html"),
           )
           forbidden = (
-              "A website of James Howard",
               "jh-site-legal",
               "Disclosure Statement",
               "Terms of Use",
@@ -91,6 +90,9 @@ jobs:
               identity_html = identity.group(0)
               assert "phonics.jameshoward.us" in identity_html, (
                   f"Incorrect site identity in {page}"
+              )
+              assert "A website of James Howard" in identity_html, (
+                  f"Missing site tagline in {page}"
               )
               assert "<a " not in identity_html, f"Linked site identity in {page}"
               for text in forbidden:
