@@ -252,7 +252,7 @@ jobs:
   reverse-dependencies:
     if: startsWith(github.head_ref, 'release/')
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    timeout-minutes: 180
     name: CRAN reverse-dependency comparison
 
     steps:
@@ -287,10 +287,14 @@ jobs:
             pkg = ".",
             dependencies = c("Depends", "Imports", "Suggests", "LinkingTo"),
             quiet = FALSE,
-            timeout = as.difftime(45, units = "mins"),
-            num_workers = 3,
+            timeout = as.difftime(90, units = "mins"),
+            num_workers = 1,
             bioc = TRUE,
-            cran = TRUE
+            cran = TRUE,
+            env = c(
+              revdepcheck::revdep_env_vars(),
+              MAKEFLAGS = "-j2"
+            )
           )
 
           results <- revdepcheck::revdep_summary()
