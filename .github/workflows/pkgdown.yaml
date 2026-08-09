@@ -38,6 +38,9 @@ jobs:
         run: pkgdown::build_site(new_process = FALSE, install = FALSE)
         shell: Rscript {0}
 
+      - name: Add canonical page metadata
+        run: Rscript pkgdown/add-canonical-metadata.R
+
       - name: Validate generated site
         shell: bash
         run: |
@@ -47,7 +50,11 @@ jobs:
           test -f docs/articles/phonics.html
           test -f docs/authors.html
           test -f docs/jh-badge-1x1.svg
-          grep -q 'https://phonics.jameshoward.us' docs/index.html
+          grep -q 'rel="canonical" href="https://phonics.jameshoward.us/"' docs/index.html
+          grep -q 'property="og:url" content="https://phonics.jameshoward.us/"' docs/index.html
+          grep -q 'rel="canonical" href="https://phonics.jameshoward.us/reference/soundex.html"' docs/reference/soundex.html
+          grep -q 'property="og:url" content="https://phonics.jameshoward.us/reference/soundex.html"' docs/reference/soundex.html
+          grep -q 'rel="canonical" href="https://phonics.jameshoward.us/articles/phonics.html"' docs/articles/phonics.html
           grep -q 'https://phonics.jameshoward.us' docs/sitemap.xml
           grep -q 'jh-site-identity' docs/index.html
           grep -q 'jh-site-identity' docs/reference/soundex.html
