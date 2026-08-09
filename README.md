@@ -54,7 +54,7 @@ phonetic spelling and test phonetic similarity.
 
 ## For more information
 
-* [Phonics in R website](https://jameshoward.us/phonics-in-r/)
+* [Phonics in R website](https://phonics.jameshoward.us/)
 * James P. Howard, II <<jh@jameshoward.us>>
 
 ## Acknowledgements

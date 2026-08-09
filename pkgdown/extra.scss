@@ -1,0 +1,38 @@
+.pkgdown-footer-left,
+.pkgdown-footer-right {
+  line-height: 1.45;
+}
+
+.jh-site-identity {
+  align-items: center;
+  display: inline-flex;
+  gap: 0.75rem;
+  text-align: left;
+}
+
+.jh-site-identity img {
+  display: block;
+  height: 48px;
+  max-width: none;
+  width: 48px;
+}
+
+.jh-site-identity > span,
+.jh-site-legal {
+  display: inline-block;
+}
+
+.jh-site-legal {
+  font-size: 0.875rem;
+}
+
+@media (max-width: 767.98px) {
+  .pkgdown-footer-left,
+  .pkgdown-footer-right {
+    text-align: left;
+  }
+
+  .pkgdown-footer-right {
+    margin-top: 1rem;
+  }
+}
