@@ -91,10 +91,33 @@ jobs:
               assert "phonics.jameshoward.us" in identity_html, (
                   f"Incorrect site identity in {page}"
               )
-              assert "A website of James Howard" in identity_html, (
+              assert "A website of " in identity_html, (
                   f"Missing site tagline in {page}"
               )
-              assert "<a " not in identity_html, f"Linked site identity in {page}"
+              links = re.findall(
+                  r'<a\b[^>]*\bhref="([^"]+)"[^>]*>(.*?)</a>',
+                  identity_html,
+                  flags=re.DOTALL,
+              )
+              assert len(links) == 2, f"Expected exactly two identity links in {page}"
+              assert all(href == "https://jameshoward.us" for href, _ in links), (
+                  f"Incorrect identity link target in {page}"
+              )
+              badge_links = [body for _, body in links if "<img" in body]
+              assert len(badge_links) == 1, f"Badge is not singly linked in {page}"
+              text_links = [
+                  re.sub(r"<[^>]+>", "", body).strip() for _, body in links
+                  if "<img" not in body
+              ]
+              assert text_links == ["James Howard"], (
+                  f"James Howard text is not singly linked in {page}"
+              )
+              linked_text = [
+                  re.sub(r"<[^>]+>", "", body).strip() for _, body in links
+              ]
+              assert all("phonics.jameshoward.us" not in text for text in linked_text), (
+                  f"Phonics domain must remain unlinked in {page}"
+              )
               for text in forbidden:
                   assert text not in html, f"Forbidden footer text {text!r} in {page}"
           PY
