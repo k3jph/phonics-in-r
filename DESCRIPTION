@@ -10,7 +10,7 @@ Authors@R: c(person(given = "James", family = "Howard",
                     person(given = "Kyle", family = "Haynes", role = "ctb"),
                     person(given = "Amanda", family = "Hood", role = "ctb"),
                     person(given = "Os", family = "Keyes", role = "ctb"))
-URL: https://jameshoward.us/phonics-in-r/
+URL: https://phonics.jameshoward.us, https://github.com/k3jph/phonics-in-r
 BugReports: https://github.com/k3jph/phonics-in-r/issues
 Description: Provides a collection of phonetic algorithms including
     Soundex, Metaphone, NYSIIS, Caverphone, and others.  The package is

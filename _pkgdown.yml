@@ -1,10 +1,55 @@
-url: https://jameshoward.us/phonics-in-r
+url: https://phonics.jameshoward.us
 destination: docs
+
+template:
+  bootstrap: 5
 
 home:
   links:
-  - text: Phonics in R
-    href: https://jameshoward.us/phonics-in-r
+  - text: Source repository
+    href: https://github.com/k3jph/phonics-in-r
+
+reference:
+- title: Package interface
+  contents:
+  - phonics
+- title: Phonetic encoders
+  contents:
+  - caverphone
+  - cologne
+  - lein
+  - metaphone
+  - nysiis
+  - phonex
+  - rogerroot
+  - soundex
+  - statcan
+- title: Composite and comparison methods
+  contents:
+  - mra_encode
+  - onca
+
+footer:
+  structure:
+    left: james_howard
+    right: [legal, built_with]
+  components:
+    james_howard: >-
+      <span class="jh-site-identity"><a href="https://jameshoward.us"><img
+      src="jh-badge-1x1.svg" alt="Badge of James Howard" width="48"
+      height="48"></a><span><a href="https://jameshoward.us">jameshoward.us</a><br>A
+      website of James Howard</span></span>
+    legal: >-
+      <span class="jh-site-legal">Copyright &copy; 1997&ndash;<span
+      class="jh-current-year">2026</span> James P. Howard, II<br><a
+      href="https://jameshoward.us/disclosure-statement/">Disclosure
+      Statement</a> &middot; <a href="https://jameshoward.us/terms-of-use/">Terms
+      of Use</a> &middot; <a
+      href="https://jameshoward.us/privacy-and-cookie-notice">Privacy
+      Notice</a> &middot; <a
+      href="https://jameshoward.us/privacy-and-cookie-notice#cookie-settings">Cookie
+      Settings</a> &middot; <a
+      href="https://jameshoward.us/copyright/">Copyright</a></span>
 
 authors:
   James P. Howard, II:
