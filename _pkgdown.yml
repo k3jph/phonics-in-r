@@ -32,24 +32,12 @@ reference:
 footer:
   structure:
     left: james_howard
-    right: [legal, built_with]
+    right: [built_with]
   components:
     james_howard: >-
-      <span class="jh-site-identity"><a href="https://jameshoward.us"><img
+      <span class="jh-site-identity"><img
       src="https://phonics.jameshoward.us/jh-badge-1x1.svg" alt="Badge of James Howard" width="48"
-      height="48"></a><span><a href="https://jameshoward.us">jameshoward.us</a><br>A
-      website of James Howard</span></span>
-    legal: >-
-      <span class="jh-site-legal">Copyright &copy; 1997&ndash;<span
-      class="jh-current-year">2026</span> James P. Howard, II<br><a
-      href="https://jameshoward.us/disclosure-statement/">Disclosure
-      Statement</a> &middot; <a href="https://jameshoward.us/terms-of-use/">Terms
-      of Use</a> &middot; <a
-      href="https://jameshoward.us/privacy-and-cookie-notice">Privacy
-      Notice</a> &middot; <a
-      href="https://jameshoward.us/privacy-and-cookie-notice#cookie-settings">Cookie
-      Settings</a> &middot; <a
-      href="https://jameshoward.us/copyright/">Copyright</a></span>
+      height="48"><span>phonics.jameshoward.us</span></span>
 
 authors:
   James P. Howard, II:
