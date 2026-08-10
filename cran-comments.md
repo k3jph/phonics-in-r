@@ -10,17 +10,26 @@ modernizes the test suite, and refreshes package documentation.
 
 ## Test environments
 
-Qualification is in progress. This section will be replaced with the exact
-completed environments used to check the frozen source tarball.
+The frozen source tarball was checked on GitHub Actions with R release and
+R-devel on Ubuntu. Repository checks also passed on Ubuntu with R release,
+R-devel, and R oldrel, on Windows with R release, and on macOS with R release.
+
+The previous CRAN release, 1.3.10, currently reports OK on every platform in
+the CRAN check matrix.
 
 ## R CMD check results
 
-Qualification is in progress. No result is claimed until the exact
-`phonics_1.4.0.tar.gz` candidate has completed `R CMD check --as-cran` with
-manual generation enabled.
+The exact `phonics_1.4.0.tar.gz` candidate completed `R CMD check --as-cran`
+under R release and R-devel with PDF and HTML manual generation enabled.
+
+0 errors | 0 warnings | 0 notes
 
 ## Reverse dependencies
 
-The current CRAN reverse-dependency graph will be queried and recorded before
-the candidate is frozen.
+The current CRAN reverse-dependency graph contains `epidm` and `joinery` as
+reverse imports and `starling` as a reverse suggest.
 
+All three were compared from source with `revdepcheck` against CRAN phonics
+1.3.10. There were 0 new problems and 0 packages that failed to check. `epidm`
+and `joinery` completed with 0 errors, 0 warnings, and 0 notes. `starling` had
+the same pre-existing vignette error with both phonics versions.
