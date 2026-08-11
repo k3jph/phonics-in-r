@@ -23,24 +23,24 @@ soundex encoded character vector
 The Soundex phonetic algorithms
 }
 \details{
-The function \code{soundex} phonentically encodes the given
-string using the soundex algorithm.  The function \code{refinedSoundex}
-uses Apache's refined soundex algorithm.  Both implementations are loosely
-based on the Apache Commons Java editons.
+The function \code{soundex} phonetically encodes the given
+string using the U.S. census Soundex rules. The function
+\code{refinedSoundex} implements the U.S.-English mapping and duplicate
+handling from Apache Commons Codec's Refined Soundex.
 
 The variable \code{maxCodeLen} is the limit on how long the returned
 soundex should be.
 
-The \code{soundex} and \code{revisedSoundex} algorithms are only
+The \code{soundex} and \code{refinedSoundex} algorithms are only
 defined for inputs over the standard English alphabet, \emph{i.e.},
 "A-Z." Non-alphabetical characters are removed from the string in a
 locale-dependent fashion.  This strips spaces, hyphens, and numbers.
 Other letters, such as "Ü," may be permissible in the current locale
-but are unknown to \code{soundex} and \code{revisedSoundex}.  For
+but are unknown to \code{soundex} and \code{refinedSoundex}.  For
 inputs outside of its known range, the output is undefined and
-\code{NA} is returned and a \code{warning} this thrown.  If
+\code{NA} is returned and a \code{warning} is issued.  If
 \code{clean} is \code{FALSE}, \code{soundex} and
-\code{revisedSoundex} attempts to process the strings.  The default
+\code{refinedSoundex} attempts to process the strings.  The default
 is \code{TRUE}.
 }
 \section{Caveats}{
@@ -61,25 +61,31 @@ systematically abbreviating English words and names," \emph{Journal
 of the ACM}, vol. 8, no. 4 (1961), p. 538-552.
 
 James P. Howard, II, "Phonetic Spelling Algorithm Implementations
-for R," \emph{Journal of Statistical Software}, vol. 25, no. 8,
+for R," \emph{Journal of Statistical Software}, vol. 95, no. 8,
 (2020), p. 1--21, <10.18637/jss.v095.i08>.
 
 Howard B. Newcombe, James M. Kennedy, "Record linkage: making
 maximum use of the discriminating power of identifying information,"
 \emph{Communications of the ACM}, vol. 5, no. 11 (1962), p. 563-566.
+
+United States National Archives and Records Administration,
+"The Soundex Indexing System."
+
+Apache Software Foundation, \emph{Apache Commons Codec:
+RefinedSoundex}.
 }
 \seealso{
-Other phonics: 
-\code{\link{caverphone}()},
-\code{\link{cologne}()},
-\code{\link{lein}()},
-\code{\link{metaphone}()},
-\code{\link{mra_encode}()},
-\code{\link{nysiis}()},
-\code{\link{onca}()},
-\code{\link{phonex}()},
-\code{\link{phonics}()},
-\code{\link{rogerroot}()},
-\code{\link{statcan}()}
+Other phonics:
+\code{\link[=caverphone]{caverphone()}},
+\code{\link[=cologne]{cologne()}},
+\code{\link[=lein]{lein()}},
+\code{\link[=metaphone]{metaphone()}},
+\code{\link[=mra_encode]{mra_encode()}},
+\code{\link[=nysiis]{nysiis()}},
+\code{\link[=onca]{onca()}},
+\code{\link[=phonex]{phonex()}},
+\code{\link[=phonics]{phonics()}},
+\code{\link[=rogerroot]{rogerroot()}},
+\code{\link[=statcan]{statcan()}}
 }
 \concept{phonics}

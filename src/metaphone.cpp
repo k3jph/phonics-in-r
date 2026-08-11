@@ -26,179 +26,243 @@
 
 //' @useDynLib phonics
 //' @importFrom Rcpp evalCpp
-// [[Rcpp::depends(BH)]]
 #include <Rcpp.h>
-#include <boost/algorithm/string.hpp>
+#include <algorithm>
+#include <cctype>
+#include <cstddef>
+#include <string>
 
-#define cc         *i
-#define nc         *(i + 1)
-#define nnc        *(i + 2)
-#define pc          lastChar
-#define NULLCHAR    (char)NULL
+namespace {
 
-bool is(std::string x, char c) {
-    return (c != NULLCHAR && x.find_first_of(c) != std::string::npos);
+constexpr char MISSING_CHAR = '\0';
+constexpr R_xlen_t INTERRUPT_INTERVAL = 10000;
+
+bool is_ascii_letter(char value) {
+    return (value >= 'A' && value <= 'Z') ||
+           (value >= 'a' && value <= 'z');
 }
 
-char at(std::string x, int i) {
-
-    try {
-        return x.at(i);
-    } catch(const std::out_of_range& e) {
-        return NULLCHAR;
-    }
+bool is_space(char value) {
+    return std::isspace(static_cast<unsigned char>(value)) != 0;
 }
 
-std::string substr(std::string x, int i, int n) {
+std::string trim_and_uppercase(std::string value) {
+    value.erase(
+        std::find_if_not(value.rbegin(), value.rend(), is_space).base(),
+        value.end()
+    );
+    value.erase(
+        value.begin(),
+        std::find_if_not(value.begin(), value.end(), is_space)
+    );
 
-    try {
-        return x.substr(i, n);
-    } catch(const std::out_of_range& e) {
-        return "";
-    }
+    std::transform(
+        value.begin(),
+        value.end(),
+        value.begin(),
+        [](char character) {
+            return static_cast<char>(
+                std::toupper(static_cast<unsigned char>(character))
+            );
+        }
+    );
+
+    return value;
+}
+
+bool contains(const std::string& characters, char value) {
+    return value != MISSING_CHAR &&
+           characters.find(value) != std::string::npos;
+}
+
+char char_at(const std::string& word, std::ptrdiff_t position) {
+    if(position < 0)
+        return MISSING_CHAR;
+
+    const std::size_t index = static_cast<std::size_t>(position);
+    if(index >= word.size())
+        return MISSING_CHAR;
+
+    return word[index];
+}
+
+bool matches_at(
+    const std::string& word,
+    std::ptrdiff_t position,
+    const std::string& expected
+) {
+    if(position < 0)
+        return false;
+
+    const std::size_t index = static_cast<std::size_t>(position);
+    if(index > word.size() || expected.size() > word.size() - index)
+        return false;
+
+    return word.compare(index, expected.size(), expected) == 0;
+}
+
+bool code_has_capacity(const std::string& code, int maxCodeLen) {
+    // Preserve the historical behavior for negative values until the API
+    // contract for maxCodeLen is addressed separately.
+    return maxCodeLen < 0 ||
+           code.size() < static_cast<std::size_t>(maxCodeLen);
 }
 
 std::string metaphone_single(std::string x, int maxCodeLen, bool traditional) {
-    std::string alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    std::string soft = "EIY";
-    std::string vowels = "AEIOU";
+    const std::string alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const std::string soft = "EIY";
+    const std::string vowels = "AEIOU";
 
-    std::string::iterator i;
-    std::string word = x.substr(), meta = "";
-    char lastChar = NULLCHAR;
-
-    boost::trim(word);
-    boost::to_upper(word);
+    const std::string word = trim_and_uppercase(x);
+    std::string meta;
+    char lastChar = MISSING_CHAR;
 
     /*
      * First, we will handle a few special cases.  The Metaphone of the
      * null string is, itself, the null string.  The Metaphone of a
      * single character is itself, capitalized, as appropriate.
      */
-    for(i = word.begin(); i != word.end() && !isalpha(*i); i++);
-    if(i == word.end())
+    std::ptrdiff_t position = 0;
+    while(char_at(word, position) != MISSING_CHAR &&
+          !is_ascii_letter(char_at(word, position))) {
+        ++position;
+    }
+
+    if(char_at(word, position) == MISSING_CHAR)
         return "";
     if(word.length() == 1)
         return(word);
 
-    switch (cc) {
+    switch (char_at(word, position)) {
     case 'A':
-        meta += nc == 'E' ? nc : cc;
-        i += 1;
+        meta += char_at(word, position + 1) == 'E' ?
+            char_at(word, position + 1) : char_at(word, position);
+        position += 1;
         break;
     case 'G':
     case 'K':
     case 'P':
-        if (nc == 'N') {
-            meta += nc;
-            i += 2;
+        if (char_at(word, position + 1) == 'N') {
+            meta += char_at(word, position + 1);
+            position += 2;
         }
         break;
     case 'W':
-        if (nc == 'R') {
-            meta += nc;
-            i += 2;
-        } else if (nc == 'H' || is(vowels, nc)) {
+        if (char_at(word, position + 1) == 'R') {
+            meta += char_at(word, position + 1);
+            position += 2;
+        } else if (char_at(word, position + 1) == 'H' ||
+                   contains(vowels, char_at(word, position + 1))) {
             meta += 'W';
-            i += 2;
+            position += 2;
         }
         break;
     case 'X':
         meta += 'S';
-        i += 1;
+        position += 1;
         break;
     case 'E':
     case 'I':
     case 'O':
     case 'U':
-        meta += cc;
-        i++;
+        meta += char_at(word, position);
+        ++position;
         break;
     }
 
-    while(meta.length() < maxCodeLen && i != word.end()) {
-        if(cc != 'C' && pc == cc)
-            i++;
+    while(code_has_capacity(meta, maxCodeLen) &&
+          char_at(word, position) != MISSING_CHAR) {
+        const char currentChar = char_at(word, position);
+        const char nextChar = char_at(word, position + 1);
+        const char nextNextChar = char_at(word, position + 2);
+
+        if(currentChar != 'C' && lastChar == currentChar)
+            ++position;
         else {
-            switch(cc) {
+            switch(currentChar) {
             case 'B':
-                if (pc != 'M')
-                    meta += cc;
+                if (lastChar != 'M')
+                    meta += currentChar;
                 break;
             case 'C':
-                if (is(soft, nc)) {
-                    if (nc == 'I' && nnc == 'A') {
+                if (contains(soft, nextChar)) {
+                    if (nextChar == 'I' && nextNextChar == 'A') {
                         meta += 'X';
-                    } else if (pc != 'S') {
+                    } else if (lastChar != 'S') {
                         meta += 'S';
                     }
-                } else if (nc == 'H') {
-                    meta += !traditional && (nnc == 'R' || pc == 'S') ? 'K' : 'X';
-                    i++;
+                } else if (nextChar == 'H') {
+                    meta += !traditional &&
+                        (nextNextChar == 'R' || lastChar == 'S') ? 'K' : 'X';
+                    ++position;
                 } else {
                     meta += 'K';
                 }
                 break;
             case 'D':
-                if (nc == 'G' && is(soft, nnc)) {
+                if (nextChar == 'G' && contains(soft, nextNextChar)) {
                     meta += 'J';
-                    i++;
+                    ++position;
                 } else {
                     meta += 'T';
                 }
                 break;
             case 'G':
-                if (nc == 'H') {
-                    if(!(is("BDH", at(word, std::distance(word.begin(), i) - 3)) ||
-                         at(word, std::distance(word.begin(), i) - 4) == 'H')) {
+                if (nextChar == 'H') {
+                    if(!(contains("BDH", char_at(word, position - 3)) ||
+                         char_at(word, position - 4) == 'H')) {
                         meta += 'F';
-                        i++;
+                        ++position;
                     }
-                } else if(nc == 'N') {
-                    if (is(alpha, nnc) && substr(word, std::distance(word.begin(), i) + 1, 3) != "NED") {
+                } else if(nextChar == 'N') {
+                    if (contains(alpha, nextNextChar) &&
+                        !matches_at(word, position + 1, "NED")) {
                         meta += 'K';
                     }
-                } else if(is(soft, nc) && pc != 'G') {
+                } else if(contains(soft, nextChar) && lastChar != 'G') {
                     meta += 'J';
                 } else {
                     meta += 'K';
                 }
                 break;
             case 'H':
-                if(is(vowels, nc) && !is("CGPST", pc))
-                    meta += cc;
+                if(contains(vowels, nextChar) &&
+                   !contains("CGPST", lastChar)) {
+                    meta += currentChar;
+                }
                 break;
             case 'K':
-                if (pc != 'C') {
+                if (lastChar != 'C') {
                     meta += 'K';
                 }
                 break;
             case 'P':
-                meta += nc == 'H' ? 'F' : cc;
+                meta += nextChar == 'H' ? 'F' : currentChar;
                 break;
             case 'Q':
                 meta += 'K';
                 break;
             case 'S':
-                if(nc == 'I' && is("AO", nnc)) {
+                if(nextChar == 'I' && contains("AO", nextNextChar)) {
                     meta += 'X';
-                } else if(nc == 'H') {
+                } else if(nextChar == 'H') {
                     meta += 'X';
-                    i += 1;
-                } else if(!traditional && substr(word, std::distance(word.begin(), i) + 1, 3) == "CHW") {
+                    position += 1;
+                } else if(!traditional &&
+                          matches_at(word, position + 1, "CHW")) {
                     meta += 'X';
-                    i += 2;
+                    position += 2;
                 } else {
                     meta += 'S';
                 }
                 break;
             case 'T':
-                if(nc == 'I' && is("AO", nnc)) {
+                if(nextChar == 'I' && contains("AO", nextNextChar)) {
                     meta += 'X';
-                } else if(nc == 'H') {
+                } else if(nextChar == 'H') {
                     meta += '0';
-                    i += 1;
-                } else if(substr(word, std::distance(word.begin(), i) + 1, 2) != "CH") {
+                    position += 1;
+                } else if(!matches_at(word, position + 1, "CH")) {
                     meta += 'T';
                 }
                 break;
@@ -207,8 +271,8 @@ std::string metaphone_single(std::string x, int maxCodeLen, bool traditional) {
                 break;
             case 'W':
             case 'Y':
-                if(is(vowels, nc))
-                    meta += cc;
+                if(contains(vowels, nextChar))
+                    meta += currentChar;
                 break;
             case 'X':
                 meta += "KS";
@@ -222,26 +286,31 @@ std::string metaphone_single(std::string x, int maxCodeLen, bool traditional) {
             case 'M':
             case 'N':
             case 'R':
-                meta += cc;
+                meta += currentChar;
                 break;
             default:
                 break;
             }
-            pc = cc;
-            i++;
+            // The historical iterator implementation recorded the final
+            // character consumed by a multi-character rule (for example,
+            // H in GH), not always the character that entered the switch.
+            lastChar = char_at(word, position);
+            ++position;
         }
     }
     return meta;
 }
 
+} // namespace
+
 //[[Rcpp::export]]
 Rcpp::CharacterVector metaphone_internal(Rcpp::CharacterVector word, int maxCodeLen = 10) {
 
-    unsigned int input_size = word.size();
+    const R_xlen_t input_size = word.size();
     Rcpp::CharacterVector res(input_size);
 
-    for(unsigned int i = 0; i < input_size; i++){
-        if((i % 10000) == 0){
+    for(R_xlen_t i = 0; i < input_size; ++i){
+        if((i % INTERRUPT_INTERVAL) == 0){
             Rcpp::checkUserInterrupt();
         }
         if(word[i] == NA_STRING){

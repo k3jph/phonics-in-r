@@ -45,7 +45,7 @@
 #' hyphens, and numbers.  Other letters, such as "Ü," may be permissible
 #' in the current locale but are unknown to \code{statcan}.  For inputs
 #' outside of its known range, the output is undefined and \code{NA} is
-#' returned and a \code{warning} this thrown.  If \code{clean} is
+#' returned and a \code{warning} is issued.  If \code{clean} is
 #' \code{FALSE}, \code{statcan} attempts to process the strings.  The
 #' default is \code{TRUE}.
 #'
@@ -54,7 +54,7 @@
 #' @references
 #'
 #' James P. Howard, II, "Phonetic Spelling Algorithm Implementations
-#' for R," \emph{Journal of Statistical Software}, vol. 25, no. 8,
+#' for R," \emph{Journal of Statistical Software}, vol. 95, no. 8,
 #' (2020), p. 1--21, <10.18637/jss.v095.i08>.
 #'
 #' Billy T. Lynch and William L. Arends. "Selection of surname coding
@@ -72,7 +72,11 @@
 #' @export
 statcan <- function(word, maxCodeLen = 4, clean = TRUE) {
 
-    ## Remove umlauts and eszett
+    maxCodeLen <- .validate_max_code_len(maxCodeLen)
+
+    word <- toupper(word)
+
+    ## Normalize the French letters named by the algorithm's input domain
     word <- gsub("\u00C0|\u00C2", "A", word, perl = TRUE)
     word <- gsub("\u00C8|\u00C9|\u00CA|\u00CB", "E", word, perl = TRUE)
     word <- gsub("\u00CE|\u00CF", "I", word, perl = TRUE)
@@ -81,8 +85,7 @@ statcan <- function(word, maxCodeLen = 4, clean = TRUE) {
     word <- gsub("\u0178", "Y", word, perl = TRUE)
     word <- gsub("\u00C7", "C", word, perl = TRUE)
 
-    ## First, uppercase it and test for unprocessable characters
-    word <- toupper(word)
+    ## Test for unprocessable characters
     word[is.null(word)] <- NA
     listNAs <- is.na(word)
     if(any(nonalpha <- grepl("[^A-Z]", word, perl = TRUE)) && clean)

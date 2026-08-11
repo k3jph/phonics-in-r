@@ -20,9 +20,9 @@ the Cologne encoded character vector
 The Cologne phonetic name coding procedure.
 }
 \details{
-The variable \code{word} is the name to be encoded.  The variable
-\code{maxCodeLen} is the limit on how long the returned name code
-should be.  The default is 4.
+\code{maxCodeLen = NULL} preserves the algorithm's historical unbounded
+output. An explicit nonnegative whole-number value truncates each code to
+at most that many characters.
 
 The \code{cologne} algorithm is only defined for inputs over the
 standard English alphabet, \emph{i.e.}, "A-Z," "Ä," "Ö," "Ü," and
@@ -31,7 +31,7 @@ locale-dependent fashion.  This strips spaces, hyphens, and numbers.
 Other letters, such as "ç," may be permissible in the current locale
 but are unknown to \code{cologne}.  For inputs outside of its known
 range, the output is undefined and \code{NA} is returned and a
-\code{warning} this thrown.  If \code{clean} is \code{FALSE},
+\code{warning} is issued.  If \code{clean} is \code{FALSE},
 \code{cologne} attempts to process the strings.  The default is
 \code{TRUE}.
 }
@@ -43,7 +43,7 @@ cologne("Stevenson", maxCodeLen = 8)
 }
 \references{
 James P. Howard, II, "Phonetic Spelling Algorithm Implementations
-for R," \emph{Journal of Statistical Software}, vol. 25, no. 8,
+for R," \emph{Journal of Statistical Software}, vol. 95, no. 8,
 (2020), p. 1--21, <10.18637/jss.v095.i08>.
 
 Hans Joachim Postel. "Die Koelner Phonetik. Ein Verfahren zur
@@ -52,17 +52,17 @@ Gestaltanalyse."  \emph{IBM-Nachrichten} 19. Jahrgang, 1969,
 p. 925-931.
 }
 \seealso{
-Other phonics: 
-\code{\link{caverphone}()},
-\code{\link{lein}()},
-\code{\link{metaphone}()},
-\code{\link{mra_encode}()},
-\code{\link{nysiis}()},
-\code{\link{onca}()},
-\code{\link{phonex}()},
-\code{\link{phonics}()},
-\code{\link{rogerroot}()},
-\code{\link{soundex}()},
-\code{\link{statcan}()}
+Other phonics:
+\code{\link[=caverphone]{caverphone()}},
+\code{\link[=lein]{lein()}},
+\code{\link[=metaphone]{metaphone()}},
+\code{\link[=mra_encode]{mra_encode()}},
+\code{\link[=nysiis]{nysiis()}},
+\code{\link[=onca]{onca()}},
+\code{\link[=phonex]{phonex()}},
+\code{\link[=phonics]{phonics()}},
+\code{\link[=rogerroot]{rogerroot()}},
+\code{\link[=soundex]{soundex()}},
+\code{\link[=statcan]{statcan()}}
 }
 \concept{phonics}

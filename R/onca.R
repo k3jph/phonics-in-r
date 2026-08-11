@@ -37,9 +37,11 @@
 #'
 #' @details
 #'
-#' The variable \code{word} is the name to be encoded.  The variable
-#' \code{maxCodeLen} is the limit on how long the returned name code
-#' should be.  The default is 4.
+#' ONCA applies NYSIIS and then Soundex. Gill describes the first stage as an
+#' "anglicised" NYSIIS but does not publish its complete rule set; this
+#' implementation uses the documented standard NYSIIS scan. The
+#' \code{modified} and \code{refined} combinations are package extensions.
+#' \code{maxCodeLen} bounds the final code and defaults to 4.
 #'
 #' The \code{onca} algorithm is only defined for inputs over the
 #' standard English alphabet, \emph{i.e.}, "A-Z.". Non-alphabetical
@@ -47,7 +49,7 @@
 #' This strips spaces, hyphens, and numbers.  Other letters, such as
 #' "Ü," may be permissible in the current locale but are unknown to
 #' \code{onca}.  For inputs outside of its known range, the output is
-#' undefined and \code{NA} is returned and a \code{warning} this thrown.
+#' undefined and \code{NA} is returned and a \code{warning} is issued.
 #' If \code{clean} is \code{FALSE}, \code{onca} attempts to process the
 #' strings.  The default is \code{TRUE}.
 #'
@@ -55,10 +57,11 @@
 #'
 #' @references
 #'
-#' Gill, Leicester. "OX-LINK: the Oxford medical record linkage system." (1997).
+#' Gill, L. E. (1997). "OX-LINK: The Oxford Medical Record Linkage System."
+#' In \emph{Record Linkage Techniques---1997}, p. 15--33.
 #'
 #' James P. Howard, II, "Phonetic Spelling Algorithm Implementations
-#' for R," \emph{Journal of Statistical Software}, vol. 25, no. 8,
+#' for R," \emph{Journal of Statistical Software}, vol. 95, no. 8,
 #' (2020), p. 1--21, <10.18637/jss.v095.i08>.
 #'
 #' @family phonics
@@ -71,8 +74,20 @@
 #' @export
 onca <- function(word, maxCodeLen = 4, clean = TRUE, modified = FALSE, refined = FALSE) {
 
-    ## Yes, it really is this simple, but maxCodeLen * 2 is kind of eyeballing it
-    word <- nysiis(word, maxCodeLen = maxCodeLen * 2, clean = clean)
+    maxCodeLen <- .validate_max_code_len(maxCodeLen)
+
+    inputLength <- nchar(word)
+    intermediateLength <- max(
+        c(1L, inputLength[is.finite(inputLength)] + 1L),
+        na.rm = TRUE
+    )
+
+    word <- nysiis(
+        word,
+        maxCodeLen = intermediateLength,
+        modified = modified,
+        clean = clean
+    )
     if(refined)
         word <- refinedSoundex(word, maxCodeLen, clean = clean)
     else

@@ -1,4 +1,4 @@
-## Test values taken from the clj-fuzzy,
+## Rule-derived corpus checked against Postel's Cologne table and examples.
 word,value
 Müller-Lü denscheidt,NA
 Müller,657

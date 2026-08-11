@@ -49,7 +49,7 @@
 #' This strips spaces, hyphens, and numbers.  Other letters, such as
 #' "Ü," may be permissible in the current locale but are unknown to
 #' \code{mra_encode}.  For inputs outside of its known range, the output is
-#' undefined and \code{NA} is returned and a \code{warning} this thrown.
+#' undefined and \code{NA} is returned and a \code{warning} is issued.
 #' If \code{clean} is \code{FALSE}, \code{mra_encode} attempts to process the
 #' strings.  The default is \code{TRUE}.
 #'
@@ -61,7 +61,7 @@
 #' @references
 #'
 #' James P. Howard, II, "Phonetic Spelling Algorithm Implementations
-#' for R," \emph{Journal of Statistical Software}, vol. 25, no. 8,
+#' for R," \emph{Journal of Statistical Software}, vol. 95, no. 8,
 #' (2020), p. 1--21, <10.18637/jss.v095.i08>.
 #'
 #' G.B. Moore, J.L. Kuhns, J.L. Treffzs, and C.A. Montgomery,
@@ -101,7 +101,7 @@ mra_encode <- function(word, clean = TRUE) {
 
     ## If longer than 6 characters, take first and last 3...and we have
     ## to vectorize it
-    for(i in 1:length(word)) {
+    for(i in seq_along(word)) {
         if((l = nchar(word[i])) > 6) {
             first <- substr(word[i], 1, 3)
             last <- substr(word[i], l - 2, l)
@@ -121,14 +121,15 @@ mra_encode <- function(word, clean = TRUE) {
 #' @name mra_compare
 #' @export
 mra_compare <- function(x, y) {
-    if(all(is.na(x)) | all(is.na(y)))
-       return(NA)
+    if(length(x) == 0L && length(y) == 0L)
+        return(logical())
 
     mra <- data.frame(x = x, y = y, sim = 0, min = 100, stringsAsFactors = FALSE)
 
     ## Obtain the minimum rating value by calculating the length sum of
-    ## the encoded strings and using table A (from Wikipedia).  We start
-    ## by setting the minimum to be the sum and move from there.
+    ## the encoded strings and using Table 1 in NBS Special Publication
+    ## 500-2. We start by setting the minimum to be the sum and move from
+    ## there.
     mra$lensum <- nchar(mra$x) + nchar(mra$y)
     mra$min[mra$lensum == 12] <- 2
     mra$min[mra$lensum > 7 & mra$lensum <= 11] <- 3
@@ -146,10 +147,13 @@ mra_compare <- function(x, y) {
     y <- strsplit(mra$y, split = "")
     rows <- nrow(mra)
     for(i in 1:rows) {
+        if(is.na(mra$x[i]) || is.na(mra$y[i]))
+            next
+
         ## Process the encoded strings from left to right and remove any
         ## identical characters found from both strings respectively.
         j <- 1
-        while(j < min(length(x[[i]]), length(y[[i]]))) {
+        while(j <= min(length(x[[i]]), length(y[[i]]))) {
             if(x[[i]][j] == y[[i]][j]) {
                 x[[i]] <- x[[i]][-j]
                 y[[i]] <- y[[i]][-j]
@@ -163,7 +167,7 @@ mra_compare <- function(x, y) {
         x[[i]] <- rev(x[[i]])
         y[[i]] <- rev(y[[i]])
         j <- 1
-        while(j < min(length(x[[i]]), length(y[[i]]))) {
+        while(j <= min(length(x[[i]]), length(y[[i]]))) {
             if(x[[i]][j] == y[[i]][j]) {
                 x[[i]] <- x[[i]][-j]
                 y[[i]] <- y[[i]][-j]
@@ -172,7 +176,7 @@ mra_compare <- function(x, y) {
         }
         ## Subtract the number of unmatched characters from 6 in the
         ## longer string. This is the similarity rating.
-        len <- min(length(x[[i]]), length(y[[i]]))
+        len <- max(length(x[[i]]), length(y[[i]]))
         mra$sim[i] <- 6 - len
     }
 

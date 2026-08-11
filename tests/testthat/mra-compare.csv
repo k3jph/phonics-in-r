@@ -1,8 +1,8 @@
-##  Test values from https://en.wikipedia.org/wiki/Match_rating_approach
+## Rule-derived corpus checked against Moore et al. (1977), NBS SP 500-2.
 word1,word2,value
 Byrnn,Boern,TRUE
 Smith,Smyth,TRUE
 Catherine,Kathryn,TRUE
-##  I need a handful of gauranteed fails
+## Independently derived nonmatches.
 James,Howard,FALSE
 Strangelove,Maryland,FALSE

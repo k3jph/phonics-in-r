@@ -22,17 +22,16 @@ the NYSIIS encoded character vector
 The NYSIIS phonetic algorithm
 }
 \details{
-The \code{nysiis} function phentically encodes the given
-string using the New York State Identification and Intelligence
-System (NYSIIS) algorithm. The algorithm is based on the
-implementation provided by Wikipedia and is implemented in pure R
-using regular expressions.
+The \code{nysiis} function implements the original NYSIIS
+character scan described by Taft and the USDA modified scan documented by
+Lynch and Arends.
 
 The variable \code{maxCodeLen} is the limit on how long the returned
 NYSIIS code should be.  The default is 6.
 
-The variable \code{modified} directs \code{nysiis} to use the
-modified method instead of the original.
+Set \code{modified = TRUE} for the USDA variant. That publication classifies
+names ending in \code{JR} or \code{SR} as errors; this function warns and
+returns \code{NA} for those inputs.
 
 The \code{nysiis} algorithm is only defined for inputs over the
 standard English alphabet, \emph{i.e.}, "A-Z.". Non-alphabetical
@@ -40,7 +39,7 @@ characters are removed from the string in a locale-dependent fashion.
 This strips spaces, hyphens, and numbers.  Other letters, such as
 "Ü," may be permissible in the current locale but are unknown to
 \code{nysiis}.  For inputs outside of its known range, the output is
-undefined and \code{NA} is returned and a \code{warning} this thrown.
+undefined and \code{NA} is returned and a \code{warning} is issued.
 If \code{clean} is \code{FALSE}, \code{nysiis} attempts to process the
 strings.  The default is \code{TRUE}.
 }
@@ -53,24 +52,28 @@ nysiis("mississippi", 4)
 }
 \references{
 James P. Howard, II, "Phonetic Spelling Algorithm Implementations
-for R," \emph{Journal of Statistical Software}, vol. 25, no. 8,
+for R," \emph{Journal of Statistical Software}, vol. 95, no. 8,
 (2020), p. 1--21, <10.18637/jss.v095.i08>.
 
 Robert L. Taft, \emph{Name search techniques}, Bureau of Systems
 Development, Albany, New York, 1970.
+
+Billy T. Lynch and William L. Arends, \emph{Selection of a Surname
+Coding Procedure for the SRS Record Linkage System}, United States
+Department of Agriculture, 1977, Appendix B.
 }
 \seealso{
-Other phonics: 
-\code{\link{caverphone}()},
-\code{\link{cologne}()},
-\code{\link{lein}()},
-\code{\link{metaphone}()},
-\code{\link{mra_encode}()},
-\code{\link{onca}()},
-\code{\link{phonex}()},
-\code{\link{phonics}()},
-\code{\link{rogerroot}()},
-\code{\link{soundex}()},
-\code{\link{statcan}()}
+Other phonics:
+\code{\link[=caverphone]{caverphone()}},
+\code{\link[=cologne]{cologne()}},
+\code{\link[=lein]{lein()}},
+\code{\link[=metaphone]{metaphone()}},
+\code{\link[=mra_encode]{mra_encode()}},
+\code{\link[=onca]{onca()}},
+\code{\link[=phonex]{phonex()}},
+\code{\link[=phonics]{phonics()}},
+\code{\link[=rogerroot]{rogerroot()}},
+\code{\link[=soundex]{soundex()}},
+\code{\link[=statcan]{statcan()}}
 }
 \concept{phonics}

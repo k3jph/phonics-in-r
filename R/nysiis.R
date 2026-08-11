@@ -34,17 +34,16 @@
 #' @param modified     if \code{TRUE}, use the modified NYSIIS algorithm
 #' @param clean if \code{TRUE}, return \code{NA} for unknown alphabetical characters
 #'
-#' @details The \code{nysiis} function phentically encodes the given
-#' string using the New York State Identification and Intelligence
-#' System (NYSIIS) algorithm. The algorithm is based on the
-#' implementation provided by Wikipedia and is implemented in pure R
-#' using regular expressions.
+#' @details The \code{nysiis} function implements the original NYSIIS
+#' character scan described by Taft and the USDA modified scan documented by
+#' Lynch and Arends.
 #'
 #' The variable \code{maxCodeLen} is the limit on how long the returned
 #' NYSIIS code should be.  The default is 6.
 #'
-#' The variable \code{modified} directs \code{nysiis} to use the
-#' modified method instead of the original.
+#' Set \code{modified = TRUE} for the USDA variant. That publication classifies
+#' names ending in \code{JR} or \code{SR} as errors; this function warns and
+#' returns \code{NA} for those inputs.
 #'
 #' The \code{nysiis} algorithm is only defined for inputs over the
 #' standard English alphabet, \emph{i.e.}, "A-Z.". Non-alphabetical
@@ -52,7 +51,7 @@
 #' This strips spaces, hyphens, and numbers.  Other letters, such as
 #' "Ü," may be permissible in the current locale but are unknown to
 #' \code{nysiis}.  For inputs outside of its known range, the output is
-#' undefined and \code{NA} is returned and a \code{warning} this thrown.
+#' undefined and \code{NA} is returned and a \code{warning} is issued.
 #' If \code{clean} is \code{FALSE}, \code{nysiis} attempts to process the
 #' strings.  The default is \code{TRUE}.
 #'
@@ -61,11 +60,15 @@
 #' @references
 #'
 #' James P. Howard, II, "Phonetic Spelling Algorithm Implementations
-#' for R," \emph{Journal of Statistical Software}, vol. 25, no. 8,
+#' for R," \emph{Journal of Statistical Software}, vol. 95, no. 8,
 #' (2020), p. 1--21, <10.18637/jss.v095.i08>.
 #'
 #' Robert L. Taft, \emph{Name search techniques}, Bureau of Systems
 #' Development, Albany, New York, 1970.
+#'
+#' Billy T. Lynch and William L. Arends, \emph{Selection of a Surname
+#' Coding Procedure for the SRS Record Linkage System}, United States
+#' Department of Agriculture, 1977, Appendix B.
 #'
 #' @family phonics
 #'
@@ -77,9 +80,7 @@
 #'
 #' @export
 nysiis <- function(word, maxCodeLen = 6, modified = FALSE, clean = TRUE) {
-    ## Both NYSIIS and the modified NYSIIS are based on the
-    ## implementation described at
-    ## http://www.dropby.com/NYSIISTextStrings.html
+    maxCodeLen <- .validate_max_code_len(maxCodeLen)
 
     ## First, uppercase it and test for unprocessable characters
     word <- toupper(word)
@@ -89,10 +90,18 @@ nysiis <- function(word, maxCodeLen = 6, modified = FALSE, clean = TRUE) {
         warning("unknown characters found, results may not be consistent")
     word <- gsub("[^A-Z]*", "", word, perl = TRUE)
     
-    if(modified == TRUE)
-        word <- nysiis_modified(word, maxCodeLen)
+    invalidModified <- if(modified)
+        !is.na(word) & grepl("(JR|SR)$", word, perl = TRUE)
     else
-        word <- nysiis_original(word, maxCodeLen)
+        rep(FALSE, length(word))
+    if(any(invalidModified, na.rm = TRUE))
+        warning("modified NYSIIS cannot encode names ending in JR or SR")
+
+    word <- if(modified)
+        nysiis_modified(word, maxCodeLen)
+    else
+        nysiis_original(word, maxCodeLen)
+    word[invalidModified] <- NA_character_
 
     ## Yeah, we already processed them, but now get rid of them
     word[listNAs] <- NA
@@ -103,150 +112,132 @@ nysiis <- function(word, maxCodeLen = 6, modified = FALSE, clean = TRUE) {
 }
 
 nysiis_original <- function(word, maxCodeLen = 6) {
-
-    ## Translate first characters of name: MAC to MCC, KN to N, K to C, PH,
-    ## PF to FF, SCH to SSS
-    word <- gsub("^MAC", "MCC", word, perl = TRUE)
-    word <- gsub("KN", "NN", word, perl = TRUE)
-    word <- gsub("K", "C", word, perl = TRUE)
-    word <- gsub("^PF", "FF", word, perl = TRUE)
-    word <- gsub("PH", "FF", word, perl = TRUE)
-    word <- gsub("SCH", "SSS", word, perl = TRUE)
-
-    ## Translate last characters of name: EE to Y, IE to Y, DT, RT, RD,
-    ## NT, ND to D
-    word <- gsub("EE$", "Y", word, perl = TRUE)
-    word <- gsub("IE$", "Y", word, perl = TRUE)
-    word <- gsub("DT$", "D", word, perl = TRUE)
-    word <- gsub("RT$", "D", word, perl = TRUE)
-    word <- gsub("RD$", "D", word, perl = TRUE)
-    word <- gsub("NT$", "D", word, perl = TRUE)
-    word <- gsub("ND$", "D", word, perl = TRUE)
-
-    ## First character of key = first character of name.
-    first <- substr(word, 1, 1)
-    word <- substr(word, 2, nchar(word))
-
-    ## EV to AF else A, E, I, O, U to A
-    word <- gsub("EV", "AF", word, perl = TRUE)
-    word <- gsub("E|I|O|U", "A", word, perl = TRUE)
-
-    ## Q to G, Z to S, M to N
-    word <- gsub("Q", "G", word, perl = TRUE)
-    word <- gsub("Z", "S", word, perl = TRUE)
-    word <- gsub("M", "N", word, perl = TRUE)
-
-    ## KN to N else K to C
-    ## SCH to SSS, PH to FF
-    ## Rules are implemented as part of opening block
-
-    ## Put back first letter before applying remaining rules
-    word <- paste(first, word, sep = "")
-
-    ## H to If previous or next is non-vowel, previous.
-    word <- gsub("([^AEIOU])H", "\\1\\1", word, perl = TRUE)
-    word <- gsub("(.)H(?=([^AEIOU]|$))", "\\1\\1", word, perl= TRUE)
-
-    ## W to If previous is vowel, A
-    word <- gsub("([AEIOU])W", "A", word, perl = TRUE)
-
-    ## Remove duplicate consecutive characters
-    word <- gsub("([A-Z])\\1+", "\\1", word, perl = TRUE)
-
-    ## If last character is S, remove it
-    word <- gsub("S$", "", word, perl = TRUE)
-
-    ## If last characters are AY, replace with Y
-    word <- gsub("AY$", "Y", word, perl = TRUE)
-
-    ## If last character is A, remove it
-    word <- gsub("A$", "", word, perl = TRUE)
-
-    ## Truncate to requested length
-    word <- substr(word, 1, maxCodeLen)
-
-    return(word)
+    vapply(
+        word,
+        nysiis_encode_one,
+        character(1),
+        maxCodeLen = maxCodeLen,
+        modified = FALSE,
+        USE.NAMES = FALSE
+    )
 }
 
 nysiis_modified <- function(word, maxCodeLen = 6) {
+    vapply(
+        word,
+        nysiis_encode_one,
+        character(1),
+        maxCodeLen = maxCodeLen,
+        modified = TRUE,
+        USE.NAMES = FALSE
+    )
+}
 
-    ## Translate first characters of name: MAC to MC, PF to FF
-    word <- gsub("^MAC", "MC", word, perl = TRUE)
-    word <- gsub("^PF", "FF", word, perl = TRUE)
+nysiis_encode_one <- function(word, maxCodeLen, modified) {
+    if(is.na(word))
+        return(NA_character_)
+    if(!nzchar(word))
+        return("")
 
-    ## First character of key = first character of name.
-    first <- substr(word, 1, 1)
+    vowels <- c("A", "E", "I", "O", "U")
+    originalFirst <- substr(word, 1, 1)
 
-    ## Remove a trailing S
-    word <- gsub("S$|Z$", "", word, perl = TRUE)
+    if(startsWith(word, "MAC"))
+        word <- sub("^MAC", "MCC", word)
+    else if(startsWith(word, "KN"))
+        word <- sub("^KN", "NN", word)
+    else if(startsWith(word, "K"))
+        word <- sub("^K", "C", word)
+    else if(startsWith(word, "PH") || startsWith(word, "PF"))
+        word <- sub("^(PH|PF)", "FF", word)
+    else if(startsWith(word, "SCH"))
+        word <- sub("^SCH", "SSS", word)
+    else if(modified && startsWith(word, "WR"))
+        word <- sub("^WR", "RR", word)
+    else if(modified && startsWith(word, "RH"))
+        word <- sub("^RH", "RR", word)
+    else if(modified && startsWith(word, "DG"))
+        word <- sub("^DG", "GG", word)
+    else if(modified && originalFirst %in% vowels)
+        substr(word, 1, 1) <- "A"
 
-    ## Translate last characters of name
-    word <- gsub("IX$", "IC", word, perl = TRUE)
-    word <- gsub("EX$", "EC", word, perl = TRUE)
-    word <- gsub("YE$|EE$|IE$", "Y", word, perl = TRUE)
-    word <- gsub("DT$|RT$|RD$|NT$|ND$", "D", word, perl = TRUE)
+    if(modified)
+        word <- sub("[SZ]$", "", word)
 
-    ## transcode 'EV' to 'EF' if not at start of name
-    word <- gsub("(.+)EV", "\1EF", word, perl = TRUE)
+    if(grepl("(EE|IE)$", word))
+        word <- sub("(EE|IE)$", "Y", word)
+    else if(modified && grepl("YE$", word))
+        word <- sub("YE$", "Y", word)
+    else if(grepl("(DT|RT|RD)$", word))
+        word <- sub("(DT|RT|RD)$", "D", word)
+    else if(grepl("(NT|ND)$", word))
+        word <- sub("(NT|ND)$", if(modified) "N" else "D", word)
+    else if(modified && grepl("IX$", word))
+        word <- sub("IX$", "ICK", word)
+    else if(modified && grepl("EX$", word))
+        word <- sub("EX$", "ECK", word)
 
-    ## EV to AF else A, E, I, O, U to A
-    word <- gsub("E|I|O|U", "A", word, perl = TRUE)
+    if(!nzchar(word))
+        return("")
 
-    ## W to If previous is vowel, A
-    word <- gsub("([AEIOU])W", "A", word, perl = TRUE)
+    letters <- strsplit(word, "", fixed = TRUE)[[1]]
+    key <- letters[1]
 
-    ## transcode 'GHT' to 'GT'
-    word <- gsub("GHT", "GT", word, perl = TRUE)
+    if(length(letters) > 1L) {
+        for(i in 2:length(letters)) {
+            current <- letters[i]
+            previous <- letters[i - 1L]
+            following <- if(i < length(letters)) letters[i + 1L] else ""
+            remaining <- paste(letters[i:length(letters)], collapse = "")
 
-    ## transcode 'DG' to 'G'
-    word <- gsub("DG", "G", word, perl = TRUE)
+            if(current %in% vowels) {
+                if(startsWith(remaining, "EV")) {
+                    letters[i] <- "A"
+                    letters[i + 1L] <- "F"
+                } else {
+                    letters[i] <- "A"
+                }
+            } else if(modified && current == "Y" && i < length(letters)) {
+                letters[i] <- "A"
+            } else if(current == "Q") {
+                letters[i] <- "G"
+            } else if(current == "Z") {
+                letters[i] <- "S"
+            } else if(current == "M") {
+                letters[i] <- "N"
+            } else if(current == "K") {
+                letters[i] <- if(following == "N") "N" else "C"
+            } else if(startsWith(remaining, "SCH")) {
+                letters[i:(i + 2L)] <- if(modified && i + 2L == length(letters))
+                    c("S", "S", "A") else c("S", "S", "S")
+            } else if(modified && startsWith(remaining, "SH")) {
+                letters[i:(i + 1L)] <- if(i + 1L == length(letters))
+                    c("S", "A") else c("S", "S")
+            } else if(startsWith(remaining, "PH")) {
+                letters[i:(i + 1L)] <- c("F", "F")
+            } else if(modified && startsWith(remaining, "GHT")) {
+                letters[i:(i + 2L)] <- c("T", "T", "T")
+            } else if(modified && startsWith(remaining, "DG")) {
+                letters[i:(i + 1L)] <- c("G", "G")
+            } else if(modified && startsWith(remaining, "WR")) {
+                letters[i:(i + 1L)] <- c("R", "R")
+            } else if(current == "H" &&
+                      (!(previous %in% vowels) || !(following %in% vowels))) {
+                letters[i] <- previous
+            } else if(current == "W" && previous %in% vowels) {
+                letters[i] <- previous
+            }
 
-    ## Q to G,  M to N, SH to S, SCH to S, YW to Y, Y to A,
-    word <- gsub("M", "N", word, perl = TRUE)
-    word <- gsub("Q", "G", word, perl = TRUE)
-    word <- gsub("(.+)SH", "\\1S", word, perl = TRUE)
-    word <- gsub("(.+)SCH", "\\1S", word, perl = TRUE)
-    word <- gsub("YW", "Y", word, perl = TRUE)
+            if(letters[i] != substr(key, nchar(key), nchar(key)))
+                key <- paste0(key, letters[i])
+        }
+    }
 
-    ## if not first or last character, change 'Y' to 'A'
-    last <- substring(word, nchar(word), nchar(word))
-    word <- substring(word, 1, nchar(word) - 1)
-    word <- gsub("Y", "A", word, perl = TRUE)
-    word <- paste(word, last, sep = "")
+    key <- sub("S$", "", key)
+    key <- sub("AY$", "Y", key)
+    key <- sub("A$", "", key)
+    if(modified && startsWith(key, "A"))
+        substr(key, 1, 1) <- originalFirst
 
-    ## WR to R, Z to S
-    word <- gsub("WR", "R", word, perl = TRUE)
-    word <- gsub("Z", "S", word, perl = TRUE)
-
-    ## Remove duplicate consecutive characters
-	word <- gsub("([A-Z])\\1+", "\\1", word, perl = TRUE)
-
-    ## If last character is A, remove it
-    word <- gsub("A$", "", word, perl = TRUE)
-
-    ## Append word except for first character to first
-    word <- substr(word, 2, nchar(word))
-    word <- paste(first, word, sep = "")
-
-    ## transcode 'PH' to 'F'
-    word <- gsub("PH", "F", word, perl = TRUE)
-
-    ## change 'KN' to 'N', else 'K' to 'C'
-    word <- gsub("KN", "N", word, perl = TRUE)
-    word <- gsub("K", "C", word, perl = TRUE)
-
-    ## H to If previous or next is non-vowel, previous.
-    word <- gsub("([^AEIOU])H", "\\1", word, perl = TRUE)
-    word <- gsub("(.)H[^AEIOU]", "\\1", word, perl = TRUE)
-
-    ## transcode terminal 'AY' to 'Y'
-    word <- gsub("AY$", "Y", word, perl = TRUE)
-
-    ## Remove duplicate consecutive characters
-    word <- gsub("([A-Z])\\1+", "\\1", word, perl = TRUE)
-
-    ## Truncate to requested length
-    word <- substr(word, 1, maxCodeLen)
-
-    return(word)
+    substr(key, 1, maxCodeLen)
 }

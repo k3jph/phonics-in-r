@@ -1,3 +1,5 @@
+## Locally maintained regression corpus for NYSIIS + Refined Soundex.
+## These are integration expectations, not an independent reference source.
 word,value
 andersen,A086
 Anderson,A086

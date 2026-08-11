@@ -40,7 +40,7 @@ characters are removed from the string in a locale-dependent fashion.
 This strips spaces, hyphens, and numbers.  Other letters, such as
 "Ü," may be permissible in the current locale but are unknown to
 \code{mra_encode}.  For inputs outside of its known range, the output is
-undefined and \code{NA} is returned and a \code{warning} this thrown.
+undefined and \code{NA} is returned and a \code{warning} is issued.
 If \code{clean} is \code{FALSE}, \code{mra_encode} attempts to process the
 strings.  The default is \code{TRUE}.
 }
@@ -51,7 +51,7 @@ mra_encode("Stevenson")
 }
 \references{
 James P. Howard, II, "Phonetic Spelling Algorithm Implementations
-for R," \emph{Journal of Statistical Software}, vol. 25, no. 8,
+for R," \emph{Journal of Statistical Software}, vol. 95, no. 8,
 (2020), p. 1--21, <10.18637/jss.v095.i08>.
 
 G.B. Moore, J.L. Kuhns, J.L. Treffzs, and C.A. Montgomery,
@@ -60,17 +60,17 @@ Nonunique Identifiers,} US National Institute of Standards and
 Technology, SP-500-2 (1977), p. 17.
 }
 \seealso{
-Other phonics: 
-\code{\link{caverphone}()},
-\code{\link{cologne}()},
-\code{\link{lein}()},
-\code{\link{metaphone}()},
-\code{\link{nysiis}()},
-\code{\link{onca}()},
-\code{\link{phonex}()},
-\code{\link{phonics}()},
-\code{\link{rogerroot}()},
-\code{\link{soundex}()},
-\code{\link{statcan}()}
+Other phonics:
+\code{\link[=caverphone]{caverphone()}},
+\code{\link[=cologne]{cologne()}},
+\code{\link[=lein]{lein()}},
+\code{\link[=metaphone]{metaphone()}},
+\code{\link[=nysiis]{nysiis()}},
+\code{\link[=onca]{onca()}},
+\code{\link[=phonex]{phonex()}},
+\code{\link[=phonics]{phonics()}},
+\code{\link[=rogerroot]{rogerroot()}},
+\code{\link[=soundex]{soundex()}},
+\code{\link[=statcan]{statcan()}}
 }
 \concept{phonics}

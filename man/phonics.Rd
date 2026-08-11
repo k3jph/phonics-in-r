@@ -7,77 +7,53 @@
 phonics(word, method, clean = TRUE)
 }
 \arguments{
-\item{word}{string or vector of strings to encode}
+\item{word}{A character vector to encode.}
 
-\item{method}{vector of method names to use}
+\item{method}{A character vector naming the methods to apply.}
 
-\item{clean}{if \code{TRUE}, return \code{NA} for unknown alphabetical characters}
+\item{clean}{If \code{TRUE}, warn and return \code{NA} for inputs containing
+characters outside an encoder's supported alphabet. If \code{FALSE},
+unsupported characters are discarded before encoding.}
 }
 \value{
-Returns a data frame containing the phonetic spellings of the input
-for each method applied.
+A data frame whose first column is \code{word}, followed by one character
+column for each recognized method.
 }
 \description{
-The \code{phonics} package for \code{R} is designed to provide a
-variety of phonetic indexing algorithms in common and not-so-common
-use today.  The algorithms generally reduce a string to a symbolic
-representation approximating the sound made by pronouncing the
-string.  They can be used to match names, strings, and as a proxy for
-assorted string distance algorithms.  The algorithm reduces a string
-to a symbolic representation approximating the sound.  It can be used
-to match names, strings, and as a proxy for assorted string distance
-algorithms.
+Apply one or more phonetic encoders to a character vector and return their
+codes together in a data frame.
 }
 \details{
-The \code{phonics} package for \code{R} is designed to provide a
-variety of phonetic indexing algorithms in common and not-so-common
-use today.  The algorithms generally reduce a string to a symbolic
-representation approximating the sound made by pronouncing the
-string.  They can be used to match names, strings, and as a proxy for
-assorted string distance algorithms.  The algorithm reduces a string
-to a symbolic representation approximating the sound.  It can be used
-to match names, strings, and as a proxy for assorted string distance
-algorithms.
-
-The variable \code{word} is a character string or a vector of
-character strings to be encoded.
-
-Different phonetic algorithm are only defined for inputs over the
-limited alphabets, Non-alphabetical characters are removed from the
-string in a locale-dependent fashion. This strips spaces, hyphens,
-and numbers. For inputs outside of its known range, the output is
-undefined and \code{NA} is returned and a warning this thrown. If
-\code{clean} is \code{FALSE}, \code{phonics} attempts to process the
-strings. The default is \code{TRUE}.
-
-The \code{method} parameter should be a character vector containing one or
-more methods that should be used. The available list of methods is
-"caverphone", "caverphone.modified", "cologne", "lein", "metaphone",
-"nysiis", "nysiis.modified", "onca", "onca.modified", "onca.refined",
-"onca.modified.refined", "phonex", "rogerroot", "soundex",
-"soundex.refined", and "statcan".
+Available methods are \code{"caverphone"},
+\code{"caverphone.modified"}, \code{"cologne"}, \code{"lein"},
+\code{"metaphone"}, \code{"nysiis"}, \code{"nysiis.modified"},
+\code{"onca"}, \code{"onca.modified"}, \code{"onca.refined"},
+\code{"onca.modified.refined"}, \code{"phonex"},
+\code{"rogerroot"}, \code{"soundex"}, \code{"soundex.refined"}, and
+\code{"statcan"}. Unknown method names produce a warning and no result
+column.
 }
 \examples{
 phonics(c("Peter", "Peady"), c("soundex", "soundex.refined"))
 
 }
 \references{
-James P. Howard, II, "Phonetic Spelling Algorithm Implementations
-for R," \emph{Journal of Statistical Software}, vol. 25, no. 8,
-(2020), p. 1--21, <10.18637/jss.v095.i08>.
+Howard, J. P., II (2020). "Phonetic Spelling Algorithm Implementations
+for R." \emph{Journal of Statistical Software}, 95(8), 1--21.
+\doi{10.18637/jss.v095.i08}.
 }
 \seealso{
-Other phonics: 
-\code{\link{caverphone}()},
-\code{\link{cologne}()},
-\code{\link{lein}()},
-\code{\link{metaphone}()},
-\code{\link{mra_encode}()},
-\code{\link{nysiis}()},
-\code{\link{onca}()},
-\code{\link{phonex}()},
-\code{\link{rogerroot}()},
-\code{\link{soundex}()},
-\code{\link{statcan}()}
+Other phonics:
+\code{\link[=caverphone]{caverphone()}},
+\code{\link[=cologne]{cologne()}},
+\code{\link[=lein]{lein()}},
+\code{\link[=metaphone]{metaphone()}},
+\code{\link[=mra_encode]{mra_encode()}},
+\code{\link[=nysiis]{nysiis()}},
+\code{\link[=onca]{onca()}},
+\code{\link[=phonex]{phonex()}},
+\code{\link[=rogerroot]{rogerroot()}},
+\code{\link[=soundex]{soundex()}},
+\code{\link[=statcan]{statcan()}}
 }
 \concept{phonics}

@@ -15,7 +15,8 @@ export(rogerroot)
 export(soundex)
 export(statcan)
 importFrom(Rcpp,evalCpp)
-importFrom(data.table,":=")
-importFrom(data.table,data.table)
-importFrom(utils,read.csv)
+importFrom(data.table,
+  ":=",
+  data.table
+)
 useDynLib(phonics)

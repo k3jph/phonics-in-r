@@ -4,8 +4,10 @@
 paper.md
 paper.bib
 COPYRIGHT.md
+CITATION.cff
 ^.github
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
 ^\.github$
+^cran-comments\.md$

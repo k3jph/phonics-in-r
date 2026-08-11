@@ -18,13 +18,9 @@ algorithms.
 
 # Basic Usage 
 
-All algorithms, except the Match Rating Approach, accept a character
-vector or vector of character vectors as the input.  These are converted
-to their phonetic spelling using the relevant algorithm.  For example,
-we shall consider the Soundex and Refined Soundex algorithms.  The
-Soundex algorithm is implemented as the ``soundex`` function and the
-Refined Soundex method is given in the ``refinedSoundex`` function, and
-we can observe them in the following examples.
+Every encoder accepts a character vector and returns one code per input.
+Match Rating Approach (MRA) additionally has a comparison stage. For example,
+`soundex()` and `refinedSoundex()` encode a vector directly.
 
 ```{r basic-examples}
 library("phonics")
@@ -44,25 +40,40 @@ refinedSoundex(x1)
 refinedSoundex(x2)
 ```
 
-Both functions accept a `maxCodeLen` that limits the length of the
-returned code.  Except where noted, all the algorithms support the
-`maxCodeLen` option to change the maximum or expected code length
-returned, as appropriate.
+Both functions accept a `maxCodeLen` that limits the length of the returned
+code. All encoders except `mra_encode()` expose this bound. Cologne preserves
+its historical unbounded output by default (`maxCodeLen = NULL`); an explicit
+bound truncates it like the other encoders.
 
 Beyond soundex, additional algorithms are available, as shown in the
 following table.
 
 | Algorithm                                             | Function Name |
 |:------------------------------------------------------|:--------------|
-| Caverphone                                            | caverphone    |
-| Cologne Phonetic                                      | cologne       |
-| Lein Name Coding                                      | lein          |
-| Metaphone                                             | metaphone     |
-| New York State Identification and Intelligence System | nysiis        |
-| Oxford Name Compression Algorithm                     | onca          |
-| Phonex                                                | phonex        |
-| Roger Root Name Coding Procedure                      | rogerroot     |
-| Statistics Canada Name Coding                         | statcan       |
+| Caverphone 1 and 2                                    | `caverphone()` |
+| Cologne Phonetic                                      | `cologne()` |
+| Lein Name Coding                                      | `lein()` |
+| Match Rating Approach                                 | `mra_encode()`, `mra_compare()` |
+| Metaphone                                             | `metaphone()` |
+| Original and USDA Modified NYSIIS                     | `nysiis()` |
+| Oxford Name Compression Algorithm                     | `onca()` |
+| Phonex                                                | `phonex()` |
+| Roger Root Name Coding Procedure                      | `rogerroot()` |
+| Soundex and Apache Refined Soundex                    | `soundex()`, `refinedSoundex()` |
+| Census Modified Statistics Canada                     | `statcan()` |
+
+## Input and output contracts
+
+Input is converted to a common case before encoding. With the default
+`clean = TRUE`, an input containing characters outside an encoder's supported
+alphabet produces a warning and an `NA` result. With `clean = FALSE`, those
+characters are discarded before encoding. `NA` values remain `NA`, empty
+strings remain empty, and vector order is preserved.
+
+The encoders implement different published normalization domains. In
+particular, Cologne accepts German umlauts and eszett, Phonex accepts their
+German equivalents, and Census Modified Statistics Canada normalizes its
+documented French letters.
  
 # Match Rating Approach
 
@@ -92,17 +103,14 @@ mra_compare(mra1, mra3)
 mra_compare(mra2, mra3)
 ```
 
-The threshold necessary to establish similarity _gets smaller_ as the
-encoded strings get larger.  This leads to some interesting results.
-For instance, Catherine and William match as names.
-
-```{r mra-kw-example}
-mra_compare(mra_encode("Catherine"), mra_encode("William"))
-```
+The required similarity threshold gets smaller as the combined encoded length
+increases. The comparison removes aligned characters from left to right and
+then right to left, and scores the unmatched characters in the longer
+remainder.
 
 # Summary
 
-This paper has outlined the `phonics` package for R.  Included in this
+This vignette has outlined the `phonics` package for R. Included in this
 package are several English-, German-, and French-language suitable
 algorithms for phonetically reducing names and strings.  These can be
-used for comparison and indexing, as well as later record-linkage. 
+used for comparison and indexing, as well as later record linkage.

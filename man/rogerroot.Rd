@@ -20,7 +20,7 @@ the Roger Root encoded character vector
 Provides the Roger Root name coding system
 }
 \details{
-The \code{rogerroot} function phentically encodes the given string
+The \code{rogerroot} function phonetically encodes the given string
 using the Roger Root algorithm.  The variable \code{word} is a string
 or vector of strings to encode.
 
@@ -45,24 +45,25 @@ rogerroot("Stevenson")
 }
 \references{
 James P. Howard, II, "Phonetic Spelling Algorithm Implementations
-for R," \emph{Journal of Statistical Software}, vol. 25, no. 8,
+for R," \emph{Journal of Statistical Software}, vol. 95, no. 8,
 (2020), p. 1--21, <10.18637/jss.v095.i08>.
 
-Robert L. Taft, \emph{Name search techniques}, Bureau of Systems
-Development, Albany, New York, 1970.
+Billy T. Lynch and William L. Arends, \emph{Selection of a Surname
+Coding Procedure for the SRS Record Linkage System}, United States
+Department of Agriculture, 1977, Appendix B.
 }
 \seealso{
-Other phonics: 
-\code{\link{caverphone}()},
-\code{\link{cologne}()},
-\code{\link{lein}()},
-\code{\link{metaphone}()},
-\code{\link{mra_encode}()},
-\code{\link{nysiis}()},
-\code{\link{onca}()},
-\code{\link{phonex}()},
-\code{\link{phonics}()},
-\code{\link{soundex}()},
-\code{\link{statcan}()}
+Other phonics:
+\code{\link[=caverphone]{caverphone()}},
+\code{\link[=cologne]{cologne()}},
+\code{\link[=lein]{lein()}},
+\code{\link[=metaphone]{metaphone()}},
+\code{\link[=mra_encode]{mra_encode()}},
+\code{\link[=nysiis]{nysiis()}},
+\code{\link[=onca]{onca()}},
+\code{\link[=phonex]{phonex()}},
+\code{\link[=phonics]{phonics()}},
+\code{\link[=soundex]{soundex()}},
+\code{\link[=statcan]{statcan()}}
 }
 \concept{phonics}

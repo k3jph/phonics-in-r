@@ -35,9 +35,9 @@
 #'
 #' @details
 #'
-#' The variable \code{word} is the name to be encoded.  The variable
-#' \code{maxCodeLen} is the limit on how long the returned name code
-#' should be.  The default is 4.
+#' \code{maxCodeLen = NULL} preserves the algorithm's historical unbounded
+#' output. An explicit nonnegative whole-number value truncates each code to
+#' at most that many characters.
 #'
 #' The \code{cologne} algorithm is only defined for inputs over the
 #' standard English alphabet, \emph{i.e.}, "A-Z," "Ä," "Ö," "Ü," and
@@ -46,7 +46,7 @@
 #' Other letters, such as "ç," may be permissible in the current locale
 #' but are unknown to \code{cologne}.  For inputs outside of its known
 #' range, the output is undefined and \code{NA} is returned and a
-#' \code{warning} this thrown.  If \code{clean} is \code{FALSE},
+#' \code{warning} is issued.  If \code{clean} is \code{FALSE},
 #' \code{cologne} attempts to process the strings.  The default is
 #' \code{TRUE}.
 #'
@@ -55,7 +55,7 @@
 #' @references
 #'
 #' James P. Howard, II, "Phonetic Spelling Algorithm Implementations
-#' for R," \emph{Journal of Statistical Software}, vol. 25, no. 8,
+#' for R," \emph{Journal of Statistical Software}, vol. 95, no. 8,
 #' (2020), p. 1--21, <10.18637/jss.v095.i08>.
 #'
 #' Hans Joachim Postel. "Die Koelner Phonetik. Ein Verfahren zur
@@ -73,6 +73,9 @@
 #' @export
 cologne <- function(word, maxCodeLen = NULL, clean = TRUE) {
 
+    if(!is.null(maxCodeLen))
+        maxCodeLen <- .validate_max_code_len(maxCodeLen)
+
     ## First, uppercase it and test for unprocessable characters
     word <- toupper(word)
     listNulls <- is.null(word)
@@ -88,53 +91,10 @@ cologne <- function(word, maxCodeLen = NULL, clean = TRUE) {
         warning("unknown characters found, results may not be consistent")
     word <- gsub("[^A-Z]*", "", word, perl = TRUE)
     
-    ## Work through the rules...but backwards, mostly, here's 8s
-	word <- gsub("([CKQ])X", "\\18", word, perl = TRUE)
-    word <- gsub("[DT]([CSZ])", "8\\1", word, perl = TRUE)
-    word <- gsub("([SZ])C", "\\18", word, perl = TRUE)
-    word <- gsub("^C([^AHKLOQRUX])", "8\\1", word, perl = TRUE)
-    word <- gsub("C([^AHKOQUX])", "8\\1", word, perl = TRUE)
-    word <- gsub("[SZ]", "8", word, perl = TRUE)
+    word <- vapply(word, cologne_encode_one, character(1), USE.NAMES = FALSE)
 
-    ## Rule #7
-    word <- gsub("R", "7", word, perl = TRUE)
-
-    ## Rule #6
-    word <- gsub("[MN]", "6", word, perl = TRUE)
-
-    ## Rule #5
-    word <- gsub("L", "5", word, perl = TRUE)
-
-    ## Rule #48
-    word <- gsub("X", "48", word, perl = TRUE)
-
-    ## Rule #4
-    word <- gsub("[CGKQ]", "4", word, perl = TRUE)
-
-    ## Rule #3
-    ## And we can strip the H since it will not be coded
-    word <- gsub("PH|[FVW]", "3", word, perl = TRUE)
-
-    ## Rule #2
-    word <- gsub("[DT]", "2", word, perl = TRUE)
-
-    ## Rule #1
-    word <- gsub("[BP]", "1", word, perl = TRUE)
-
-    ## Rule #H
-    word <- gsub("H", "", word, perl = TRUE)
-
-    ## Rule #0
-    word <- gsub("[AEIJOUY]", "0", word, perl = TRUE)
-
-    ## Remove duplicate consecutive characters
-    word <- gsub("([0-9])\\1+", "\\1\\2", word, perl = TRUE)
-
-    ## Remove all 0s, except first
-    first <- substr(word, 1, 1)
-    word <- substr(word, 2, nchar(word))
-	word <- gsub("0", "", word, perl = TRUE)
-    word <- paste(first, word, sep = "")
+    if(!is.null(maxCodeLen))
+        word <- substr(word, 1, maxCodeLen)
 
     ## Yeah, we already processed them, but now get rid of them
     word[listNulls] <- NA
@@ -143,4 +103,60 @@ cologne <- function(word, maxCodeLen = NULL, clean = TRUE) {
         word[nonalpha] <- NA
 
     return(word)
+}
+
+cologne_encode_one <- function(word) {
+    if(is.na(word))
+        return(NA_character_)
+    if(!nzchar(word))
+        return("")
+
+    letters <- strsplit(word, "", fixed = TRUE)[[1]]
+    code <- character()
+    for(i in seq_along(letters)) {
+        current <- letters[i]
+        previous <- if(i > 1L) letters[i - 1L] else ""
+        following <- if(i < length(letters)) letters[i + 1L] else ""
+
+        value <- if(current %in% c("A", "E", "I", "J", "O", "U", "Y")) {
+            "0"
+        } else if(current == "H") {
+            ""
+        } else if(current == "B") {
+            "1"
+        } else if(current == "P") {
+            if(following == "H") "3" else "1"
+        } else if(current %in% c("D", "T")) {
+            if(following %in% c("C", "S", "Z")) "8" else "2"
+        } else if(current %in% c("F", "V", "W")) {
+            "3"
+        } else if(current %in% c("G", "K", "Q")) {
+            "4"
+        } else if(current == "C") {
+            if(i == 1L)
+                if(following %in% c("A", "H", "K", "L", "O", "Q", "R", "U", "X")) "4" else "8"
+            else if(previous %in% c("S", "Z") ||
+                    !(following %in% c("A", "H", "K", "O", "Q", "U", "X")))
+                "8"
+            else
+                "4"
+        } else if(current == "X") {
+            if(previous %in% c("C", "K", "Q")) "8" else "48"
+        } else if(current == "L") {
+            "5"
+        } else if(current %in% c("M", "N")) {
+            "6"
+        } else if(current == "R") {
+            "7"
+        } else if(current %in% c("S", "Z")) {
+            "8"
+        } else {
+            ""
+        }
+        code <- c(code, value)
+    }
+
+    code <- paste0(code, collapse = "")
+    code <- gsub("([0-9])\\1+", "\\1", code, perl = TRUE)
+    paste0(substr(code, 1, 1), gsub("0", "", substr(code, 2, nchar(code))))
 }

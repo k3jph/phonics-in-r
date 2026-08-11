@@ -35,24 +35,24 @@
 #' @param maxCodeLen  maximum length of the resulting encodings, in characters
 #' @param clean if \code{TRUE}, return \code{NA} for unknown alphabetical characters
 #'
-#' @details The function \code{soundex} phonentically encodes the given
-#' string using the soundex algorithm.  The function \code{refinedSoundex}
-#' uses Apache's refined soundex algorithm.  Both implementations are loosely
-#' based on the Apache Commons Java editons.
+#' @details The function \code{soundex} phonetically encodes the given
+#' string using the U.S. census Soundex rules. The function
+#' \code{refinedSoundex} implements the U.S.-English mapping and duplicate
+#' handling from Apache Commons Codec's Refined Soundex.
 #'
 #' The variable \code{maxCodeLen} is the limit on how long the returned
 #' soundex should be.
 #'
-#' The \code{soundex} and \code{revisedSoundex} algorithms are only
+#' The \code{soundex} and \code{refinedSoundex} algorithms are only
 #' defined for inputs over the standard English alphabet, \emph{i.e.},
 #' "A-Z." Non-alphabetical characters are removed from the string in a
 #' locale-dependent fashion.  This strips spaces, hyphens, and numbers.
 #' Other letters, such as "Ü," may be permissible in the current locale
-#' but are unknown to \code{soundex} and \code{revisedSoundex}.  For
+#' but are unknown to \code{soundex} and \code{refinedSoundex}.  For
 #' inputs outside of its known range, the output is undefined and
-#' \code{NA} is returned and a \code{warning} this thrown.  If
+#' \code{NA} is returned and a \code{warning} is issued.  If
 #' \code{clean} is \code{FALSE}, \code{soundex} and
-#' \code{revisedSoundex} attempts to process the strings.  The default
+#' \code{refinedSoundex} attempts to process the strings.  The default
 #' is \code{TRUE}.
 #'
 #' @return soundex encoded character vector
@@ -69,12 +69,18 @@
 #' of the ACM}, vol. 8, no. 4 (1961), p. 538-552.
 #'
 #' James P. Howard, II, "Phonetic Spelling Algorithm Implementations
-#' for R," \emph{Journal of Statistical Software}, vol. 25, no. 8,
+#' for R," \emph{Journal of Statistical Software}, vol. 95, no. 8,
 #' (2020), p. 1--21, <10.18637/jss.v095.i08>.
 #'
 #' Howard B. Newcombe, James M. Kennedy, "Record linkage: making
 #' maximum use of the discriminating power of identifying information,"
 #' \emph{Communications of the ACM}, vol. 5, no. 11 (1962), p. 563-566.
+#'
+#' United States National Archives and Records Administration,
+#' "The Soundex Indexing System."
+#'
+#' Apache Software Foundation, \emph{Apache Commons Codec:
+#' RefinedSoundex}.
 #'
 #' @family phonics
 #'
@@ -84,6 +90,8 @@
 #'
 #' @export
 soundex <- function(word, maxCodeLen = 4L, clean = TRUE) {
+
+    maxCodeLen <- .validate_max_code_len(maxCodeLen)
 
     ## First, uppercase it and test for unprocessable characters
     word <- toupper(word)
@@ -104,6 +112,8 @@ soundex <- function(word, maxCodeLen = 4L, clean = TRUE) {
 #' @rdname soundex
 #' @export
 refinedSoundex <- function(word, maxCodeLen = 10L, clean = TRUE) {
+
+    maxCodeLen <- .validate_max_code_len(maxCodeLen)
     
     ## First, uppercase it and test for unprocessable characters
     word <- toupper(word)
